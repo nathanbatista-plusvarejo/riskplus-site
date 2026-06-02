@@ -211,7 +211,7 @@
     .rp-hero::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse 80% 60% at 30% 40%, #000 0%, transparent 70%); pointer-events: none; z-index: 0; }
     .rp-hero .watermark { position: absolute; right: -160px; top: -80px; width: 880px; height: 880px; opacity: 0.10; pointer-events: none; z-index: 0; animation: float 14s ease-in-out infinite; }
     @keyframes float { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-20px, 18px) rotate(8deg); } }
-    .rp-hero .container { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 1fr; gap: 64px; align-items: center; }
+    .rp-hero .container { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 1fr; gap: 64px; align-items: start; }
     .rp-hero .content { max-width: 620px; }
     .rp-hero .badge-row { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; padding: 6px 14px 6px 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: rgba(255,255,255,0.92); margin-bottom: 28px; }
     .rp-hero .badge-row .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #6FE0A4; box-shadow: 0 0 0 0 rgba(111,224,164,0.6); animation: pulse 1.8s ease-out infinite; }
