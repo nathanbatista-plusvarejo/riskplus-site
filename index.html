@@ -1,0 +1,1401 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RiskPlus — Decisão de crédito B2B em segundos.</title>
+  <meta name="description" content="Analise o CNPJ do seu cliente B2B e descubra em segundos se vale dar o prazo — mesmo para quem não aparece nos bureaus tradicionais. Sem planilha. Sem achismo." />
+  <link rel="icon" href="assets/icon-blue.svg" />
+
+  <script src="vendor/react.js"></script>
+  <script src="vendor/react-dom.js"></script>
+  <script src="vendor/babel.js"></script>
+  <script src="vendor/lucide.js"></script>
+
+  <style>
+    /* ============================================================
+       RiskPlus Design System — Colors & Type
+       ============================================================ */
+    /* Google Fonts loaded if available, gracefully degrades to system fonts */
+
+    :root {
+      --rp-blue:        #0050FF;
+      --rp-white:       #FFFFFF;
+      --rp-black:       #000000;
+      --rp-orange:      #FF6E29;
+      --rp-purple:      #6E56CF;
+      --rp-slate:       #5B6475;
+
+      --rp-blue-50:     #EAF1FF;
+      --rp-blue-100:    #CFDEFF;
+      --rp-blue-200:    #9DBDFF;
+      --rp-blue-300:    #5C8EFF;
+      --rp-blue-400:    #2A6BFF;
+      --rp-blue-500:    #0050FF;
+      --rp-blue-600:    #003ECC;
+      --rp-blue-700:    #002E99;
+      --rp-blue-800:    #001F66;
+      --rp-blue-900:    #001233;
+
+      --rp-orange-50:   #FFF1E9;
+      --rp-orange-100:  #FFD9C2;
+      --rp-orange-300:  #FFA170;
+      --rp-orange-500:  #FF6E29;
+      --rp-orange-600:  #E45713;
+      --rp-orange-700:  #B7430A;
+
+      --rp-ink:         #0B0F18;
+      --rp-graphite:    #1B2230;
+      --rp-slate-700:   #3A4252;
+      --rp-slate-600:   #5B6475;
+      --rp-slate-500:   #7B8493;
+      --rp-slate-400:   #A0A8B5;
+      --rp-slate-300:   #C4CAD3;
+      --rp-slate-200:   #DFE2E8;
+      --rp-slate-100:   #EEF0F4;
+      --rp-slate-50:    #F7F8FA;
+
+      --fg-1:           var(--rp-ink);
+      --fg-2:           var(--rp-slate-700);
+      --fg-3:           var(--rp-slate-600);
+      --fg-4:           var(--rp-slate-500);
+      --fg-inverse:     var(--rp-white);
+
+      --bg-1:           var(--rp-white);
+      --bg-2:           var(--rp-slate-50);
+      --bg-3:           var(--rp-slate-100);
+      --bg-brand:       var(--rp-blue);
+      --bg-brand-soft:  var(--rp-blue-50);
+      --bg-dark:        var(--rp-ink);
+
+      --border-1:       var(--rp-slate-200);
+      --border-2:       var(--rp-slate-300);
+      --border-strong:  var(--rp-slate-700);
+
+      --accent:         var(--rp-blue);
+      --accent-hover:   var(--rp-blue-600);
+      --accent-pressed: var(--rp-blue-700);
+
+      --warn:           var(--rp-orange);
+      --highlight:      var(--rp-purple);
+
+      --risk-go:        #1E9E5E;
+      --risk-go-soft:   #E3F6EC;
+      --risk-caution:   var(--rp-orange);
+      --risk-caution-soft: var(--rp-orange-50);
+      --risk-stop:      #D6324A;
+      --risk-stop-soft: #FBE6EA;
+
+      --font-display:   'Outfit', 'Momo Trust Display', system-ui, sans-serif;
+      --font-accent:    'Jomhuria', 'Outfit', serif;
+      --font-body:      'Open Sans', system-ui, -apple-system, sans-serif;
+      --font-mono:      ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+      --text-display:   clamp(3rem, 6vw, 5.5rem);
+      --text-h1:        clamp(2.25rem, 4vw, 3.5rem);
+      --text-h2:        clamp(1.75rem, 3vw, 2.5rem);
+      --text-h3:        1.5rem;
+      --text-h4:        1.25rem;
+      --text-lead:      1.125rem;
+      --text-body:      1rem;
+      --text-small:     0.875rem;
+      --text-micro:     0.75rem;
+
+      --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+      --space-5: 20px; --space-6: 24px; --space-7: 32px; --space-8: 40px;
+      --space-9: 56px; --space-10: 72px; --space-11: 96px;
+
+      --radius-xs: 4px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-pill: 999px;
+
+      --shadow-xs:  0 1px 2px rgba(11, 15, 24, 0.04);
+      --shadow-sm:  0 1px 3px rgba(11, 15, 24, 0.06), 0 1px 2px rgba(11, 15, 24, 0.04);
+      --shadow-md:  0 4px 12px rgba(11, 15, 24, 0.08), 0 2px 4px rgba(11, 15, 24, 0.04);
+      --shadow-lg:  0 12px 32px rgba(11, 15, 24, 0.10), 0 4px 8px rgba(11, 15, 24, 0.04);
+      --shadow-brand: 0 12px 32px rgba(0, 80, 255, 0.22), 0 4px 12px rgba(0, 80, 255, 0.12);
+
+      --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-fast:    120ms;
+      --dur-base:    180ms;
+      --dur-slow:    280ms;
+
+      --gradient-brand: linear-gradient(180deg, #1a5bff 0%, #0050FF 50%, #003ad9 100%);
+      --gradient-cover: linear-gradient(135deg, #1a5bff 0%, #0050FF 60%, #002cb8 100%);
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      line-height: 1.55;
+      color: var(--fg-1);
+      background: var(--bg-1);
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, .h1 { font-family: var(--font-display); font-size: var(--text-h1); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; color: var(--fg-1); }
+    h2, .h2 { font-family: var(--font-display); font-size: var(--text-h2); font-weight: 700; line-height: 1.08; letter-spacing: -0.015em; color: var(--fg-1); }
+    h3, .h3 { font-family: var(--font-display); font-size: var(--text-h3); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+    h4, .h4 { font-family: var(--font-display); font-size: var(--text-h4); font-weight: 600; line-height: 1.3; }
+    .display { font-family: var(--font-display); font-size: var(--text-display); font-weight: 800; line-height: 0.95; letter-spacing: -0.025em; }
+    .accent-display { font-family: var(--font-accent); font-size: clamp(4rem, 10vw, 9rem); line-height: 0.8; letter-spacing: -0.01em; }
+    p, .p { font-family: var(--font-body); font-size: var(--text-body); line-height: 1.6; color: var(--fg-2); }
+    .lead { font-size: var(--text-lead); line-height: 1.5; color: var(--fg-2); }
+    small, .small { font-size: var(--text-small); color: var(--fg-3); }
+    .micro { font-size: var(--text-micro); color: var(--fg-3); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+    code, .code { font-family: var(--font-mono); font-size: 0.92em; background: var(--bg-3); padding: 2px 6px; border-radius: var(--radius-xs); }
+    a { color: var(--accent); text-decoration: none; transition: color var(--dur-fast) var(--ease-out); }
+    a:hover { color: var(--accent-hover); }
+
+    /* ============================================================
+       Site Marketing styles
+       ============================================================ */
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--fg-1); background: var(--bg-1); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .eyebrow { font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rp-blue); display: inline-flex; align-items: center; gap: 10px; }
+    .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: 0.5; }
+    .eyebrow.on-dark { color: rgba(255,255,255,.82); }
+
+    section.rp-section { padding: 112px 0; position: relative; }
+    section.rp-section.tight { padding: 72px 0; }
+    section.rp-section.bg-soft { background: var(--bg-2); }
+    section.rp-section.bg-dark { background: var(--rp-ink); color: #fff; }
+    section.rp-section h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 4.4vw, 56px); letter-spacing: -0.022em; line-height: 1.04; text-wrap: balance; margin: 14px 0 18px; color: inherit; }
+    section.rp-section.bg-dark h2 { color: #fff; }
+    section.rp-section .sub { font-size: 18px; color: var(--fg-2); max-width: 640px; line-height: 1.55; margin: 0; }
+    section.rp-section.bg-dark .sub { color: rgba(255,255,255,0.74); }
+    section.rp-section .head { max-width: 780px; margin-bottom: 64px; }
+    section.rp-section .head.text-center { margin-left: auto; margin-right: auto; }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-body); font-weight: 600; font-size: 14px; padding: 13px 22px; border-radius: 12px; border: 1.5px solid transparent; cursor: pointer; transition: all var(--dur-base) var(--ease-out); text-decoration: none; white-space: nowrap; }
+    .btn-primary { background: var(--rp-blue); color: #fff; box-shadow: 0 10px 24px rgba(0,80,255,.24); }
+    .btn-primary:hover { background: var(--rp-blue-600); color: #fff; }
+    .btn-primary:active { background: var(--rp-blue-700); transform: scale(.985); }
+    .btn-secondary { background: #fff; color: var(--rp-blue); border-color: var(--border-1); }
+    .btn-secondary:hover { border-color: var(--rp-blue); color: var(--rp-blue-600); }
+    .btn-secondary.on-dark { background: rgba(255,255,255,0.06); color: #fff; border-color: rgba(255,255,255,0.20); }
+    .btn-secondary.on-dark:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.40); color: #fff; }
+    .btn-warn { background: var(--rp-orange); color: #fff; }
+    .btn-warn:hover { background: var(--rp-orange-600); color: #fff; }
+    .btn-ghost { background: transparent; color: var(--fg-1); border-color: transparent; }
+    .btn-ghost.on-dark { color: #fff; }
+    .btn-ghost.on-dark:hover { color: rgba(255,255,255,0.78); }
+    .btn-lg { padding: 17px 30px; font-size: 15px; border-radius: 14px; }
+    .btn .arrow { transition: transform var(--dur-base) var(--ease-out); }
+    .btn:hover .arrow { transform: translateX(3px); }
+
+    /* Header */
+    .rp-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; transition: background var(--dur-slow) var(--ease-out), border-color var(--dur-slow) var(--ease-out), backdrop-filter var(--dur-slow) var(--ease-out); background: transparent; border-bottom: 1px solid transparent; }
+    .rp-header.scrolled { background: rgba(255,255,255,0.86); border-bottom: 1px solid var(--border-1); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+    .rp-header .inner { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 32px; }
+    .rp-header .logo { height: 24px; transition: opacity var(--dur-base); }
+    .rp-header nav { display: flex; gap: 28px; }
+    .rp-header nav a { color: rgba(255,255,255,0.86); font-weight: 500; font-size: 14px; text-decoration: none; transition: color var(--dur-base); }
+    .rp-header.scrolled nav a { color: var(--fg-2); }
+    .rp-header nav a:hover { color: #fff; }
+    .rp-header.scrolled nav a:hover { color: var(--rp-blue); }
+    .rp-header .actions { display: flex; gap: 10px; align-items: center; }
+    .rp-header .actions .login { color: rgba(255,255,255,0.92); }
+    .rp-header.scrolled .actions .login { color: var(--fg-1); }
+
+    /* Hero */
+    .rp-hero { position: relative; background: linear-gradient(160deg, #1c5dff 0%, #0050FF 55%, #002cb8 100%); color: #fff; overflow: hidden; padding: 168px 0 120px; isolation: isolate; }
+    .rp-hero::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse 80% 60% at 30% 40%, #000 0%, transparent 70%); pointer-events: none; z-index: 0; }
+    .rp-hero .watermark { position: absolute; right: -160px; top: -80px; width: 880px; height: 880px; opacity: 0.10; pointer-events: none; z-index: 0; animation: float 14s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-20px, 18px) rotate(8deg); } }
+    .rp-hero .container { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 1fr; gap: 64px; align-items: center; }
+    .rp-hero .content { max-width: 620px; }
+    .rp-hero .badge-row { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; padding: 6px 14px 6px 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: rgba(255,255,255,0.92); margin-bottom: 28px; }
+    .rp-hero .badge-row .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #6FE0A4; box-shadow: 0 0 0 0 rgba(111,224,164,0.6); animation: pulse 1.8s ease-out infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(111,224,164,0.6); } 100% { box-shadow: 0 0 0 12px rgba(111,224,164,0); } }
+    .rp-hero h1 { font-family: var(--font-display); font-size: clamp(44px, 6.8vw, 92px); font-weight: 800; line-height: 0.96; letter-spacing: -0.03em; margin: 0 0 22px; color: #fff; text-wrap: balance; }
+    .rp-hero h1 .accent { color: #FFB58A; }
+    .rp-hero .lead { font-size: 19px; line-height: 1.55; color: rgba(255,255,255,0.84); max-width: 540px; margin: 0 0 36px; }
+    .rp-hero .lead .em { color: #fff; font-weight: 700; }
+    .rp-hero .reassure { margin-top: 32px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; font-size: 13px; color: rgba(255,255,255,0.74); }
+    .rp-hero .reassure .item { display: inline-flex; align-items: center; gap: 8px; }
+    .rp-hero .reassure .item svg { width: 14px; height: 14px; stroke: #6FE0A4; stroke-width: 2.5; }
+
+    /* Demo card */
+    .demo-card { position: relative; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-radius: 24px; padding: 8px; box-shadow: 0 30px 80px rgba(0, 20, 80, 0.30), 0 8px 24px rgba(0, 0, 0, 0.16); }
+    .demo-window { background: #fff; color: var(--fg-1); border-radius: 18px; overflow: hidden; font-size: 14px; }
+    .demo-titlebar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border-1); background: var(--bg-2); }
+    .demo-titlebar .dots { display: flex; gap: 6px; }
+    .demo-titlebar .dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--rp-slate-300); }
+    .demo-titlebar .url { flex: 1; margin-left: 8px; background: #fff; border: 1px solid var(--border-1); border-radius: 8px; padding: 5px 12px; font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); display: flex; align-items: center; gap: 8px; }
+    .demo-titlebar .url svg { width: 11px; height: 11px; stroke: var(--risk-go); stroke-width: 2.5; }
+    .demo-body { padding: 22px; }
+    .demo-input-row { display: flex; gap: 8px; background: var(--bg-2); padding: 6px; border-radius: 14px; border: 1px solid var(--border-1); }
+    .demo-input-row input { flex: 1; padding: 10px 14px; background: #fff; border: 1px solid var(--border-1); border-radius: 10px; font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--fg-1); outline: none; transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+    .demo-input-row input:focus { border-color: var(--rp-blue); box-shadow: 0 0 0 3px rgba(0,80,255,0.14); }
+    .demo-input-row button { background: var(--rp-blue); color: #fff; border: 0; border-radius: 10px; font-weight: 700; font-size: 13px; padding: 0 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background var(--dur-base) var(--ease-out); }
+    .demo-input-row button:hover { background: var(--rp-blue-600); }
+    .demo-input-row button:disabled { background: var(--rp-slate-300); cursor: not-allowed; }
+    .demo-input-row button svg { width: 14px; height: 14px; }
+    .demo-examples { margin-top: 14px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 12px; }
+    .demo-examples .lbl { color: var(--fg-3); font-weight: 600; }
+    .demo-examples .chip { background: var(--bg-2); border: 1px solid var(--border-1); border-radius: 999px; padding: 5px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-2); font-weight: 600; cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
+    .demo-examples .chip:hover { border-color: var(--rp-blue); color: var(--rp-blue); background: #fff; }
+    .demo-analyzing { margin-top: 18px; padding: 16px 18px; background: var(--bg-2); border-radius: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .demo-analyzing .step { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--fg-3); font-weight: 500; opacity: 0.4; transition: opacity var(--dur-slow) var(--ease-out), color var(--dur-slow); }
+    .demo-analyzing .step.active { opacity: 1; color: var(--fg-1); }
+    .demo-analyzing .step.done { opacity: 1; color: var(--risk-go); }
+    .demo-analyzing .step .check { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+    .demo-analyzing .step.active .check { background: rgba(0,80,255,0.12); }
+    .demo-analyzing .step.done .check { background: var(--risk-go-soft); }
+    .demo-analyzing .step .check svg { width: 11px; height: 11px; stroke-width: 3; }
+    .demo-analyzing .step.active .check svg { stroke: var(--rp-blue); animation: spin 0.9s linear infinite; }
+    .demo-analyzing .step.done .check svg { stroke: var(--risk-go); }
+    .demo-analyzing .step.pending .check { background: var(--bg-3); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .demo-result { margin-top: 18px; padding: 22px; border-radius: 14px; animation: rise 0.4s var(--ease-out); }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .demo-result.go      { background: var(--risk-go-soft); border: 1px solid #B6E2C9; }
+    .demo-result.caution { background: var(--risk-caution-soft); border: 1px solid #FFCDA8; }
+    .demo-result.stop    { background: var(--risk-stop-soft); border: 1px solid #F2B6BF; }
+    .demo-result-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .demo-result-co { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--fg-1); line-height: 1.2; }
+    .demo-result-cnpj { font-family: var(--font-mono); font-size: 11px; color: var(--fg-3); margin-top: 4px; }
+    .demo-result-score-block { text-align: right; flex: none; }
+    .demo-result-score { font-family: var(--font-display); font-weight: 800; font-size: 44px; line-height: 0.9; letter-spacing: -0.02em; }
+    .demo-result.go      .demo-result-score { color: var(--risk-go); }
+    .demo-result.caution .demo-result-score { color: var(--rp-orange-700); }
+    .demo-result.stop    .demo-result-score { color: var(--risk-stop); }
+    .demo-result-label { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; background: #fff; }
+    .demo-result.go      .demo-result-label { color: var(--risk-go); }
+    .demo-result.caution .demo-result-label { color: var(--rp-orange-700); }
+    .demo-result.stop    .demo-result-label { color: var(--risk-stop); }
+    .demo-result-label .dot { width: 7px; height: 7px; border-radius: 50%; }
+    .demo-result.go      .demo-result-label .dot { background: var(--risk-go); }
+    .demo-result.caution .demo-result-label .dot { background: var(--rp-orange); }
+    .demo-result.stop    .demo-result-label .dot { background: var(--risk-stop); }
+    .demo-result-grid { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.07); }
+    .demo-result-grid .k { font-size: 11px; color: var(--fg-3); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+    .demo-result-grid .v { font-size: 14px; color: var(--fg-1); font-weight: 600; }
+    .demo-result-grid .pair { display: flex; flex-direction: column; gap: 2px; }
+    .demo-result-factors { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+    .demo-result-factor { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--fg-2); }
+    .demo-result-factor .ic { width: 14px; height: 14px; flex: none; }
+    .demo-result-factor.good .ic { color: var(--risk-go); }
+    .demo-result-factor.bad .ic { color: var(--risk-stop); }
+    .demo-result-factor.warn .ic { color: var(--rp-orange-700); }
+
+    /* Logos */
+    .logos-section { padding: 56px 0; background: var(--bg-2); border-bottom: 1px solid var(--border-1); }
+    .logos-strip { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .logos-strip .partner { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--fg-3); letter-spacing: -0.01em; opacity: 0.7; transition: opacity var(--dur-base); }
+    .logos-strip .partner:hover { opacity: 1; }
+    .logos-strip .partner.b { font-style: italic; font-weight: 500; }
+    .logos-eyebrow { text-align: center; color: var(--fg-3); font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 24px; }
+
+    /* Differentiators */
+    .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; border: 1px solid var(--border-1); border-radius: 24px; overflow: hidden; background: #fff; }
+    .diff-col { padding: 36px; display: flex; flex-direction: column; gap: 22px; }
+    .diff-col.them { background: var(--bg-2); color: var(--fg-2); border-right: 1px solid var(--border-1); }
+    .diff-col.us   { background: linear-gradient(180deg, #fff 0%, #f4f8ff 100%); }
+    .diff-col h3 { font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: 0; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
+    .diff-col.them h3 { color: var(--fg-2); }
+    .diff-col.us h3 { color: var(--rp-blue); }
+    .diff-col h3 .mark { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; font-weight: 800; background: var(--rp-slate-200); color: var(--fg-2); }
+    .diff-col.us h3 .mark { background: var(--rp-blue); color: #fff; }
+    .diff-list { display: flex; flex-direction: column; gap: 14px; margin: 0; padding: 0; list-style: none; }
+    .diff-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.5; }
+    .diff-list li .t { flex: 1; }
+    .diff-list li .t strong { font-weight: 700; }
+    .diff-list li .ico { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; margin-top: 1px; }
+    .diff-col.them li { color: var(--fg-2); }
+    .diff-col.them li .ico { background: var(--bg-3); }
+    .diff-col.them li .ico svg { width: 12px; height: 12px; stroke: var(--rp-slate-500); stroke-width: 2.5; }
+    .diff-col.us li { color: var(--fg-1); font-weight: 500; }
+    .diff-col.us li .ico { background: var(--risk-go); }
+    .diff-col.us li .ico svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; }
+
+    /* Feature grid */
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: step; }
+    .feature { position: relative; background: #fff; border: 1px solid var(--border-1); border-radius: 24px; padding: 36px 28px; display: flex; flex-direction: column; gap: 16px; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base); }
+    .feature:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(11,15,24,.08); border-color: var(--rp-blue-200); }
+    .feature .glyph { width: 56px; height: 56px; background: var(--rp-blue-50); border-radius: 16px; display: grid; place-items: center; position: relative; }
+    .feature .glyph svg { width: 28px; height: 28px; stroke: var(--rp-blue); stroke-width: 2; }
+    .feature .step-num { position: absolute; top: 28px; right: 28px; font-family: var(--font-display); font-weight: 800; font-size: 56px; color: var(--rp-slate-100); line-height: 1; letter-spacing: -0.04em; }
+    .feature h3 { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin: 0; line-height: 1.2; letter-spacing: -0.01em; }
+    .feature p { color: var(--fg-2); font-size: 15px; line-height: 1.55; margin: 0; }
+    .feature .step-label { font-family: var(--font-body); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rp-blue); font-weight: 700; }
+
+    /* Product preview */
+    .preview-shell { background: var(--rp-ink); border-radius: 28px; padding: 8px; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.30), 0 12px 32px rgba(0,0,0,0.20); position: relative; overflow: hidden; }
+    .preview-shell::before { content: ""; position: absolute; inset: -1px; background: linear-gradient(135deg, rgba(0,80,255,0.5), transparent 40%, rgba(255,110,41,0.35)); border-radius: 28px; z-index: 0; opacity: 0.5; filter: blur(20px); pointer-events: none; }
+    .preview-window { position: relative; z-index: 1; background: #fff; border-radius: 22px; overflow: hidden; }
+    .preview-toolbar { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-2); border-bottom: 1px solid var(--border-1); }
+    .preview-toolbar .dots { display: flex; gap: 6px; }
+    .preview-toolbar .dots span { width: 11px; height: 11px; border-radius: 50%; }
+    .preview-toolbar .dots span:nth-child(1) { background: #FF5F57; }
+    .preview-toolbar .dots span:nth-child(2) { background: #FEBC2E; }
+    .preview-toolbar .dots span:nth-child(3) { background: #28C840; }
+    .preview-toolbar .crumb { font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); display: flex; align-items: center; gap: 6px; }
+    .preview-toolbar .crumb .arr { color: var(--rp-slate-400); }
+    .preview-grid { display: grid; grid-template-columns: 220px 1fr; min-height: 540px; }
+    .preview-side { background: var(--bg-2); border-right: 1px solid var(--border-1); padding: 20px 14px; display: flex; flex-direction: column; gap: 4px; }
+    .preview-side .brand { display: flex; align-items: center; gap: 8px; padding: 0 10px 18px; border-bottom: 1px solid var(--border-1); margin-bottom: 10px; }
+    .preview-side .brand img { height: 18px; }
+    .preview-side .nav-i { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--fg-2); cursor: pointer; transition: background var(--dur-fast); }
+    .preview-side .nav-i:hover { background: var(--bg-3); }
+    .preview-side .nav-i.active { background: var(--rp-blue-50); color: var(--rp-blue); font-weight: 600; }
+    .preview-side .nav-i svg { width: 15px; height: 15px; stroke-width: 2; }
+    .preview-side .sec-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-4); padding: 14px 10px 6px; }
+    .preview-main { padding: 28px; overflow: hidden; }
+    .preview-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+    .preview-h h4 { font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: 0; line-height: 1.2; letter-spacing: -0.01em; }
+    .preview-h .sub-meta { font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); margin-top: 4px; }
+    .preview-h .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--risk-go-soft); color: var(--risk-go); flex: none; }
+    .preview-h .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--risk-go); }
+    .preview-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+    .preview-card { background: #fff; border: 1px solid var(--border-1); border-radius: 12px; padding: 16px; }
+    .preview-card .k { font-size: 11px; color: var(--fg-3); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+    .preview-card .v { font-family: var(--font-display); font-weight: 800; font-size: 28px; letter-spacing: -0.02em; margin-top: 4px; color: var(--fg-1); }
+    .preview-card .v .small { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--fg-3); margin-left: 4px; }
+    .preview-card.score .v { color: var(--risk-go); }
+    .preview-card .meta { font-size: 11px; color: var(--fg-3); margin-top: 4px; }
+    .preview-section { background: var(--bg-2); border-radius: 12px; padding: 18px; }
+    .preview-section h5 { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin: 0 0 12px; letter-spacing: -0.005em; }
+    .score-meter { position: relative; height: 12px; background: var(--bg-3); border-radius: 999px; overflow: hidden; margin: 6px 0 14px; }
+    .score-meter .fill { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--risk-go) 0%, #6FE0A4 100%); border-radius: 999px; }
+    .score-meter .pointer { position: absolute; top: -4px; width: 4px; height: 20px; background: var(--rp-ink); border-radius: 2px; }
+    .score-axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--fg-4); font-family: var(--font-mono); }
+    .factor-list { display: flex; flex-direction: column; gap: 8px; }
+    .factor-list .f { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-1); }
+    .factor-list .f .name { font-size: 13px; font-weight: 500; color: var(--fg-1); display: flex; align-items: center; gap: 8px; }
+    .factor-list .f .name .ic { width: 14px; height: 14px; }
+    .factor-list .f.good .ic { color: var(--risk-go); }
+    .factor-list .f.warn .ic { color: var(--rp-orange); }
+    .factor-list .f.bad .ic { color: var(--risk-stop); }
+    .factor-list .f .weight { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--bg-2); color: var(--fg-2); }
+    .factor-list .f.good .weight { background: var(--risk-go-soft); color: var(--risk-go); }
+    .factor-list .f.warn .weight { background: var(--risk-caution-soft); color: var(--rp-orange-700); }
+    .factor-list .f.bad .weight { background: var(--risk-stop-soft); color: var(--risk-stop); }
+
+    /* Risk Bands */
+    .bands { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .band { border-radius: 22px; padding: 32px; color: #fff; display: flex; flex-direction: column; gap: 12px; min-height: 280px; position: relative; overflow: hidden; transition: transform var(--dur-base) var(--ease-out); }
+    .band:hover { transform: translateY(-3px); }
+    .band .letter { font-family: var(--font-accent); font-size: 230px; line-height: 0.8; position: absolute; right: -10px; bottom: -50px; opacity: 0.20; pointer-events: none; }
+    .band .head-row { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.86; }
+    .band .head-row svg { width: 14px; height: 14px; stroke-width: 2.5; }
+    .band .name { font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.015em; }
+    .band .desc { font-size: 14px; line-height: 1.55; opacity: 0.92; max-width: 260px; flex: 1; }
+    .band .meta { font-family: var(--font-mono); font-size: 11px; opacity: 0.7; letter-spacing: 0.04em; text-transform: uppercase; }
+    .band.go { background: linear-gradient(160deg, #20B16C 0%, #168F54 100%); }
+    .band.caution { background: linear-gradient(160deg, #FF8847 0%, #E45713 100%); }
+    .band.stop { background: linear-gradient(160deg, #E04158 0%, #B7263C 100%); }
+
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; border-top: 1px solid var(--border-1); border-bottom: 1px solid var(--border-1); padding: 56px 0; }
+    .stat .num { font-family: var(--font-display); font-size: clamp(56px, 7.2vw, 96px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; color: var(--rp-blue); }
+    .stat .num.orange { color: var(--rp-orange); }
+    .stat .num.purple { color: var(--rp-purple); }
+    .stat .lbl { margin-top: 14px; font-size: 15px; color: var(--fg-2); line-height: 1.5; max-width: 280px; }
+
+    /* Testimonial */
+    .testimonial { background: linear-gradient(135deg, #1c5dff 0%, #0050FF 60%, #002cb8 100%); color: #fff; border-radius: 28px; padding: 72px 60px; position: relative; overflow: hidden; }
+    .testimonial .watermark { position: absolute; right: -40px; bottom: -60px; width: 380px; opacity: 0.10; }
+    .testimonial .quote { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 3vw, 38px); line-height: 1.2; letter-spacing: -0.018em; max-width: 780px; position: relative; z-index: 1; text-wrap: balance; }
+    .testimonial .quote::before { content: "\201C"; font-size: 1.4em; color: rgba(255,255,255,0.32); margin-right: 4px; vertical-align: -0.15em; }
+    .testimonial .who { margin-top: 28px; font-size: 14px; opacity: 0.86; position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; }
+    .testimonial .who .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #FFB58A, #FF6E29); display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+    .testimonial .who strong { display: block; font-weight: 700; opacity: 1; }
+
+    /* Pricing */
+    .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
+    .price { background: #fff; border: 1px solid var(--border-1); border-radius: 24px; padding: 36px; display: flex; flex-direction: column; gap: 18px; position: relative; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base); }
+    .price:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .price.featured { background: var(--bg-dark); color: #fff; border-color: var(--bg-dark); box-shadow: 0 18px 50px rgba(0,80,255,0.18); }
+    .price.featured:hover { box-shadow: 0 22px 60px rgba(0,80,255,0.22); }
+    .price-flag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--rp-orange); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; }
+    .price .tier { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-3); font-weight: 700; }
+    .price.featured .tier { color: rgba(255,255,255,0.62); }
+    .price .name { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; }
+    .price .sub { font-size: 13px; color: var(--fg-3); line-height: 1.45; margin-top: -8px; }
+    .price.featured .sub { color: rgba(255,255,255,0.66); }
+    .price .amount { font-family: var(--font-display); font-size: 52px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; display: flex; align-items: flex-end; gap: 4px; }
+    .price .amount .currency { font-size: 22px; font-weight: 600; margin-bottom: 8px; color: var(--fg-3); }
+    .price.featured .amount .currency { color: rgba(255,255,255,0.6); }
+    .price .amount .per { font-family: var(--font-body); font-size: 13px; color: var(--fg-3); font-weight: 500; margin-bottom: 10px; margin-left: 6px; }
+    .price.featured .amount .per { color: rgba(255,255,255,0.6); }
+    .price.featured .amount span:not(.currency):not(.per) { color: #fff; }
+    .price ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .price li { font-size: 14px; line-height: 1.4; color: var(--fg-2); display: flex; gap: 10px; align-items: flex-start; }
+    .price.featured li { color: rgba(255,255,255,0.88); }
+    .price li .ic { width: 18px; height: 18px; flex: none; margin-top: 1px; color: var(--rp-blue); }
+    .price.featured li .ic { color: var(--rp-orange); }
+    .price .cta { margin-top: 8px; }
+    .price.enterprise .amount { font-size: 32px; line-height: 1.1; }
+
+    /* FAQ */
+    .faq-wrap { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: start; }
+    .faq-list { display: flex; flex-direction: column; }
+    .faq-item { border-bottom: 1px solid var(--border-1); }
+    .faq-item:first-child { border-top: 1px solid var(--border-1); }
+    .faq-q { width: 100%; background: none; border: 0; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 4px; cursor: pointer; font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--fg-1); text-align: left; line-height: 1.35; letter-spacing: -0.005em; transition: color var(--dur-base); }
+    .faq-q:hover { color: var(--rp-blue); }
+    .faq-q .plus { width: 26px; height: 26px; flex: none; border-radius: 50%; background: var(--bg-2); display: grid; place-items: center; transition: background var(--dur-base) var(--ease-out), transform var(--dur-base); }
+    .faq-q .plus svg { width: 12px; height: 12px; stroke: var(--fg-1); stroke-width: 2.5; transition: transform var(--dur-base) var(--ease-out); }
+    .faq-item.open .faq-q .plus { background: var(--rp-blue); }
+    .faq-item.open .faq-q .plus svg { stroke: #fff; transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height var(--dur-slow) var(--ease-out); }
+    .faq-item.open .faq-a { max-height: 400px; }
+    .faq-a-inner { padding: 0 4px 22px; font-size: 15px; line-height: 1.6; color: var(--fg-2); max-width: 580px; }
+    .faq-a-inner a { color: var(--rp-blue); font-weight: 600; }
+
+    /* CTA strip */
+    .cta-strip { background: var(--rp-orange); color: #fff; border-radius: 32px; padding: 72px 64px; display: flex; justify-content: space-between; align-items: center; gap: 32px; position: relative; overflow: hidden; }
+    .cta-strip::after { content: ""; position: absolute; right: -160px; top: 50%; transform: translateY(-50%); width: 460px; height: 460px; background-image: url("assets/icon-white.svg"); background-repeat: no-repeat; background-size: contain; opacity: 0.12; pointer-events: none; }
+    .cta-strip h2 { font-family: var(--font-display); font-size: clamp(30px, 3.8vw, 48px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.05; margin: 0; max-width: 620px; color: #fff; text-wrap: balance; position: relative; z-index: 1; }
+    .cta-strip .actions { display: flex; gap: 12px; flex-shrink: 0; position: relative; z-index: 1; }
+    .cta-strip .btn-primary { background: #fff; color: var(--rp-orange-700); box-shadow: none; }
+    .cta-strip .btn-primary:hover { background: #FFF1E9; color: var(--rp-orange-700); }
+    .cta-strip .btn-secondary.on-dark { border-color: rgba(255,255,255,0.6); }
+
+    /* Footer */
+    .rp-footer { background: var(--rp-ink); color: rgba(255,255,255,0.7); padding: 80px 0 32px; }
+    .rp-footer .grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; }
+    .rp-footer h4 { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; margin: 0 0 18px; font-weight: 700; }
+    .rp-footer a { color: rgba(255,255,255,0.66); text-decoration: none; font-size: 14px; display: block; padding: 5px 0; transition: color var(--dur-fast); }
+    .rp-footer a:hover { color: #fff; }
+    .rp-footer .blurb { font-size: 14px; line-height: 1.6; max-width: 280px; margin: 18px 0 24px; color: rgba(255,255,255,0.66); }
+    .rp-footer .logo { height: 26px; }
+    .rp-footer .social { display: flex; gap: 10px; margin-top: 6px; }
+    .rp-footer .social a { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,0.16); border-radius: 50%; padding: 0; transition: all var(--dur-base); }
+    .rp-footer .social a:hover { background: var(--rp-blue); border-color: var(--rp-blue); }
+    .rp-footer .social svg { width: 15px; height: 15px; }
+    .rp-footer .bottom { margin-top: 64px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.10); display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.50); flex-wrap: wrap; gap: 14px; }
+
+    /* Utilities */
+    .text-center { text-align: center; }
+    .row-between { display: flex; justify-content: space-between; align-items: center; }
+    .mb-12 { margin-bottom: 12px; }
+    .mb-24 { margin-bottom: 24px; }
+
+    /* Mobile menu */
+    .menu-toggle { display: none; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.06); border-radius: 10px; cursor: pointer; align-items: center; justify-content: center; padding: 0; transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base); }
+    .menu-toggle svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; }
+    .rp-header.scrolled .menu-toggle { background: var(--bg-2); border-color: var(--border-1); }
+    .rp-header.scrolled .menu-toggle svg { stroke: var(--fg-1); }
+    .mobile-menu { position: fixed; inset: 0; background: var(--rp-ink); z-index: 60; display: none; flex-direction: column; padding: 24px; animation: slide-in 0.24s var(--ease-out); }
+    .mobile-menu.open { display: flex; }
+    @keyframes slide-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+    .mobile-menu .top { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .mobile-menu .top img { height: 24px; }
+    .mobile-menu .close { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.06); border-radius: 10px; cursor: pointer; padding: 0; display: grid; place-items: center; }
+    .mobile-menu .close svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; }
+    .mobile-menu .links { display: flex; flex-direction: column; gap: 4px; margin-top: 24px; flex: 1; }
+    .mobile-menu .links a { color: #fff; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.015em; padding: 14px 4px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
+    .mobile-menu .links a:hover { color: #FFB58A; }
+    .mobile-menu .links a svg { width: 18px; height: 18px; opacity: 0.5; }
+    .mobile-menu .ctas { display: flex; flex-direction: column; gap: 10px; padding-top: 24px; }
+    .mobile-menu .ctas .btn { justify-content: center; padding: 16px 22px; font-size: 15px; }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .container { padding: 0 28px; }
+      section.rp-section { padding: 96px 0; }
+      section.rp-section .head { margin-bottom: 48px; }
+      .rp-hero { padding: 144px 0 96px; }
+      .rp-hero .container { grid-template-columns: 1fr; gap: 48px; max-width: 720px; }
+      .rp-hero .content { max-width: 100%; }
+      .rp-hero h1 { font-size: clamp(40px, 7vw, 64px); }
+      .rp-hero .watermark { width: 640px; height: 640px; right: -200px; opacity: 0.08; }
+      .diff-grid { grid-template-columns: 1fr; }
+      .diff-col.them { border-right: 0; border-bottom: 1px solid var(--border-1); }
+      .pricing { grid-template-columns: 1fr; max-width: 540px; margin: 0 auto; }
+      .price-flag { left: 24px; transform: none; }
+      .faq-wrap { grid-template-columns: 1fr; gap: 36px; }
+      .rp-footer .grid { grid-template-columns: 1fr 1fr 1fr; gap: 36px; }
+      .rp-footer .grid > div:first-child { grid-column: 1 / -1; }
+      .rp-footer .blurb { max-width: 420px; }
+      .preview-grid { grid-template-columns: 1fr; min-height: auto; }
+      .preview-side { display: none; }
+      .preview-main { padding: 24px; }
+    }
+    @media (max-width: 820px) {
+      .rp-header nav { display: none; }
+      .rp-header .actions .login { display: none; }
+      .menu-toggle { display: inline-flex; }
+      .rp-header .actions .btn-primary { padding: 10px 16px; font-size: 13px; }
+      .rp-header .actions .btn-primary .arrow { display: none; }
+      section.rp-section { padding: 80px 0; }
+      section.rp-section h2 { font-size: clamp(28px, 5.6vw, 40px); }
+      section.rp-section .sub { font-size: 16px; }
+      section.rp-section .head { margin-bottom: 40px; }
+      .feature-grid { grid-template-columns: 1fr; gap: 16px; }
+      .feature { padding: 28px 24px; }
+      .feature .step-num { font-size: 44px; top: 22px; right: 22px; }
+      .bands { grid-template-columns: 1fr; gap: 12px; }
+      .band { min-height: 200px; padding: 28px; }
+      .band .letter { font-size: 180px; bottom: -36px; }
+      .stats { grid-template-columns: 1fr; gap: 28px; padding: 44px 0; text-align: left; }
+      .stat .lbl { max-width: 100%; }
+      .testimonial { padding: 48px 32px; border-radius: 22px; }
+      .testimonial .watermark { width: 280px; right: -50px; bottom: -40px; }
+      .cta-strip { flex-direction: column; align-items: flex-start; padding: 44px 32px; border-radius: 24px; gap: 22px; }
+      .cta-strip .actions { width: 100%; flex-direction: column; }
+      .cta-strip .actions .btn { width: 100%; justify-content: center; }
+      .cta-strip::after { width: 320px; height: 320px; right: -140px; opacity: 0.08; }
+      .rp-footer { padding: 56px 0 28px; }
+      .rp-footer .grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .rp-footer .bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .logos-strip { gap: 18px 24px; justify-content: center; }
+      .logos-strip .partner { font-size: 18px; }
+      .demo-body { padding: 18px; }
+      .demo-input-row { flex-direction: column; padding: 8px; }
+      .demo-input-row input { width: 100%; }
+      .demo-input-row button { width: 100%; height: 44px; justify-content: center; }
+      .demo-examples { font-size: 11px; }
+      .preview-cards { grid-template-columns: 1fr; gap: 10px; }
+      .preview-card .v { font-size: 24px; }
+      .diff-col { padding: 28px 24px; }
+      .diff-list li { font-size: 14px; }
+      .price { padding: 32px 28px; }
+      .price .amount { font-size: 44px; }
+    }
+    @media (max-width: 520px) {
+      .container { padding: 0 20px; }
+      section.rp-section { padding: 64px 0; }
+      section.rp-section .head { margin-bottom: 32px; }
+      section.rp-section h2 { font-size: clamp(26px, 7.4vw, 34px); margin: 10px 0 14px; }
+      section.rp-section .sub { font-size: 15px; }
+      .rp-hero { padding: 124px 0 72px; }
+      .rp-hero h1 { font-size: clamp(38px, 11vw, 54px); letter-spacing: -0.025em; }
+      .rp-hero .lead { font-size: 16px; margin-bottom: 28px; }
+      .rp-hero .reassure { gap: 16px; font-size: 12px; }
+      .rp-hero .badge-row { font-size: 11px; }
+      .rp-header .inner { height: 64px; }
+      .rp-header .logo { height: 20px; }
+      .rp-header .actions .btn-primary { padding: 9px 14px; font-size: 12px; }
+      .demo-card { border-radius: 18px; }
+      .demo-window { border-radius: 14px; font-size: 13px; }
+      .demo-titlebar { padding: 10px 12px; }
+      .demo-titlebar .url { font-size: 11px; padding: 4px 10px; }
+      .demo-body { padding: 14px; }
+      .demo-result { padding: 18px; }
+      .demo-result-score { font-size: 36px; }
+      .demo-result-co { font-size: 15px; }
+      .demo-result-grid { grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+      .demo-examples { gap: 5px; }
+      .demo-examples .chip { font-size: 10px; padding: 4px 9px; }
+      .feature { padding: 24px 22px; border-radius: 20px; }
+      .feature h3 { font-size: 19px; }
+      .feature .step-num { font-size: 38px; top: 20px; right: 20px; }
+      .band { min-height: 180px; padding: 24px; border-radius: 18px; }
+      .band .name { font-size: 24px; }
+      .band .letter { font-size: 140px; bottom: -22px; right: -8px; }
+      .stat .num { font-size: clamp(48px, 16vw, 72px); }
+      .stat .lbl { font-size: 14px; }
+      .testimonial { padding: 36px 24px; border-radius: 18px; }
+      .testimonial .quote { font-size: clamp(20px, 5.6vw, 26px); }
+      .testimonial .who .avatar { width: 38px; height: 38px; font-size: 14px; }
+      .price { padding: 28px 24px; border-radius: 20px; }
+      .price .amount { font-size: 40px; }
+      .price.enterprise .amount { font-size: 26px; }
+      .price .name { font-size: 22px; }
+      .faq-q { font-size: 16px; padding: 18px 4px; gap: 16px; }
+      .faq-a-inner { font-size: 14px; }
+      .cta-strip { padding: 36px 24px; border-radius: 20px; }
+      .cta-strip h2 { font-size: clamp(24px, 6.4vw, 30px); }
+      .rp-footer .grid { grid-template-columns: 1fr; gap: 28px; }
+      .rp-footer h4 { margin-bottom: 12px; }
+      .rp-footer .blurb { margin: 14px 0 20px; }
+      .diff-grid { border-radius: 20px; }
+      .diff-col { padding: 24px 22px; }
+      .diff-col h3 { font-size: 18px; }
+      .diff-list li { font-size: 14px; gap: 10px; }
+      .preview-shell { border-radius: 22px; padding: 6px; }
+      .preview-window { border-radius: 18px; }
+      .preview-toolbar { padding: 10px 14px; gap: 8px; }
+      .preview-toolbar .crumb { font-size: 11px; }
+      .preview-main { padding: 20px 16px; }
+      .preview-h h4 { font-size: 18px; }
+      .preview-h { flex-direction: column; gap: 10px; }
+      .preview-section h5 { font-size: 13px; }
+      .factor-list .f { padding: 8px 12px; }
+      .factor-list .f .name { font-size: 12px; }
+      .logos-section { padding: 36px 0; }
+      .logos-strip { gap: 14px 20px; }
+      .logos-strip .partner { font-size: 16px; }
+      .logos-eyebrow { font-size: 11px; margin-bottom: 18px; }
+    }
+    @media (hover: none) {
+      .feature:hover, .price:hover, .band:hover { transform: none; box-shadow: none; }
+      .feature:hover { border-color: var(--border-1); }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // ── Data ──────────────────────────────────────────────────────────────────
+    const SAMPLES = {
+      "12.345.678/0001-90": {
+        name: "Mercatto Distribuição Ltda", setor: "Atacado · Alimentos", fundacao: "2014",
+        score: "A", pct: 88, label: "Liberar prazo · 60 dias", band: "go",
+        prazo: "60 dias", limite: "R$ 180.000",
+        factors: [
+          { kind: "good", text: "Adimplente há 36+ meses" },
+          { kind: "good", text: "Faturamento estável e crescente" },
+          { kind: "good", text: "Sócios sem restrições" }
+        ]
+      },
+      "33.222.111/0001-44": {
+        name: "Vega Indústria & Comércio", setor: "Indústria · Têxtil", fundacao: "2019",
+        score: "B", pct: 62, label: "Atenção · prazo curto", band: "caution",
+        prazo: "21 dias", limite: "R$ 35.000",
+        factors: [
+          { kind: "good", text: "Empresa ativa, sem pendências fiscais" },
+          { kind: "warn", text: "1 protesto nos últimos 12 meses" },
+          { kind: "warn", text: "Sinais alternativos: pagamentos atrasados" }
+        ]
+      },
+      "55.999.444/0001-12": {
+        name: "Northbay Trading ME", setor: "Importação", fundacao: "2023",
+        score: "D", pct: 22, label: "Negar · risco alto", band: "stop",
+        prazo: "—", limite: "—",
+        factors: [
+          { kind: "bad", text: "Empresa recém-aberta (6 meses)" },
+          { kind: "bad", text: "Sócio com restrição em outro CNPJ" },
+          { kind: "bad", text: "Endereço inconsistente com Receita Federal" }
+        ]
+      }
+    };
+
+    const ANALYSIS_STEPS = [
+      "Consultando Receita Federal",
+      "Cruzando dados cadastrais e sócios",
+      "Lendo sinais alternativos",
+      "Aplicando modelo RiskPlus+"
+    ];
+
+    const FAQS = [
+      {
+        q: "Como a RiskPlus consegue analisar empresas que não aparecem em bureaus tradicionais?",
+        a: "A gente combina dados públicos da Receita Federal e cartórios com sinais alternativos — comportamento de pagamento em fornecedores, presença digital, vínculos societários — e roda tudo pelos nossos modelos proprietários. Empresas novas, MEIs e pequenas que o bureau ignora ganham um score consistente.",
+      },
+      {
+        q: "De onde vêm os dados? É legal e LGPD-compliant?",
+        a: "Usamos exclusivamente dados públicos (Receita Federal, JUCESP, cartórios, diários oficiais) e sinais alternativos de fontes contratadas e auditadas. A RiskPlus é registrada como bureau, segue a LGPD e mantém base de exclusão para titulares que solicitarem.",
+      },
+      {
+        q: "Quanto tempo demora cada análise?",
+        a: 'A mediana é de 8 segundos do clique em "Analisar" até o veredito na tela. Análises de empresas com pouco histórico ou alvos de aprofundamento podem levar até 30 segundos.',
+      },
+      {
+        q: "A RiskPlus integra com meu ERP?",
+        a: "Sim. No plano Pro temos integrações nativas com Omie, Bling e Conta Azul, além de API REST e webhooks pra qualquer sistema. No Enterprise, fazemos a integração junto com seu time.",
+      },
+      {
+        q: "O que acontece se eu passar do limite de análises do plano?",
+        a: "A gente avisa em 80% do consumo. Passou do limite, você pode comprar análises avulsas (R$ 1,90 cada no Pro) ou subir de plano sem perder histórico. Nada é bloqueado de surpresa.",
+      },
+      {
+        q: "Posso usar a decisão da RiskPlus como única fonte pra liberar crédito?",
+        a: "Sim — e é o caso da maioria dos nossos clientes. Toda decisão vem com a justificativa (fatores e pesos) pra você defender internamente. Em operações de alto valor, recomendamos combinar com sua política interna.",
+      },
+      {
+        q: "Tem fidelidade ou taxa de setup?",
+        a: "Não. Plano mensal, cancelável a qualquer momento, sem taxa de setup ou multa. Onboarding incluído.",
+      },
+      {
+        q: "Vocês monitoram a carteira depois ou só no momento da venda?",
+        a: "No plano Pro o monitoramento é contínuo: a gente reanalisa sua carteira todo dia e dispara alerta (e-mail, Slack ou webhook) quando o risco de um cliente muda — protesto novo, mudança societária, queda no score.",
+      },
+    ];
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    const formatCnpj = (v) => {
+      const d = v.replace(/\D/g, "").slice(0, 14);
+      return d
+        .replace(/^(\d{2})(\d)/, "$1.$2")
+        .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+        .replace(/\.(\d{3})(\d)/, ".$1/$2")
+        .replace(/(\d{4})(\d)/, "$1-$2");
+    };
+
+    // ── Header ────────────────────────────────────────────────────────────────
+    const Header = () => {
+      const [scrolled, setScrolled] = React.useState(false);
+      const [menuOpen, setMenuOpen] = React.useState(false);
+
+      React.useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 32);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+        return () => window.removeEventListener("scroll", onScroll);
+      }, []);
+
+      React.useEffect(() => {
+        document.body.style.overflow = menuOpen ? "hidden" : "";
+        if (window.lucide) window.lucide.createIcons();
+        return () => { document.body.style.overflow = ""; };
+      }, [menuOpen]);
+
+      const logo = scrolled ? "assets/logo-blue.svg" : "assets/logo-white.svg";
+      const navLinks = [
+        { href: "#produto", label: "Produto" },
+        { href: "#diferenciais", label: "Diferenciais" },
+        { href: "#como-funciona", label: "Como funciona" },
+        { href: "#precos", label: "Preços" },
+        { href: "#faq", label: "FAQ" },
+      ];
+
+      return (
+        <>
+          <header className={`rp-header ${scrolled ? "scrolled" : ""}`}>
+            <div className="container inner">
+              <a href="#" aria-label="RiskPlus">
+                <img className="logo" src={logo} alt="RiskPlus" />
+              </a>
+              <nav>
+                {navLinks.map((l) => <a key={l.href} href={l.href}>{l.label}</a>)}
+              </nav>
+              <div className="actions">
+                <a href="#" className="btn btn-ghost login">Entrar</a>
+                <a href="#hero-demo" className="btn btn-primary">
+                  Analisar CNPJ grátis <i data-lucide="arrow-right" className="arrow"></i>
+                </a>
+                <button className="menu-toggle" aria-label="Abrir menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
+                  <i data-lucide="menu"></i>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <div className={`mobile-menu ${menuOpen ? "open" : ""}`} role="dialog" aria-modal="true">
+            <div className="top">
+              <img src="assets/logo-white.svg" alt="RiskPlus" />
+              <button className="close" aria-label="Fechar menu" onClick={() => setMenuOpen(false)}>
+                <i data-lucide="x"></i>
+              </button>
+            </div>
+            <div className="links">
+              {navLinks.map((l) => (
+                <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>
+                  {l.label}<i data-lucide="arrow-up-right"></i>
+                </a>
+              ))}
+            </div>
+            <div className="ctas">
+              <a href="#hero-demo" className="btn btn-primary" onClick={() => setMenuOpen(false)}>Analisar CNPJ grátis</a>
+              <a href="#" className="btn btn-secondary on-dark" onClick={() => setMenuOpen(false)}>Entrar</a>
+            </div>
+          </div>
+        </>
+      );
+    };
+
+    // ── Hero ──────────────────────────────────────────────────────────────────
+    const Hero = () => {
+      const [cnpj, setCnpj] = React.useState("12.345.678/0001-90");
+      const [phase, setPhase] = React.useState("result");
+      const [stepIdx, setStepIdx] = React.useState(ANALYSIS_STEPS.length);
+      const [result, setResult] = React.useState(SAMPLES["12.345.678/0001-90"]);
+      const timersRef = React.useRef([]);
+
+      const clearTimers = () => { timersRef.current.forEach(clearTimeout); timersRef.current = []; };
+
+      const analisar = (raw) => {
+        const key = raw ?? cnpj;
+        clearTimers();
+        setPhase("analyzing");
+        setStepIdx(0);
+        const sample = SAMPLES[key] || {
+          name: "Empresa Exemplo Ltda", setor: "—", fundacao: "—",
+          score: "A", pct: 80, label: "Liberar prazo · 45 dias", band: "go",
+          prazo: "45 dias", limite: "R$ 90.000",
+          factors: [
+            { kind: "good", text: "Dados cadastrais válidos" },
+            { kind: "good", text: "Sem pendências relevantes" },
+            { kind: "good", text: "Atividade compatível com porte" }
+          ]
+        };
+        ANALYSIS_STEPS.forEach((_, i) => {
+          timersRef.current.push(setTimeout(() => setStepIdx(i + 1), (i + 1) * 420));
+        });
+        timersRef.current.push(setTimeout(() => {
+          setResult(sample);
+          setPhase("result");
+        }, ANALYSIS_STEPS.length * 420 + 250));
+      };
+
+      React.useEffect(() => () => clearTimers(), []);
+
+      const pickSample = (k) => { setCnpj(k); setTimeout(() => analisar(k), 30); };
+
+      return (
+        <section className="rp-hero" id="hero-demo">
+          <img className="watermark" src="assets/icon-white.svg" alt="" aria-hidden="true" />
+          <div className="container">
+            <div className="content">
+              <div className="badge-row">
+                <span className="pulse-dot"></span>
+                <span>Análises rodando agora · &gt; 12.000 hoje</span>
+              </div>
+              <h1>
+                Tome decisões de vendas a prazo<br />
+                <span className="accent">em segundos</span>
+              </h1>
+              <p className="lead">
+                Analise o <span className="em">CNPJ</span> do seu cliente B2B e descubra na hora se vale dar o prazo
+                mesmo para quem <span className="em">não aparece</span> nos bureaus tradicionais.
+              </p>
+              <div className="reassure">
+                <span className="item"><i data-lucide="check"></i> Sem planilha.</span>
+                <span className="item"><i data-lucide="check"></i> Sem achismo.</span>
+                <span className="item"><i data-lucide="check"></i> Sem cadastro.</span>
+              </div>
+            </div>
+
+            <div className="demo-card">
+              <div className="demo-window">
+                <div className="demo-titlebar">
+                  <div className="dots"><span></span><span></span><span></span></div>
+                  <div className="url"><i data-lucide="lock"></i>app.riskplus.com.br/analise</div>
+                </div>
+                <div className="demo-body">
+                  <div className="demo-input-row">
+                    <input
+                      value={cnpj}
+                      placeholder="00.000.000/0000-00"
+                      onChange={(e) => setCnpj(formatCnpj(e.target.value))}
+                      onKeyDown={(e) => e.key === "Enter" && analisar()}
+                      aria-label="CNPJ"
+                    />
+                    <button onClick={() => analisar()} disabled={phase === "analyzing"}>
+                      {phase === "analyzing" ? "Analisando…" : <><span>Analisar</span> <i data-lucide="arrow-right"></i></>}
+                    </button>
+                  </div>
+                  <div className="demo-examples">
+                    <span className="lbl">Exemplos:</span>
+                    {Object.keys(SAMPLES).map((k) => (
+                      <button key={k} className="chip" onClick={() => pickSample(k)}>{k}</button>
+                    ))}
+                  </div>
+                  {phase === "analyzing" && (
+                    <div className="demo-analyzing">
+                      {ANALYSIS_STEPS.map((s, i) => {
+                        const state = i < stepIdx ? "done" : i === stepIdx ? "active" : "pending";
+                        return (
+                          <div key={i} className={`step ${state}`}>
+                            <span className="check">
+                              {state === "done" && <i data-lucide="check"></i>}
+                              {state === "active" && <i data-lucide="loader-2"></i>}
+                              {state === "pending" && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rp-slate-400)" }} />}
+                            </span>
+                            {s}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                  {phase === "result" && result && (
+                    <div className={`demo-result ${result.band}`}>
+                      <div className="demo-result-head">
+                        <div>
+                          <div className="demo-result-co">{result.name}</div>
+                          <div className="demo-result-cnpj">CNPJ {cnpj}</div>
+                        </div>
+                        <div className="demo-result-score-block">
+                          <div className="demo-result-score">{result.score}</div>
+                          <div className="demo-result-label">
+                            <span className="dot"></span>{result.label}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="demo-result-grid">
+                        <div className="pair"><span className="k">Prazo recomendado</span><span className="v">{result.prazo}</span></div>
+                        <div className="pair"><span className="k">Limite sugerido</span><span className="v">{result.limite}</span></div>
+                        <div className="pair"><span className="k">Setor</span><span className="v">{result.setor}</span></div>
+                        <div className="pair"><span className="k">Fundação</span><span className="v">{result.fundacao}</span></div>
+                      </div>
+                      <div className="demo-result-factors">
+                        {result.factors.map((f, i) => (
+                          <div key={i} className={`demo-result-factor ${f.kind}`}>
+                            <i data-lucide={f.kind === "good" ? "check-circle-2" : f.kind === "warn" ? "alert-triangle" : "x-circle"} className="ic"></i>
+                            {f.text}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // ── Logos ─────────────────────────────────────────────────────────────────
+    const Logos = () => {
+      const names = [
+        { t: "Mercatto", b: false }, { t: "BraVal", b: true }, { t: "PRADO & CO", b: false },
+        { t: "Vega Crédito", b: false }, { t: "Northbay", b: true }, { t: "Cassiopeia", b: false },
+      ];
+      return (
+        <section className="logos-section" aria-label="Clientes">
+          <div className="container">
+            <div className="logos-eyebrow">Empresas que decidem com RiskPlus</div>
+            <div className="logos-strip">
+              {names.map((n, i) => <span key={i} className={`partner ${n.b ? "b" : ""}`}>{n.t}</span>)}
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // ── Differentiators ───────────────────────────────────────────────────────
+    const Differentiators = () => (
+      <section className="rp-section" id="diferenciais">
+        <div className="container">
+          <div className="head">
+            <span className="eyebrow">Diferenciais</span>
+            <h2>O bureau tradicional<br />não foi feito pro seu cliente</h2>
+            <p className="sub">Bureaus clássicos olham o passado de quem já tem histórico. RiskPlus combina dado público, alternativo e proprietário pra decidir até sobre empresas novas em segundos</p>
+          </div>
+          <div className="diff-grid">
+            <div className="diff-col them">
+              <h3><span className="mark">—</span>Bureau tradicional</h3>
+              <ul className="diff-list">
+                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Score sem explicação</span></li>
+                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Empresa nova ou pequena? Geralmente "sem informação".</span></li>
+                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Relatórios longos, sem clareza.</span></li>
+                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Atualização lenta dos dados</span></li>
+                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Integração via planilha, XML antigo ou nenhuma.</span></li>
+                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Cobrança por consulta avulsa, custo imprevisível.</span></li>
+              </ul>
+            </div>
+            <div className="diff-col us">
+              <h3><span className="mark">+</span>RiskPlus</h3>
+              <ul className="diff-list">
+                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Decisão direta: <strong>Liberar, Atenção ou Negar</strong> — com motivos.</span></li>
+                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Cobertura sobre empresas <strong>fora dos bureaus</strong> via sinais alternativos.</span></li>
+                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Prazo e limite sugeridos prontos pra aplicar.</span></li>
+                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Monitoramento contínuo: a gente avisa quando o risco muda.</span></li>
+                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">API moderna + integrações nativas com ERP.</span></li>
+                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Plano mensal previsível, com franquia de análises.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // ── FeatureGrid ───────────────────────────────────────────────────────────
+    const FeatureGrid = () => (
+      <section className="rp-section bg-soft" id="como-funciona">
+        <div className="container">
+          <div className="head">
+            <span className="eyebrow">Como funciona</span>
+            <h2>Três passos. Zero achismo.</h2>
+            <p className="sub">Você cola o CNPJ, a RiskPlus cruza dezenas de fontes — públicas, alternativas e proprietárias — e devolve uma decisão clara em segundos.</p>
+          </div>
+          <div className="feature-grid">
+            <div className="feature">
+              <span className="step-num">01</span>
+              <div className="glyph"><i data-lucide="search"></i></div>
+              <div className="step-label">Passo 01</div>
+              <h3>Cole o CNPJ</h3>
+              <p>Qualquer empresa brasileira, com ou sem máscara. Sem cadastro, sem upload de planilha, sem fricção.</p>
+            </div>
+            <div className="feature">
+              <span className="step-num">02</span>
+              <div className="glyph"><i data-lucide="layers"></i></div>
+              <div className="step-label">Passo 02</div>
+              <h3>A RiskPlus cruza os dados</h3>
+              <p>Receita Federal, sócios, processos, sinais alternativos e nossos modelos proprietários em segundos.</p>
+            </div>
+            <div className="feature">
+              <span className="step-num">03</span>
+              <div className="glyph"><i data-lucide="check-circle-2"></i></div>
+              <div className="step-label">Passo 03</div>
+              <h3>Receba a decisão</h3>
+              <p>Liberar, Atenção ou Negar, respeitando a sua política de crédito e a sua decisão.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // ── ProductPreview ────────────────────────────────────────────────────────
+    const ProductPreview = () => (
+      <section className="rp-section" id="produto">
+        <div className="container">
+          <div className="head">
+            <span className="eyebrow">Painel do produto</span>
+            <h2>Uma decisão. Os motivos por trás dela.</h2>
+            <p className="sub">Cada análise vai além do score, prazo e limite sugeridos, e a lista de fatores que pesaram, sem pontos cegos.</p>
+          </div>
+          <div className="preview-shell">
+            <div className="preview-window">
+              <div className="preview-toolbar">
+                <div className="dots"><span></span><span></span><span></span></div>
+                <div className="crumb">app.riskplus.com.br <span className="arr">›</span> análises <span className="arr">›</span> #A-2841</div>
+              </div>
+              <div className="preview-grid">
+                <aside className="preview-side">
+                  <div className="brand"><img src="assets/logo-blue.svg" alt="RiskPlus" /></div>
+                  <div className="nav-i active"><i data-lucide="layout-dashboard"></i>Análises</div>
+                  <div className="nav-i"><i data-lucide="eye"></i>Monitoramento</div>
+                  <div className="nav-i">
+                    <i data-lucide="bell"></i>Alertas
+                    <span style={{ marginLeft: 'auto', background: 'var(--rp-orange)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '1px 7px', borderRadius: 999 }}>3</span>
+                  </div>
+                  <div className="nav-i"><i data-lucide="file-text"></i>Relatórios</div>
+                  <div className="sec-label">Conta</div>
+                  <div className="nav-i"><i data-lucide="plug"></i>Integrações</div>
+                  <div className="nav-i"><i data-lucide="users"></i>Equipe</div>
+                  <div className="nav-i"><i data-lucide="settings"></i>Configurações</div>
+                </aside>
+                <div className="preview-main">
+                  <div className="preview-h">
+                    <div>
+                      <h4>Mercatto Distribuição Ltda</h4>
+                      <div className="sub-meta">CNPJ 12.345.678/0001-90 · análise há 2 min</div>
+                    </div>
+                    <div className="badge"><span className="dot"></span>Liberar prazo</div>
+                  </div>
+                  <div className="preview-cards">
+                    <div className="preview-card score">
+                      <div className="k">Score RiskPlus</div>
+                      <div className="v">A<span className="small">/F</span></div>
+                      <div className="meta">88 / 100 — top 12% do setor</div>
+                    </div>
+                    <div className="preview-card">
+                      <div className="k">Prazo sugerido</div>
+                      <div className="v">60 <span className="small">dias</span></div>
+                      <div className="meta">Histórico de pagamento estável</div>
+                    </div>
+                    <div className="preview-card">
+                      <div className="k">Limite sugerido</div>
+                      <div className="v">R$ 180<span className="small">k</span></div>
+                      <div className="meta">≈ 0,8× faturamento mensal</div>
+                    </div>
+                  </div>
+                  <div className="preview-section">
+                    <h5>Posição no score</h5>
+                    <div className="score-meter">
+                      <div className="fill" style={{ width: "88%" }}></div>
+                      <div className="pointer" style={{ left: "calc(88% - 2px)" }}></div>
+                    </div>
+                    <div className="score-axis">
+                      <span>F · 0</span><span>D</span><span>C</span><span>B</span><span>A · 100</span>
+                    </div>
+                  </div>
+                  <div className="preview-section" style={{ marginTop: 12 }}>
+                    <h5>Fatores que pesaram</h5>
+                    <div className="factor-list">
+                      <div className="f good"><span className="name"><i data-lucide="trending-up" className="ic"></i>Faturamento crescente nos últimos 12 meses</span><span className="weight">+24 pts</span></div>
+                      <div className="f good"><span className="name"><i data-lucide="shield-check" className="ic"></i>Adimplente em todos os bureaus consultados</span><span className="weight">+18 pts</span></div>
+                      <div className="f good"><span className="name"><i data-lucide="users" className="ic"></i>Quadro societário estável (3+ anos)</span><span className="weight">+12 pts</span></div>
+                      <div className="f warn"><span className="name"><i data-lucide="alert-triangle" className="ic"></i>1 protesto há 18 meses (regularizado)</span><span className="weight">−4 pts</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // ── RiskBands ─────────────────────────────────────────────────────────────
+    const RiskBands = () => (
+      <section className="rp-section bg-soft">
+        <div className="container">
+          <div className="head">
+            <span className="eyebrow">A decisão</span>
+            <h2>Três faixas. Uma resposta direta.</h2>
+            <p className="sub">Cada análise volta com uma das três faixas, prazo sugerido e os fatores que pesaram na decisão.</p>
+          </div>
+          <div className="bands">
+            <div className="band go">
+              <div className="head-row"><i data-lucide="check"></i>Faixa A · B</div>
+              <div className="name">Liberar</div>
+              <div className="desc">Cliente saudável. Prazo recomendado e limite sugerido prontos para usar.</div>
+              <div className="meta">≈ 64% das análises</div>
+              <div className="letter">A</div>
+            </div>
+            <div className="band caution">
+              <div className="head-row"><i data-lucide="alert-triangle"></i>Faixa C</div>
+              <div className="name">Atenção</div>
+              <div className="desc">Há sinais para considerar. Liberar com prazo curto, garantia ou follow-up.</div>
+              <div className="meta">≈ 22% das análises</div>
+              <div className="letter">B</div>
+            </div>
+            <div className="band stop">
+              <div className="head-row"><i data-lucide="x"></i>Faixa D · F</div>
+              <div className="name">Negar</div>
+              <div className="desc">Risco alto. A RiskPlus mostra os fatores e a justificativa para a recusa.</div>
+              <div className="meta">≈ 14% das análises</div>
+              <div className="letter">C</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // ── Stats ─────────────────────────────────────────────────────────────────
+    const Stats = () => (
+      <section className="rp-section tight">
+        <div className="container">
+          <div className="stats">
+            <div className="stat">
+              <div className="num">8s</div>
+              <div className="lbl">Tempo médio entre colar o CNPJ e receber uma decisão.</div>
+            </div>
+            <div className="stat">
+              <div className="num orange">+40%</div>
+              <div className="lbl">De cobertura sobre empresas invisíveis nos bureaus tradicionais.</div>
+            </div>
+            <div className="stat">
+              <div className="num">93%</div>
+              <div className="lbl">Das decisões classificadas como "Liberar" se tornam clientes adimplentes.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // ── Testimonial ───────────────────────────────────────────────────────────
+    const Testimonial = () => (
+      <section className="rp-section" id="clientes">
+        <div className="container">
+          <div className="testimonial">
+            <img className="watermark" src="assets/icon-white.svg" alt="" aria-hidden="true" />
+            <div className="quote">
+              Cortamos a inadimplência B2B em quase metade no primeiro trimestre. Hoje ninguém aqui dá prazo sem rodar o CNPJ na RiskPlus.
+            </div>
+            <div className="who">
+              <span className="avatar">LT</span>
+              <div>
+                <strong>Laura Tavares</strong>
+                Diretora financeira, Mercatto Distribuição
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // ── Pricing ───────────────────────────────────────────────────────────────
+    const Pricing = () => {
+      const tiers = [
+        {
+          tier: "Free", name: "Para validar a ideia", sub: "Pra quem quer testar antes de integrar.",
+          currency: "R$", amount: "0", per: "/ mês",
+          features: ["3 análises de CNPJ por mês", "Decisão Liberar / Atenção / Negar", "Prazo e limite sugeridos", "Acesso ao painel web"],
+          cta: "Começar grátis", ctaClass: "btn btn-secondary", flag: null, featured: false, enterprise: false,
+        },
+        {
+          tier: "Pro", name: "Pra equipes que decidem todo dia", sub: "O mais escolhido por times de crédito e financeiro.",
+          currency: "", amount: "Sob consulta", per: "",
+          features: ["Em definição análises por mês", "Monitoramento contínuo da carteira", "Alertas em tempo real por mudança de risco", "API REST + webhooks", "Integração com ERP (Omie, Bling, Conta Azul)", "Relatórios e exportação CSV"],
+          cta: "Começar 14 dias grátis", ctaClass: "btn btn-warn", flag: "Mais popular", featured: true, enterprise: false,
+        },
+        {
+          tier: "Enterprise", name: "Pra operações de alto volume", sub: "Capacidade dedicada, SLA e integrações sob medida.",
+          currency: "", amount: "Sob consulta", per: "",
+          features: ["Volume ilimitado de análises", "Modelo customizado pro seu setor", "SSO, auditoria e SLA contratual", "Gerente de conta dedicado", "Integração 1-a-1 com seu ERP / data warehouse", "Onboarding com nosso time de risco"],
+          cta: "Falar com vendas", ctaClass: "btn btn-secondary", flag: null, featured: false, enterprise: true,
+        },
+      ];
+
+      return (
+        <section className="rp-section bg-soft" id="precos">
+          <div className="container">
+            <div className="head text-center">
+              <span className="eyebrow" style={{ justifyContent: "center" }}>Planos</span>
+              <h2>Comece grátis. Escale quando precisar.</h2>
+              <p className="sub" style={{ marginInline: "auto" }}>Sem taxa de setup. Sem fidelidade. Você decide quando subir de plano — ou voltar.</p>
+            </div>
+            <div className="pricing">
+              {tiers.map((t) => (
+                <div key={t.tier} className={`price ${t.featured ? "featured" : ""} ${t.enterprise ? "enterprise" : ""}`}>
+                  {t.flag && <div className="price-flag">{t.flag}</div>}
+                  <div className="tier">{t.tier}</div>
+                  <div>
+                    <div className="name">{t.name}</div>
+                    <div className="sub">{t.sub}</div>
+                  </div>
+                  <div className="amount">
+                    {t.currency && <span className="currency">{t.currency}</span>}
+                    <span>{t.amount}</span>
+                    {t.per && <span className="per">{t.per}</span>}
+                  </div>
+                  <ul>
+                    {t.features.map((f, i) => (
+                      <li key={i}><i data-lucide="check" className="ic"></i>{f}</li>
+                    ))}
+                  </ul>
+                  <a href="#" className={`${t.ctaClass} cta`}>
+                    {t.cta}<i data-lucide="arrow-right" className="arrow"></i>
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // ── FAQ ───────────────────────────────────────────────────────────────────
+    const FaqItem = ({ q, a, isOpen, onToggle }) => (
+      <div className={`faq-item ${isOpen ? "open" : ""}`}>
+        <button className="faq-q" onClick={onToggle} aria-expanded={isOpen}>
+          <span>{q}</span>
+          <span className="plus"><i data-lucide="plus"></i></span>
+        </button>
+        <div className="faq-a">
+          <div className="faq-a-inner">{a}</div>
+        </div>
+      </div>
+    );
+
+    const FAQ = () => {
+      const [open, setOpen] = React.useState(0);
+      React.useEffect(() => {
+        setTimeout(() => window.lucide && window.lucide.createIcons(), 50);
+      }, [open]);
+
+      return (
+        <section className="rp-section" id="faq">
+          <div className="container">
+            <div className="faq-wrap">
+              <div>
+                <span className="eyebrow">FAQ</span>
+                <h2 style={{ marginTop: 14 }}>Perguntas que a gente ouve toda semana.</h2>
+                <p className="sub">
+                  Não achou o que precisava?{" "}
+                  <a href="#" style={{ color: "var(--rp-blue)", fontWeight: 600 }}>Fala com o time</a>{" "}
+                  — respondemos em até um dia útil.
+                </p>
+              </div>
+              <div className="faq-list">
+                {FAQS.map((f, i) => (
+                  <FaqItem
+                    key={i} q={f.q} a={f.a}
+                    isOpen={open === i}
+                    onToggle={() => setOpen(open === i ? -1 : i)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // ── CTA ───────────────────────────────────────────────────────────────────
+    const CTA = () => (
+      <section className="rp-section tight">
+        <div className="container">
+          <div className="cta-strip">
+            <h2>Pare de dar prazo no escuro.<br />Comece pela primeira análise.</h2>
+            <div className="actions">
+              <a href="#hero-demo" className="btn btn-primary btn-lg">
+                Analisar CNPJ grátis <i data-lucide="arrow-right" className="arrow"></i>
+              </a>
+              <a href="#" className="btn btn-secondary on-dark btn-lg">Falar com vendas</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // ── Footer ────────────────────────────────────────────────────────────────
+    const Footer = () => (
+      <footer className="rp-footer">
+        <div className="container">
+          <div className="grid">
+            <div>
+              <img className="logo" src="assets/logo-white.svg" alt="RiskPlus" />
+              <p className="blurb">Decisão de crédito B2B em segundos. Sem planilha. Sem achismo.</p>
+              <div className="social">
+                <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+                <a href="#" aria-label="Twitter / X"><i data-lucide="twitter"></i></a>
+                <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
+              </div>
+            </div>
+            <div>
+              <h4>Produto</h4>
+              <a href="#produto">Análise de CNPJ</a>
+              <a href="#">Monitoramento</a>
+              <a href="#">API &amp; webhooks</a>
+              <a href="#">Integrações ERP</a>
+              <a href="#precos">Preços</a>
+            </div>
+            <div>
+              <h4>Empresa</h4>
+              <a href="#">Sobre</a>
+              <a href="#">Carreiras</a>
+              <a href="#">Contato</a>
+              <a href="#">Imprensa</a>
+            </div>
+            <div>
+              <h4>Recursos</h4>
+              <a href="#">Documentação da API</a>
+              <a href="#">Blog</a>
+              <a href="#">Central de ajuda</a>
+              <a href="#">Segurança &amp; LGPD</a>
+              <a href="#">Status</a>
+            </div>
+          </div>
+          <div className="bottom">
+            <span>© 2026 RiskPlus Tecnologia Ltda. Todos os direitos reservados.</span>
+            <span>CNPJ/ · São Paulo, Brasil</span>
+          </div>
+        </div>
+      </footer>
+    );
+
+    // ── App ───────────────────────────────────────────────────────────────────
+    const App = () => {
+      React.useEffect(() => {
+        const renderIcons = () => window.lucide && window.lucide.createIcons();
+        renderIcons();
+        const tids = [
+          setTimeout(renderIcons, 250),
+          setTimeout(renderIcons, 800),
+          setTimeout(renderIcons, 1800),
+        ];
+        return () => tids.forEach(clearTimeout);
+      }, []);
+
+      return (
+        <>
+          <Header />
+          <Hero />
+          <Logos />
+          <Differentiators />
+          <FeatureGrid />
+          <ProductPreview />
+          <RiskBands />
+          <Stats />
+          <Testimonial />
+          <Pricing />
+          <FAQ />
+          <CTA />
+          <Footer />
+        </>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
