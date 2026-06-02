@@ -433,6 +433,10 @@
     .band.go { background: linear-gradient(160deg, #20B16C 0%, #168F54 100%); }
     .band.caution { background: linear-gradient(160deg, #FF8847 0%, #E45713 100%); }
     .band.stop { background: linear-gradient(160deg, #E04158 0%, #B7263C 100%); }
+    .band-archetype { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; margin-bottom: 2px; }
+    .band-traits { display: flex; flex-direction: column; gap: 7px; margin: 4px 0 16px; flex: 1; }
+    .band-trait { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.92; line-height: 1.35; }
+    .band-trait::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.6); flex: none; }
 
     /* Stats */
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; border-top: 1px solid var(--border-1); border-bottom: 1px solid var(--border-1); padding: 56px 0; }
@@ -1153,28 +1157,46 @@
         <div className="container">
           <div className="head">
             <span className="eyebrow">A decisão</span>
-            <h2>Três faixas. Uma resposta direta.</h2>
-            <p className="sub">Cada análise volta com uma das três faixas, prazo sugerido e os fatores que pesaram na decisão.</p>
+            <h2>Cada empresa recebe um arquétipo.</h2>
+            <p className="sub">Após a análise, a RiskPlus classifica o CNPJ em um dos três perfis comportamentais e entrega uma recomendação clara com os fatores que pesaram.</p>
           </div>
           <div className="bands">
             <div className="band go">
-              <div className="head-row"><i data-lucide="check"></i>Faixa A · B</div>
-              <div className="name">Liberar</div>
-              <div className="desc">Cliente saudável. Prazo recomendado e limite sugerido prontos para usar.</div>
+              <div className="head-row"><i data-lucide="check"></i>Faixa A e B</div>
+              <div className="band-archetype">Arquétipo</div>
+              <div className="name">Parceiro Confiável</div>
+              <div className="band-traits">
+                <span className="band-trait">Adimplente há mais de 24 meses</span>
+                <span className="band-trait">Faturamento estável ou crescente</span>
+                <span className="band-trait">Sócios sem restrições ativas</span>
+                <span className="band-trait">Cadastro consistente na Receita Federal</span>
+              </div>
               <div className="meta">≈ 64% das análises</div>
               <div className="letter">A</div>
             </div>
             <div className="band caution">
               <div className="head-row"><i data-lucide="alert-triangle"></i>Faixa C</div>
-              <div className="name">Atenção</div>
-              <div className="desc">Há sinais para considerar. Liberar com prazo curto, garantia ou follow-up.</div>
+              <div className="band-archetype">Arquétipo</div>
+              <div className="name">Empresa em Transição</div>
+              <div className="band-traits">
+                <span className="band-trait">Algum atraso registrado nos últimos 12 meses</span>
+                <span className="band-trait">Faturamento com oscilações recentes</span>
+                <span className="band-trait">Histórico societário com movimentações</span>
+                <span className="band-trait">Sinais alternativos mistos</span>
+              </div>
               <div className="meta">≈ 22% das análises</div>
               <div className="letter">B</div>
             </div>
             <div className="band stop">
-              <div className="head-row"><i data-lucide="x"></i>Faixa D · F</div>
-              <div className="name">Negar</div>
-              <div className="desc">Risco alto. A RiskPlus mostra os fatores e a justificativa para a recusa.</div>
+              <div className="head-row"><i data-lucide="x"></i>Faixa D e F</div>
+              <div className="band-archetype">Arquétipo</div>
+              <div className="name">Perfil Comprometido</div>
+              <div className="band-traits">
+                <span className="band-trait">Protestos ativos ou não regularizados</span>
+                <span className="band-trait">Sócio com restrições em outros CNPJs</span>
+                <span className="band-trait">Endereço ou cadastro inconsistente</span>
+                <span className="band-trait">Empresa recém-aberta com múltiplos sinais de risco</span>
+              </div>
               <div className="meta">≈ 14% das análises</div>
               <div className="letter">C</div>
             </div>
