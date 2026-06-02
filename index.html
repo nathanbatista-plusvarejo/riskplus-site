@@ -287,6 +287,23 @@
     .demo-result-factor.good .ic { color: var(--risk-go); }
     .demo-result-factor.bad .ic { color: var(--risk-stop); }
     .demo-result-factor.warn .ic { color: var(--rp-orange-700); }
+    .demo-persona-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .demo-persona-av { width: 42px; height: 42px; border-radius: 12px; font-family: var(--font-display); font-weight: 800; font-size: 14px; display: grid; place-items: center; flex: none; color: #fff; }
+    .demo-persona-av.go { background: linear-gradient(135deg, var(--risk-go), #168F54); }
+    .demo-persona-av.caution { background: linear-gradient(135deg, var(--rp-orange), var(--rp-orange-600)); }
+    .demo-persona-av.stop { background: linear-gradient(135deg, var(--risk-stop), #B7263C); }
+    .demo-persona-info { flex: 1; min-width: 0; }
+    .demo-persona-identity { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .demo-persona-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; }
+    .demo-persona-archetype { font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.02em; color: var(--fg-1); line-height: 1.1; }
+    .demo-persona-traits { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(0,0,0,0.07); }
+    .demo-persona-trait { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .demo-persona-trait svg { width: 11px; height: 11px; stroke-width: 2.5; }
+    .demo-result.go  .demo-persona-trait.good    { background: rgba(30,158,94,0.15); color: var(--risk-go); }
+    .demo-result.go  .demo-persona-trait.neutral  { background: rgba(255,110,41,0.12); color: var(--rp-orange-700); }
+    .demo-result.caution .demo-persona-trait.good    { background: rgba(30,158,94,0.15); color: var(--risk-go); }
+    .demo-result.caution .demo-persona-trait.neutral { background: rgba(255,110,41,0.15); color: var(--rp-orange-700); }
+    .demo-result.stop .demo-persona-trait.bad    { background: rgba(214,50,74,0.15); color: var(--risk-stop); }
 
     /* Logos */
     .logos-section { padding: 56px 0; background: var(--bg-2); border-bottom: 1px solid var(--border-1); }
@@ -458,6 +475,11 @@
     .price.featured li .ic { color: var(--rp-orange); }
     .price .cta { margin-top: 8px; }
     .price.enterprise .amount { font-size: 32px; line-height: 1.1; }
+    .consulting-block { display: flex; flex-direction: column; gap: 4px; }
+    .consulting-tag { font-family: var(--font-display); font-size: 32px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--fg-1); }
+    .price.featured .consulting-tag { color: #fff; }
+    .consulting-sub { font-size: 13px; font-weight: 500; color: var(--fg-3); }
+    .price.featured .consulting-sub { color: rgba(255,255,255,0.55); }
 
     /* FAQ */
     .faq-wrap { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: start; }
@@ -666,32 +688,37 @@
     const SAMPLES = {
       "12.345.678/0001-90": {
         name: "Mercatto Distribuição Ltda", setor: "Atacado · Alimentos", fundacao: "2014",
-        score: "A", pct: 88, label: "Liberar prazo · 60 dias", band: "go",
+        initials: "MD", score: "A", pct: 88, label: "Liberar prazo · 60 dias", band: "go",
+        archetype: "Parceiro Confiável",
         prazo: "60 dias", limite: "R$ 180.000",
-        factors: [
-          { kind: "good", text: "Adimplente há 36+ meses" },
-          { kind: "good", text: "Faturamento estável e crescente" },
-          { kind: "good", text: "Sócios sem restrições" }
+        traits: [
+          { kind: "good", text: "Pagador assíduo", icon: "check-circle" },
+          { kind: "good", text: "Crescimento estável", icon: "trending-up" },
+          { kind: "good", text: "Gestão consolidada", icon: "shield" },
+          { kind: "good", text: "10 anos de mercado", icon: "calendar" },
         ]
       },
       "33.222.111/0001-44": {
         name: "Vega Indústria & Comércio", setor: "Indústria · Têxtil", fundacao: "2019",
-        score: "B", pct: 62, label: "Atenção · prazo curto", band: "caution",
+        initials: "VI", score: "B", pct: 62, label: "Atenção · prazo curto", band: "caution",
+        archetype: "Empresa em Crescimento",
         prazo: "21 dias", limite: "R$ 35.000",
-        factors: [
-          { kind: "good", text: "Empresa ativa, sem pendências fiscais" },
-          { kind: "warn", text: "1 protesto nos últimos 12 meses" },
-          { kind: "warn", text: "Sinais alternativos: pagamentos atrasados" }
+        traits: [
+          { kind: "good", text: "Sem pendências fiscais", icon: "check-circle" },
+          { kind: "neutral", text: "1 protesto recente", icon: "alert-triangle" },
+          { kind: "neutral", text: "Pagamentos com atrasos", icon: "clock" },
+          { kind: "good", text: "5 anos de mercado", icon: "calendar" },
         ]
       },
       "55.999.444/0001-12": {
         name: "Northbay Trading ME", setor: "Importação", fundacao: "2023",
-        score: "D", pct: 22, label: "Negar · risco alto", band: "stop",
+        initials: "NT", score: "D", pct: 22, label: "Negar · risco alto", band: "stop",
+        archetype: "Perfil de Risco Elevado",
         prazo: "—", limite: "—",
-        factors: [
-          { kind: "bad", text: "Empresa recém-aberta (6 meses)" },
-          { kind: "bad", text: "Sócio com restrição em outro CNPJ" },
-          { kind: "bad", text: "Endereço inconsistente com Receita Federal" }
+        traits: [
+          { kind: "bad", text: "Empresa recém-aberta", icon: "alert-circle" },
+          { kind: "bad", text: "Sócio com restrições", icon: "user-x" },
+          { kind: "bad", text: "Cadastro inconsistente", icon: "x-circle" },
         ]
       }
     };
@@ -926,31 +953,31 @@
                   )}
                   {phase === "result" && result && (
                     <div className={`demo-result ${result.band}`}>
-                      <div className="demo-result-head">
-                        <div>
+                      <div className="demo-persona-top">
+                        <div className={`demo-persona-av ${result.band}`}>{result.initials}</div>
+                        <div className="demo-persona-info">
                           <div className="demo-result-co">{result.name}</div>
                           <div className="demo-result-cnpj">CNPJ {cnpj}</div>
                         </div>
-                        <div className="demo-result-score-block">
-                          <div className="demo-result-score">{result.score}</div>
-                          <div className="demo-result-label">
-                            <span className="dot"></span>{result.label}
-                          </div>
-                        </div>
+                        <div className="demo-result-score">{result.score}</div>
+                      </div>
+                      <div className="demo-persona-identity">
+                        <span className="demo-persona-label">Persona de Crédito</span>
+                        <span className="demo-persona-archetype">{result.archetype}</span>
+                        <div className="demo-result-label"><span className="dot"></span>{result.label}</div>
+                      </div>
+                      <div className="demo-persona-traits">
+                        {result.traits.map((t, i) => (
+                          <span key={i} className={`demo-persona-trait ${t.kind}`}>
+                            <i data-lucide={t.icon}></i>{t.text}
+                          </span>
+                        ))}
                       </div>
                       <div className="demo-result-grid">
                         <div className="pair"><span className="k">Prazo recomendado</span><span className="v">{result.prazo}</span></div>
                         <div className="pair"><span className="k">Limite sugerido</span><span className="v">{result.limite}</span></div>
                         <div className="pair"><span className="k">Setor</span><span className="v">{result.setor}</span></div>
                         <div className="pair"><span className="k">Fundação</span><span className="v">{result.fundacao}</span></div>
-                      </div>
-                      <div className="demo-result-factors">
-                        {result.factors.map((f, i) => (
-                          <div key={i} className={`demo-result-factor ${f.kind}`}>
-                            <i data-lucide={f.kind === "good" ? "check-circle-2" : f.kind === "warn" ? "alert-triangle" : "x-circle"} className="ic"></i>
-                            {f.text}
-                          </div>
-                        ))}
                       </div>
                     </div>
                   )}
@@ -1210,13 +1237,13 @@
         },
         {
           tier: "Pro", name: "Pra equipes que decidem todo dia", sub: "O mais escolhido por times de crédito e financeiro.",
-          currency: "", amount: "Sob consulta", per: "",
+          consulting: true,
           features: ["Em definição análises por mês", "Monitoramento contínuo da carteira", "Alertas em tempo real por mudança de risco", "API REST + webhooks", "Integração com ERP (Omie, Bling, Conta Azul)", "Relatórios e exportação CSV"],
           cta: "Começar 14 dias grátis", ctaClass: "btn btn-warn", flag: "Mais popular", featured: true, enterprise: false,
         },
         {
           tier: "Enterprise", name: "Pra operações de alto volume", sub: "Capacidade dedicada, SLA e integrações sob medida.",
-          currency: "", amount: "Sob consulta", per: "",
+          consulting: true,
           features: ["Volume ilimitado de análises", "Modelo customizado pro seu setor", "SSO, auditoria e SLA contratual", "Gerente de conta dedicado", "Integração 1-a-1 com seu ERP / data warehouse", "Onboarding com nosso time de risco"],
           cta: "Falar com vendas", ctaClass: "btn btn-secondary", flag: null, featured: false, enterprise: true,
         },
@@ -1240,9 +1267,18 @@
                     <div className="sub">{t.sub}</div>
                   </div>
                   <div className="amount">
-                    {t.currency && <span className="currency">{t.currency}</span>}
-                    <span>{t.amount}</span>
-                    {t.per && <span className="per">{t.per}</span>}
+                    {t.consulting ? (
+                      <div className="consulting-block">
+                        <span className="consulting-tag">Sob consulta</span>
+                        <span className="consulting-sub">Fale com o time de vendas</span>
+                      </div>
+                    ) : (
+                      <>
+                        {t.currency && <span className="currency">{t.currency}</span>}
+                        <span>{t.amount}</span>
+                        {t.per && <span className="per">{t.per}</span>}
+                      </>
+                    )}
                   </div>
                   <ul>
                     {t.features.map((f, i) => (
@@ -1364,7 +1400,7 @@
           </div>
           <div className="bottom">
             <span>© 2026 RiskPlus Tecnologia Ltda. Todos os direitos reservados.</span>
-            <span>CNPJ/ · São Paulo, Brasil</span>
+            <span>CNPJ 35.951.627/0001-02 · São Paulo, Brasil</span>
           </div>
         </div>
       </footer>
