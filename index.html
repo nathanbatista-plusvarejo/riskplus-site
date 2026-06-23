@@ -527,6 +527,25 @@
     .rp-footer .social svg { width: 15px; height: 15px; }
     .rp-footer .bottom { margin-top: 64px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.10); display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.50); flex-wrap: wrap; gap: 14px; }
 
+    /* Lead Capture */
+    .lc-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+    .lc-left h2 { color: #fff; }
+    .lc-perks { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-direction: column; gap: 12px; }
+    .lc-perks li { display: flex; align-items: center; gap: 10px; font-size: 15px; color: rgba(255,255,255,0.82); font-weight: 500; }
+    .lc-perks li i { color: var(--risk-go); width: 18px; height: 18px; flex: none; }
+    .lc-form-card { background: #fff; border-radius: 24px; padding: 40px; box-shadow: 0 24px 64px rgba(0,0,0,0.28); }
+    .lc-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .lc-field label { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--fg-1); display: flex; align-items: center; gap: 6px; }
+    .lc-opt { font-weight: 400; color: var(--fg-4); font-size: 12px; }
+    .lc-field input { padding: 12px 14px; border: 1.5px solid var(--border-1); border-radius: 10px; font-family: var(--font-body); font-size: 15px; color: var(--fg-1); outline: none; transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base); background: var(--bg-1); width: 100%; box-sizing: border-box; }
+    .lc-field input:focus { border-color: var(--rp-blue); box-shadow: 0 0 0 3px rgba(0,80,255,0.12); }
+    .lc-field input::placeholder { color: var(--fg-4); }
+    .lc-submit { width: 100%; justify-content: center; margin-top: 8px; }
+    .lc-success { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 24px 0; gap: 12px; }
+    .lc-success-icon i { width: 52px; height: 52px; stroke-width: 1.5; color: var(--risk-go); }
+    .lc-success-title { font-family: var(--font-display); font-weight: 700; font-size: 24px; color: var(--fg-1); }
+    .lc-success-sub { font-size: 15px; color: var(--fg-2); max-width: 280px; line-height: 1.55; }
+
     /* Utilities */
     .text-center { text-align: center; }
     .row-between { display: flex; justify-content: space-between; align-items: center; }
@@ -1021,7 +1040,7 @@
               </ul>
             </div>
             <div className="diff-col us">
-              <h3><span className="mark">+</span>RiskPlus</h3>
+              <h3><img src="assets/logo-blue.svg" alt="RiskPlus" style={{ height: 26 }} /></h3>
               <ul className="diff-list">
                 <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Decisão direta: <strong>Liberar, Atenção ou Negar</strong> — com motivos.</span></li>
                 <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Cobertura sobre empresas <strong>fora dos bureaus</strong> via sinais alternativos.</span></li>
@@ -1064,8 +1083,8 @@
               <span className="step-num">03</span>
               <div className="glyph"><i data-lucide="check-circle-2"></i></div>
               <div className="step-label">Passo 03</div>
-              <h3>Receba a decisão</h3>
-              <p>Liberar, Atenção ou Negar, respeitando a sua política de crédito e a sua decisão.</p>
+              <h3>Decida com clareza</h3>
+              <p>Você recebe uma recomendação fundamentada — Liberar, Atenção ou Negar — com os fatores e pesos que apoiam a decisão do seu time de crédito.</p>
             </div>
           </div>
         </div>
@@ -1370,6 +1389,73 @@
       );
     };
 
+    // ── LeadCapture ───────────────────────────────────────────────────────────
+    const LeadCapture = () => {
+      const [form, setForm] = React.useState({ nome: "", empresa: "", email: "", cnpj: "" });
+      const [sent, setSent] = React.useState(false);
+
+      const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+      const submit = (e) => {
+        e.preventDefault();
+        setSent(true);
+      };
+
+      React.useEffect(() => {
+        setTimeout(() => window.lucide && window.lucide.createIcons(), 50);
+      }, [sent]);
+
+      return (
+        <section className="rp-section bg-dark" id="acesso">
+          <div className="container">
+            <div className="lc-wrap">
+              <div className="lc-left">
+                <span className="eyebrow on-dark">Acesso antecipado</span>
+                <h2>Seja um dos primeiros a usar a RiskPlus.</h2>
+                <p className="sub" style={{ color: "rgba(255,255,255,0.7)" }}>Deixe seu contato — nosso time entra em breve para liberar o acesso e fazer o onboarding com você.</p>
+                <ul className="lc-perks">
+                  <li><i data-lucide="check-circle"></i>1 consulta grátis para testar agora</li>
+                  <li><i data-lucide="check-circle"></i>Onboarding guiado pelo time RiskPlus</li>
+                  <li><i data-lucide="check-circle"></i>Sem contrato. Sem fidelidade.</li>
+                </ul>
+              </div>
+              <div className="lc-form-card">
+                {sent ? (
+                  <div className="lc-success">
+                    <div className="lc-success-icon"><i data-lucide="check-circle"></i></div>
+                    <div className="lc-success-title">Recebemos!</div>
+                    <div className="lc-success-sub">Entraremos em contato em breve para liberar seu acesso à plataforma.</div>
+                  </div>
+                ) : (
+                  <form onSubmit={submit}>
+                    <div className="lc-field">
+                      <label>Nome completo</label>
+                      <input name="nome" value={form.nome} onChange={handle} placeholder="João Silva" required />
+                    </div>
+                    <div className="lc-field">
+                      <label>Empresa</label>
+                      <input name="empresa" value={form.empresa} onChange={handle} placeholder="Distribuidora Exemplo Ltda" required />
+                    </div>
+                    <div className="lc-field">
+                      <label>E-mail corporativo</label>
+                      <input type="email" name="email" value={form.email} onChange={handle} placeholder="joao@empresa.com.br" required />
+                    </div>
+                    <div className="lc-field">
+                      <label>CNPJ da empresa <span className="lc-opt">opcional</span></label>
+                      <input name="cnpj" value={form.cnpj} onChange={handle} placeholder="00.000.000/0001-00" />
+                    </div>
+                    <button type="submit" className="btn btn-warn btn-lg lc-submit">
+                      Solicitar acesso <i data-lucide="arrow-right" className="arrow"></i>
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
     // ── CTA ───────────────────────────────────────────────────────────────────
     const CTA = () => (
       <section className="rp-section tight">
@@ -1455,9 +1541,9 @@
           <ProductPreview />
           <RiskBands />
           <Stats />
-          <Testimonial />
           <Pricing />
           <FAQ />
+          <LeadCapture />
           <CTA />
           <Footer />
         </>
