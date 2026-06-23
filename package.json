@@ -1,0 +1,9 @@
+{
+  "name": "riskplus-site",
+  "version": "1.0.0",
+  "description": "RiskPlus — Decisão de crédito B2B em segundos",
+  "scripts": {
+    "start": "python3 -m http.server 4444",
+    "dev": "python3 -m http.server 4444"
+  }
+}
