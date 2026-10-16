@@ -3,710 +3,470 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RiskPlus — Decisão de crédito B2B em segundos.</title>
-  <meta name="description" content="Analise o CNPJ do seu cliente B2B e descubra em segundos se vale dar o prazo — mesmo para quem não aparece nos bureaus tradicionais. Sem planilha. Sem achismo." />
+  <title>RiskPlus · Decisão de crédito B2B em segundos</title>
+  <meta name="description" content="Analise o CNPJ do seu cliente B2B e descubra em segundos se vale dar prazo, inclusive pra empresa que não aparece nos bureaus tradicionais." />
+  <meta property="og:title" content="RiskPlus · Decisão de crédito B2B em segundos" />
+  <meta property="og:description" content="Analise o CNPJ do seu cliente B2B e descubra em segundos se vale dar prazo." />
+  <meta name="color-scheme" content="light dark" />
   <link rel="icon" href="assets/icon-blue.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&family=Outfit:wght@600;800&family=Open+Sans:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
 
   <script src="vendor/react.js"></script>
   <script src="vendor/react-dom.js"></script>
   <script src="vendor/babel.js"></script>
-  <script src="vendor/lucide.js"></script>
 
   <style>
     /* ============================================================
-       RiskPlus Design System — Colors & Type
+       RiskPlus Design System tokens (project/styles/tokens.css,
+       "Guia de Estilo - Risk Plus v1"), laid out in an apple.com-style
+       tile system.
+       Shape rule (DS radii): buttons & inputs = --radius-md (12px),
+       chips = pill, inner cards = --radius-lg (20px),
+       tiles = --radius-xl (28px).
        ============================================================ */
-    @import url('https://fonts.googleapis.com/css2?family=Momo+Trust+Display:wght@400;700;800&family=Open+Sans:wght@400;500;600&display=swap');
-    /* Gracefully degrades to system fonts if Google Fonts is unavailable */
-
     :root {
-      --rp-blue:        #0050FF;
-      --rp-white:       #FFFFFF;
-      --rp-black:       #000000;
-      --rp-orange:      #FF6E29;
-      --rp-purple:      #6E56CF;
-      --rp-slate:       #5B6475;
+      /* Primary / secondary */
+      --rp-blue:   #0050FF;
+      --rp-white:  #FFFFFF;
+      --rp-orange: #FF6E29;
+      --rp-purple: #6E56CF;
+      --rp-blue-50: #EAF1FF;  --rp-blue-100: #CFDEFF; --rp-blue-200: #9DBDFF;
+      --rp-blue-300: #5C8EFF; --rp-blue-400: #2A6BFF; --rp-blue-600: #003ECC;
+      --rp-blue-700: #002E99; --rp-blue-800: #001F66; --rp-blue-900: #001233;
+      --rp-orange-50: #FFF1E9; --rp-orange-100: #FFD9C2; --rp-orange-300: #FFA170;
+      --rp-orange-600: #E45713; --rp-orange-700: #B7430A;
+      /* Neutrals (Grafite azulado) */
+      --rp-ink: #0B0F18; --rp-graphite: #1B2230;
+      --rp-slate-700: #3A4252; --rp-slate-600: #5B6475; --rp-slate-500: #7B8493;
+      --rp-slate-400: #A0A8B5; --rp-slate-300: #C4CAD3; --rp-slate-200: #DFE2E8;
+      --rp-slate-100: #EEF0F4; --rp-slate-50: #F7F8FA;
+      /* Risk decision palette */
+      --risk-go: #1E9E5E;   --risk-go-soft: #E3F6EC;
+      --risk-caution: #FF6E29; --risk-caution-soft: #FFF1E9;
+      --risk-stop: #D6324A; --risk-stop-soft: #FBE6EA;
 
-      --rp-blue-50:     #EAF1FF;
-      --rp-blue-100:    #CFDEFF;
-      --rp-blue-200:    #9DBDFF;
-      --rp-blue-300:    #5C8EFF;
-      --rp-blue-400:    #2A6BFF;
-      --rp-blue-500:    #0050FF;
-      --rp-blue-600:    #003ECC;
-      --rp-blue-700:    #002E99;
-      --rp-blue-800:    #001F66;
-      --rp-blue-900:    #001233;
+      /* Type */
+      --font-display: 'Momo Trust Display', 'Outfit', system-ui, sans-serif;
+      --font-body:    'Open Sans', system-ui, -apple-system, sans-serif;
+      --font-mono:    ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-      --rp-orange-50:   #FFF1E9;
-      --rp-orange-100:  #FFD9C2;
-      --rp-orange-300:  #FFA170;
-      --rp-orange-500:  #FF6E29;
-      --rp-orange-600:  #E45713;
-      --rp-orange-700:  #B7430A;
-
-      --rp-ink:         #0B0F18;
-      --rp-graphite:    #1B2230;
-      --rp-slate-700:   #3A4252;
-      --rp-slate-600:   #5B6475;
-      --rp-slate-500:   #7B8493;
-      --rp-slate-400:   #A0A8B5;
-      --rp-slate-300:   #C4CAD3;
-      --rp-slate-200:   #DFE2E8;
-      --rp-slate-100:   #EEF0F4;
-      --rp-slate-50:    #F7F8FA;
-
-      --fg-1:           var(--rp-ink);
-      --fg-2:           var(--rp-slate-700);
-      --fg-3:           var(--rp-slate-600);
-      --fg-4:           var(--rp-slate-500);
-      --fg-inverse:     var(--rp-white);
-
-      --bg-1:           var(--rp-white);
-      --bg-2:           var(--rp-slate-50);
-      --bg-3:           var(--rp-slate-100);
-      --bg-brand:       var(--rp-blue);
-      --bg-brand-soft:  var(--rp-blue-50);
-      --bg-dark:        var(--rp-ink);
-
-      --border-1:       var(--rp-slate-200);
-      --border-2:       var(--rp-slate-300);
-      --border-strong:  var(--rp-slate-700);
-
-      --accent:         var(--rp-blue);
-      --accent-hover:   var(--rp-blue-600);
-      --accent-pressed: var(--rp-blue-700);
-
-      --warn:           var(--rp-orange);
-      --highlight:      var(--rp-purple);
-
-      --risk-go:        #1E9E5E;
-      --risk-go-soft:   #E3F6EC;
-      --risk-caution:   var(--rp-orange);
-      --risk-caution-soft: var(--rp-orange-50);
-      --risk-stop:      #D6324A;
-      --risk-stop-soft: #FBE6EA;
-
-      --font-display:   'Momo Trust Display', 'Outfit', system-ui, sans-serif;
-      --font-accent:    'Jomhuria', 'Outfit', serif;
-      --font-body:      'Open Sans', system-ui, -apple-system, sans-serif;
-      --font-mono:      ui-monospace, 'SFMono-Regular', Menlo, monospace;
-
-      --text-display:   clamp(3rem, 6vw, 5.5rem);
-      --text-h1:        clamp(2.25rem, 4vw, 3.5rem);
-      --text-h2:        clamp(1.75rem, 3vw, 2.5rem);
-      --text-h3:        1.5rem;
-      --text-h4:        1.25rem;
-      --text-lead:      1.125rem;
-      --text-body:      1rem;
-      --text-small:     0.875rem;
-      --text-micro:     0.75rem;
-
-      --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
-      --space-5: 20px; --space-6: 24px; --space-7: 32px; --space-8: 40px;
-      --space-9: 56px; --space-10: 72px; --space-11: 96px;
-
-      --radius-xs: 4px;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 20px;
-      --radius-xl: 28px;
-      --radius-pill: 999px;
-
-      --shadow-xs:  0 1px 2px rgba(11, 15, 24, 0.04);
-      --shadow-sm:  0 1px 3px rgba(11, 15, 24, 0.06), 0 1px 2px rgba(11, 15, 24, 0.04);
-      --shadow-md:  0 4px 12px rgba(11, 15, 24, 0.08), 0 2px 4px rgba(11, 15, 24, 0.04);
-      --shadow-lg:  0 12px 32px rgba(11, 15, 24, 0.10), 0 4px 8px rgba(11, 15, 24, 0.04);
-      --shadow-brand: 0 12px 32px rgba(0, 80, 255, 0.22), 0 4px 12px rgba(0, 80, 255, 0.12);
-
-      --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
-      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-      --dur-fast:    120ms;
-      --dur-base:    180ms;
-      --dur-slow:    280ms;
-
-      --gradient-brand: linear-gradient(180deg, #1a5bff 0%, #0050FF 50%, #003ad9 100%);
+      /* Radii, shadows, motion */
+      --radius-xs: 4px; --radius-sm: 8px; --radius-md: 12px; --radius-lg: 20px; --radius-xl: 28px; --radius-pill: 999px;
+      --shadow-sm: 0 1px 3px rgba(11,15,24,.06), 0 1px 2px rgba(11,15,24,.04);
+      --shadow-md: 0 4px 12px rgba(11,15,24,.08), 0 2px 4px rgba(11,15,24,.04);
+      --shadow-lg: 0 12px 32px rgba(11,15,24,.10), 0 4px 8px rgba(11,15,24,.04);
+      --shadow-brand: 0 12px 32px rgba(0,80,255,.22), 0 4px 12px rgba(0,80,255,.12);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       --gradient-cover: linear-gradient(135deg, #1a5bff 0%, #0050FF 60%, #002cb8 100%);
-    }
 
-    body {
-      font-family: var(--font-body);
-      font-size: var(--text-body);
-      line-height: 1.55;
-      color: var(--fg-1);
-      background: var(--bg-1);
-      -webkit-font-smoothing: antialiased;
-    }
-    h1, .h1 { font-family: var(--font-display); font-size: var(--text-h1); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; color: var(--fg-1); }
-    h2, .h2 { font-family: var(--font-display); font-size: var(--text-h2); font-weight: 700; line-height: 1.08; letter-spacing: -0.015em; color: var(--fg-1); }
-    h3, .h3 { font-family: var(--font-display); font-size: var(--text-h3); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
-    h4, .h4 { font-family: var(--font-display); font-size: var(--text-h4); font-weight: 600; line-height: 1.3; }
-    .display { font-family: var(--font-display); font-size: var(--text-display); font-weight: 800; line-height: 0.95; letter-spacing: -0.025em; }
-    .accent-display { font-family: var(--font-accent); font-size: clamp(4rem, 10vw, 9rem); line-height: 0.8; letter-spacing: -0.01em; }
-    p, .p { font-family: var(--font-body); font-size: var(--text-body); line-height: 1.6; color: var(--fg-2); }
-    .lead { font-size: var(--text-lead); line-height: 1.5; color: var(--fg-2); }
-    small, .small { font-size: var(--text-small); color: var(--fg-3); }
-    .micro { font-size: var(--text-micro); color: var(--fg-3); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
-    code, .code { font-family: var(--font-mono); font-size: 0.92em; background: var(--bg-3); padding: 2px 6px; border-radius: var(--radius-xs); }
-    a { color: var(--accent); text-decoration: none; transition: color var(--dur-fast) var(--ease-out); }
-    a:hover { color: var(--accent-hover); }
+      /* Semantic aliases used by this page */
+      --page:   var(--rp-white);
+      --tile:   var(--rp-slate-50);
+      --raised: var(--rp-white);
+      --ink:    var(--rp-ink);
+      --ink-2:  var(--rp-slate-700);
+      --muted:  var(--rp-slate-600);
+      --faint:  var(--rp-slate-400);
+      --line:   var(--rp-slate-200);
+      --hair:   rgba(11,15,24,.08);
+      --accent:      var(--rp-blue);
+      --accent-hov:  var(--rp-blue-600);
+      --accent-soft: var(--rp-blue-50);
+      --on-accent:   var(--rp-white);
+      --warn:        var(--rp-orange);
+      --warn-hov:    var(--rp-orange-600);
+      --dark:     var(--rp-ink);
+      --dark-2:   var(--rp-graphite);
+      --dark-ink: var(--rp-white);
+      --dark-mut: var(--rp-slate-400);
+      --go: var(--risk-go);           --go-soft: var(--risk-go-soft);
+      --caution: var(--rp-orange-700); --caution-soft: var(--risk-caution-soft);
+      --stop: var(--risk-stop);       --stop-soft: var(--risk-stop-soft);
 
-    /* ============================================================
-       Site Marketing styles
-       ============================================================ */
-    :root { color-scheme: light; }
+      --font: var(--font-body);
+      --mono: var(--font-mono);
+      --ease: var(--ease-out);
+      --r-tile: var(--radius-xl); --r-card: var(--radius-lg); --r-input: var(--radius-md);
+      --z-nav: 40; --z-menu: 50;
+      --nav-h: 76px;
+    }
+    /* Dark scheme built from the DS neutrals (the guide defines light only) */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --page:  var(--rp-ink);
+        --tile:  #111623;
+        --raised: var(--rp-graphite);
+        --ink:   var(--rp-slate-50);
+        --ink-2: var(--rp-slate-200);
+        --muted: var(--rp-slate-400);
+        --faint: var(--rp-slate-600);
+        --line:  var(--rp-slate-700);
+        --hair:  rgba(255,255,255,.1);
+        --accent:      var(--rp-blue-400);
+        --accent-hov:  var(--rp-blue-300);
+        --accent-soft: var(--rp-blue-900);
+        --dark:   #05070C;
+        --dark-2: var(--rp-graphite);
+        --go: #4FCB8B; --go-soft: #0F2A1E;
+        --caution: var(--rp-orange-300); --caution-soft: #2E1A0F;
+        --stop: #F07587; --stop-soft: #2E1218;
+      }
+      .logo-light { display: none !important; }
+      .logo-dark { display: block !important; }
+    }
+    .logo-dark { display: none !important; }
+
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); color: var(--fg-1); background: var(--bg-1); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    section[id] { scroll-margin-top: var(--nav-h); }
+    body { font-family: var(--font); font-size: 17px; line-height: 1.55; color: var(--ink); background: var(--page); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+    h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); font-weight: 400; letter-spacing: -.02em; text-wrap: balance; }
+    /* Display face for big numerals and headline-like labels */
+    .res-score, .res-arch, .stat .big, .pmetrics .v, .bt .share b, .bt .letter, .model .tier, .model .price b, .mmenu nav a { font-family: var(--font-display); font-weight: 400; }
+    p { margin: 0; text-wrap: pretty; }
+    .num { font-variant-numeric: tabular-nums; }
+    .skip { position: absolute; left: 16px; top: -60px; background: var(--ink); color: var(--page); padding: 10px 16px; border-radius: 999px; z-index: 100; }
+    .skip:focus { top: 12px; }
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    .eyebrow { font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rp-blue); display: inline-flex; align-items: center; gap: 10px; }
-    .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: 0.5; }
-    .eyebrow.on-dark { color: rgba(255,255,255,.82); }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .wrap-narrow { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+    .center { text-align: center; }
 
-    section.rp-section { padding: 112px 0; position: relative; }
-    section.rp-section.tight { padding: 72px 0; }
-    section.rp-section.bg-soft { background: var(--bg-2); }
-    section.rp-section.bg-dark { background: var(--rp-ink); color: #fff; }
-    section.rp-section h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 4.4vw, 56px); letter-spacing: -0.022em; line-height: 1.04; text-wrap: balance; margin: 14px 0 18px; color: inherit; }
-    section.rp-section.bg-dark h2 { color: #fff; }
-    section.rp-section .sub { font-size: 18px; color: var(--fg-2); max-width: 640px; line-height: 1.55; margin: 0; }
-    section.rp-section.bg-dark .sub { color: rgba(255,255,255,0.74); }
-    section.rp-section .head { max-width: 780px; margin-bottom: 64px; }
-    section.rp-section .head.text-center { margin-left: auto; margin-right: auto; }
+    /* Reveal ------------------------------------------------------ */
+    [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: calc(var(--i, 0) * 90ms); }
+    [data-reveal][data-shown] { opacity: 1; transform: none; }
 
-    .btn { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-body); font-weight: 600; font-size: 14px; padding: 13px 22px; border-radius: 12px; border: 1.5px solid transparent; cursor: pointer; transition: all var(--dur-base) var(--ease-out); text-decoration: none; white-space: nowrap; }
-    .btn-primary { background: var(--rp-blue); color: #fff; box-shadow: 0 10px 24px rgba(0,80,255,.24); }
-    .btn-primary:hover { background: var(--rp-blue-600); color: #fff; }
-    .btn-primary:active { background: var(--rp-blue-700); transform: scale(.985); }
-    .rp-header .btn-primary { background: var(--rp-orange); box-shadow: 0 8px 20px rgba(255,110,41,.30); }
-    .rp-header .btn-primary:hover { background: var(--rp-orange-600); }
-    .btn-secondary { background: #fff; color: var(--rp-blue); border-color: var(--border-1); }
-    .btn-secondary:hover { border-color: var(--rp-blue); color: var(--rp-blue-600); }
-    .btn-secondary.on-dark { background: rgba(255,255,255,0.06); color: #fff; border-color: rgba(255,255,255,0.20); }
-    .btn-secondary.on-dark:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.40); color: #fff; }
-    .btn-warn { background: var(--rp-orange); color: #fff; }
-    .btn-warn:hover { background: var(--rp-orange-600); color: #fff; }
-    .btn-ghost { background: transparent; color: var(--fg-1); border-color: transparent; }
-    .btn-ghost.on-dark { color: #fff; }
-    .btn-ghost.on-dark:hover { color: rgba(255,255,255,0.78); }
-    .btn-lg { padding: 17px 30px; font-size: 15px; border-radius: 14px; }
-    .btn .arrow { transition: transform var(--dur-base) var(--ease-out); }
-    .btn:hover .arrow { transform: translateX(3px); }
+    /* Buttons (pill) ------------------------------------------------ */
+    .pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: var(--radius-md); padding: 13px 22px; font-size: 15px; font-weight: 600; line-height: 1.2; border: 1px solid transparent; cursor: pointer; white-space: nowrap; transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease), transform .2s var(--ease); }
+    .pill:active { transform: scale(.97); }
+    .pill-fill { background: var(--accent); color: var(--on-accent); box-shadow: var(--shadow-brand); }
+    .pill-fill:hover { background: var(--accent-hov); }
+    .pill-line { color: var(--accent); border-color: var(--accent); }
+    .pill-line:hover { background: var(--accent); color: var(--on-accent); }
+    .pill-sm { padding: 9px 16px; font-size: 14px; }
+    .pill-warn { background: var(--warn); color: #fff; box-shadow: 0 8px 20px rgba(255,110,41,.30); }
+    .pill-warn:hover { background: var(--warn-hov); }
+    .more { color: var(--accent); display: inline-flex; align-items: center; gap: 2px; font-size: 15px; font-weight: 600; }
+    .more i { font-size: 14px; transition: transform .3s var(--ease); }
+    .more:hover { text-decoration: underline; }
+    .more:hover i { transform: translateX(3px); }
 
-    /* Header */
-    .rp-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; transition: background var(--dur-slow) var(--ease-out), border-color var(--dur-slow) var(--ease-out), backdrop-filter var(--dur-slow) var(--ease-out); background: transparent; border-bottom: 1px solid transparent; }
-    .rp-header.scrolled { background: rgba(255,255,255,0.86); border-bottom: 1px solid var(--border-1); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
-    .rp-header .inner { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 32px; }
-    .rp-header .logo { height: 48px; transition: opacity var(--dur-base); }
-    .rp-header nav { display: flex; gap: 28px; }
-    .rp-header nav a { color: rgba(255,255,255,0.86); font-weight: 500; font-size: 14px; text-decoration: none; transition: color var(--dur-base); }
-    .rp-header.scrolled nav a { color: var(--fg-2); }
-    .rp-header nav a:hover { color: #fff; }
-    .rp-header.scrolled nav a:hover { color: var(--rp-blue); }
-    .rp-header .actions { display: flex; gap: 10px; align-items: center; }
-    .rp-header .actions .login { color: rgba(255,255,255,0.92); }
-    .rp-header.scrolled .actions .login { color: var(--fg-1); }
+    /* Global nav ---------------------------------------------------- */
+    .gnav { position: sticky; top: 0; z-index: var(--z-nav); height: var(--nav-h); background: color-mix(in srgb, var(--page) 80%, transparent); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--hair); }
+    .gnav .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .gnav .logo img { height: 48px; display: block; }
+    .gnav nav { display: flex; gap: 32px; }
+    .gnav nav a { font-size: 14px; font-weight: 500; color: var(--ink-2); opacity: .85; transition: opacity .2s, color .2s; }
+    .gnav nav a:hover, .gnav nav a.active { opacity: 1; color: var(--ink); }
+    .gnav .right { display: flex; align-items: center; gap: 10px; }
+    .icon-btn { width: 36px; height: 36px; display: none; place-items: center; border: 0; background: none; cursor: pointer; font-size: 20px; color: var(--ink); }
 
-    /* Hero */
-    .rp-hero { position: relative; background: linear-gradient(160deg, #1c5dff 0%, #0050FF 55%, #002cb8 100%); color: #fff; overflow: hidden; padding: 168px 0 120px; isolation: isolate; }
-    .rp-hero::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse 80% 60% at 30% 40%, #000 0%, transparent 70%); pointer-events: none; z-index: 0; }
-    .rp-hero .watermark { position: absolute; right: -160px; top: -80px; width: 880px; height: 880px; opacity: 0.10; pointer-events: none; z-index: 0; animation: float 14s ease-in-out infinite; }
-    @keyframes float { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-20px, 18px) rotate(8deg); } }
-    .rp-hero .container { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 1fr; gap: 64px; align-items: start; }
-    .rp-hero .content { max-width: 620px; }
-    .rp-hero .badge-row { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; padding: 6px 14px 6px 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: rgba(255,255,255,0.92); margin-bottom: 28px; }
-    .rp-hero .badge-row .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #6FE0A4; box-shadow: 0 0 0 0 rgba(111,224,164,0.6); animation: pulse 1.8s ease-out infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(111,224,164,0.6); } 100% { box-shadow: 0 0 0 12px rgba(111,224,164,0); } }
-    .rp-hero h1 { font-family: var(--font-display); font-size: clamp(36px, 4.4vw, 58px); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin: 0 0 22px; color: #fff; text-wrap: initial; }
-    .rp-hero h1 .accent { color: #FFB58A; }
-    .rp-hero .lead { font-size: 19px; line-height: 1.55; color: rgba(255,255,255,0.84); max-width: 540px; margin: 0 0 36px; }
-    .rp-hero .lead .em { color: #fff; font-weight: 700; }
-    .rp-hero .reassure { margin-top: 32px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; font-size: 13px; color: rgba(255,255,255,0.74); }
-    .rp-hero .reassure .item { display: inline-flex; align-items: center; gap: 8px; }
-    .rp-hero .reassure .item svg { width: 14px; height: 14px; stroke: #6FE0A4; stroke-width: 2.5; }
+    .mmenu { position: fixed; inset: 0; z-index: var(--z-menu); background: var(--page); padding: 0 32px 32px; display: flex; flex-direction: column; visibility: hidden; opacity: 0; transition: opacity .3s var(--ease), visibility 0s .3s; }
+    .mmenu.open { visibility: visible; opacity: 1; transition: opacity .3s var(--ease); }
+    .mmenu .top { height: var(--nav-h); display: flex; justify-content: flex-end; align-items: center; }
+    .mmenu .top .icon-btn { display: grid; }
+    .mmenu nav { display: grid; gap: 4px; margin-top: 20px; }
+    .mmenu nav a { font-size: 28px; letter-spacing: -.02em; padding: 6px 0; opacity: 0; transform: translateY(-8px); transition: opacity .5s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--i) * 40ms + 80ms); }
+    .mmenu.open nav a { opacity: 1; transform: none; }
+    .mmenu .pill { margin-top: auto; }
 
-    /* Demo card */
-    .demo-card { position: relative; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-radius: 24px; padding: 8px; box-shadow: 0 30px 80px rgba(0, 20, 80, 0.30), 0 8px 24px rgba(0, 0, 0, 0.16); }
-    .demo-window { background: #fff; color: var(--fg-1); border-radius: 18px; overflow: hidden; font-size: 14px; }
-    .demo-titlebar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border-1); background: var(--bg-2); }
-    .demo-titlebar .dots { display: flex; gap: 6px; }
-    .demo-titlebar .dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--rp-slate-300); }
-    .demo-titlebar .url { flex: 1; margin-left: 8px; background: #fff; border: 1px solid var(--border-1); border-radius: 8px; padding: 5px 12px; font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); display: flex; align-items: center; gap: 8px; }
-    .demo-titlebar .url svg { width: 11px; height: 11px; stroke: var(--risk-go); stroke-width: 2.5; }
-    .demo-body { padding: 22px; }
-    .demo-input-row { display: flex; gap: 8px; background: var(--bg-2); padding: 6px; border-radius: 14px; border: 1px solid var(--border-1); }
-    .demo-input-row input { flex: 1; padding: 10px 14px; background: #fff; border: 1px solid var(--border-1); border-radius: 10px; font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--fg-1); outline: none; transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
-    .demo-input-row input:focus { border-color: var(--rp-blue); box-shadow: 0 0 0 3px rgba(0,80,255,0.14); }
-    .demo-input-row button { background: var(--rp-blue); color: #fff; border: 0; border-radius: 10px; font-weight: 700; font-size: 13px; padding: 0 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background var(--dur-base) var(--ease-out); }
-    .demo-input-row button:hover { background: var(--rp-blue-600); }
-    .demo-input-row button:disabled { background: var(--rp-slate-300); cursor: not-allowed; }
-    .demo-input-row button svg { width: 14px; height: 14px; }
-    .demo-examples { margin-top: 14px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 12px; }
-    .demo-examples .lbl { color: var(--fg-3); font-weight: 600; }
-    .demo-examples .chip { background: var(--bg-2); border: 1px solid var(--border-1); border-radius: 999px; padding: 5px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-2); font-weight: 600; cursor: pointer; transition: all var(--dur-fast) var(--ease-out); }
-    .demo-examples .chip:hover { border-color: var(--rp-blue); color: var(--rp-blue); background: #fff; }
-    .demo-analyzing { margin-top: 18px; padding: 16px 18px; background: var(--bg-2); border-radius: 12px; display: flex; flex-direction: column; gap: 10px; }
-    .demo-analyzing .step { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--fg-3); font-weight: 500; opacity: 0.4; transition: opacity var(--dur-slow) var(--ease-out), color var(--dur-slow); }
-    .demo-analyzing .step.active { opacity: 1; color: var(--fg-1); }
-    .demo-analyzing .step.done { opacity: 1; color: var(--risk-go); }
-    .demo-analyzing .step .check { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; flex: none; }
-    .demo-analyzing .step.active .check { background: rgba(0,80,255,0.12); }
-    .demo-analyzing .step.done .check { background: var(--risk-go-soft); }
-    .demo-analyzing .step .check svg { width: 11px; height: 11px; stroke-width: 3; }
-    .demo-analyzing .step.active .check svg { stroke: var(--rp-blue); animation: spin 0.9s linear infinite; }
-    .demo-analyzing .step.done .check svg { stroke: var(--risk-go); }
-    .demo-analyzing .step.pending .check { background: var(--bg-3); }
+    /* Type & tiles -------------------------------------------------- */
+    .tile { background: var(--tile); }
+    .sec { padding: 120px 0; }
+    .h-xl { font-size: clamp(40px, 6vw, 72px); line-height: 1.05; letter-spacing: -.03em; }
+    .h-lg { font-size: clamp(32px, 4.4vw, 56px); line-height: 1.06; letter-spacing: -.025em; }
+    .lead { font-size: clamp(17px, 1.6vw, 20px); line-height: 1.55; color: var(--muted); font-weight: 400; }
+    .sub-c { margin-top: 18px; max-width: 30em; margin-inline: auto; }
+    .actions { display: flex; gap: 22px; align-items: center; justify-content: center; flex-wrap: wrap; }
+
+    /* Hero: demo left, text right. On wide screens the hero pins and the
+       pieces travel from a centered stack into the two-column layout. */
+    .hero { position: relative; }
+    .hero-pin { position: relative; padding: 80px 0 96px; }
+    .hero-grid { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 72px; align-items: center; }
+    .hero-text { grid-column: 2; grid-row: 1; }
+    .hero-demo { grid-column: 1; grid-row: 1; }
+    .hero .h-xl { font-size: clamp(40px, 4.2vw, 60px); margin: 0 0 20px; }
+    .hero .h-xl .hl { color: var(--accent); }
+    .hero .lead { margin: 0 0 30px; max-width: 26em; }
+    .hero .actions { justify-content: flex-start; }
+    .load { opacity: 0; transform: translateY(18px); animation: load-in 1.1s var(--ease) forwards; animation-delay: var(--d, 0ms); }
+    @keyframes load-in { to { opacity: 1; transform: none; } }
+    @supports (animation-timeline: scroll()) {
+      @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+        .hero { height: calc(100dvh - var(--nav-h) + 780px); }
+        .hero-pin { position: sticky; top: var(--nav-h); height: calc(100dvh - var(--nav-h)); padding: 0; display: grid; align-items: center; overflow: hidden; }
+        .hero-text, .hero-demo { animation: linear both; animation-timeline: scroll(root); animation-range: 40px 560px; }
+        .hero-text { animation-name: hero-text-in; }
+        .hero-demo { animation-name: hero-demo-in; }
+        @keyframes hero-text-in { from { transform: translate(var(--tx, 0px), var(--ty, 0px)); } to { transform: none; } }
+        @keyframes hero-demo-in { from { transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(.96); } to { transform: none; } }
+      }
+    }
+
+    /* Demo (the real product component) */
+    .demo { background: var(--raised); border-radius: var(--r-tile); padding: 28px 28px 32px; box-shadow: 0 0 0 1px var(--hair), 0 30px 80px -30px rgba(0,40,120,.25); text-align: left; }
+    .demo-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; font-size: 13px; color: var(--muted); }
+    .demo-head .ok { display: inline-flex; align-items: center; gap: 6px; color: var(--go); }
+    .demo-row { display: flex; gap: 8px; background: var(--tile); border-radius: 14px; padding: 6px; border: 1px solid transparent; transition: border-color .25s var(--ease), box-shadow .25s var(--ease); }
+    .demo-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+    .demo-row input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font-family: var(--mono); font-size: 16px; padding: 8px 14px; color: var(--ink); }
+    .demo-row button { border: 0; border-radius: var(--radius-sm); font-weight: 600; background: var(--accent); color: var(--on-accent); font-size: 15px; padding: 0 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background .2s var(--ease), transform .2s var(--ease); }
+    .demo-row button:hover { background: var(--accent-hov); }
+    .demo-row button:active { transform: scale(.96); }
+    .demo-row button:disabled { opacity: .45; cursor: default; }
+    .demo-ex { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+    .demo-ex button { font-family: var(--mono); font-size: 12px; color: var(--ink-2); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; cursor: pointer; transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease); }
+    .demo-ex button:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+    .demo-ex button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--page); }
+    .demo-ex button:disabled { opacity: .5; cursor: default; }
+    .demo-stage { margin-top: 22px; min-height: 340px; }
+
+    .skel { display: grid; gap: 12px; }
+    .skel .row { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--faint); transition: color .4s var(--ease); }
+    .skel .row.active { color: var(--ink); }
+    .skel .row.done { color: var(--muted); }
+    .skel .row i { font-size: 16px; }
+    .skel .row.done i { color: var(--go); }
+    .skel .row.active i { color: var(--accent); animation: spin .9s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .demo-result { margin-top: 18px; padding: 22px; border-radius: 14px; animation: rise 0.4s var(--ease-out); }
-    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .demo-result.go      { background: var(--risk-go-soft); border: 1px solid #B6E2C9; }
-    .demo-result.caution { background: var(--risk-caution-soft); border: 1px solid #FFCDA8; }
-    .demo-result.stop    { background: var(--risk-stop-soft); border: 1px solid #F2B6BF; }
-    .demo-result-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-    .demo-result-co { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--fg-1); line-height: 1.2; }
-    .demo-result-cnpj { font-family: var(--font-mono); font-size: 11px; color: var(--fg-3); margin-top: 4px; }
-    .demo-result-score-block { text-align: right; flex: none; }
-    .demo-result-score { font-family: var(--font-display); font-weight: 800; font-size: 44px; line-height: 0.9; letter-spacing: -0.02em; }
-    .demo-result.go      .demo-result-score { color: var(--risk-go); }
-    .demo-result.caution .demo-result-score { color: var(--rp-orange-700); }
-    .demo-result.stop    .demo-result-score { color: var(--risk-stop); }
-    .demo-result-label { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; background: #fff; }
-    .demo-result.go      .demo-result-label { color: var(--risk-go); }
-    .demo-result.caution .demo-result-label { color: var(--rp-orange-700); }
-    .demo-result.stop    .demo-result-label { color: var(--risk-stop); }
-    .demo-result-label .dot { width: 7px; height: 7px; border-radius: 50%; }
-    .demo-result.go      .demo-result-label .dot { background: var(--risk-go); }
-    .demo-result.caution .demo-result-label .dot { background: var(--rp-orange); }
-    .demo-result.stop    .demo-result-label .dot { background: var(--risk-stop); }
-    .demo-result-grid { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.07); }
-    .demo-result-grid .k { font-size: 11px; color: var(--fg-3); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
-    .demo-result-grid .v { font-size: 14px; color: var(--fg-1); font-weight: 600; }
-    .demo-result-grid .pair { display: flex; flex-direction: column; gap: 2px; }
-    .demo-result-factors { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
-    .demo-result-factor { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--fg-2); }
-    .demo-result-factor .ic { width: 14px; height: 14px; flex: none; }
-    .demo-result-factor.good .ic { color: var(--risk-go); }
-    .demo-result-factor.bad .ic { color: var(--risk-stop); }
-    .demo-result-factor.warn .ic { color: var(--rp-orange-700); }
-    .demo-persona-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-    .demo-persona-av { width: 42px; height: 42px; border-radius: 12px; font-family: var(--font-display); font-weight: 800; font-size: 14px; display: grid; place-items: center; flex: none; color: #fff; }
-    .demo-persona-av.go { background: linear-gradient(135deg, var(--risk-go), #168F54); }
-    .demo-persona-av.caution { background: linear-gradient(135deg, var(--rp-orange), var(--rp-orange-600)); }
-    .demo-persona-av.stop { background: linear-gradient(135deg, var(--risk-stop), #B7263C); }
-    .demo-persona-info { flex: 1; min-width: 0; }
-    .demo-persona-identity { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
-    .demo-persona-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; }
-    .demo-persona-archetype { font-family: var(--font-display); font-weight: 800; font-size: 18px; letter-spacing: -0.02em; color: var(--fg-1); line-height: 1.1; }
-    .demo-persona-traits { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(0,0,0,0.07); }
-    .demo-persona-trait { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
-    .demo-persona-trait svg { width: 11px; height: 11px; stroke-width: 2.5; }
-    .demo-result.go  .demo-persona-trait.good    { background: rgba(30,158,94,0.15); color: var(--risk-go); }
-    .demo-result.go  .demo-persona-trait.neutral  { background: rgba(255,110,41,0.12); color: var(--rp-orange-700); }
-    .demo-result.caution .demo-persona-trait.good    { background: rgba(30,158,94,0.15); color: var(--risk-go); }
-    .demo-result.caution .demo-persona-trait.neutral { background: rgba(255,110,41,0.15); color: var(--rp-orange-700); }
-    .demo-result.stop .demo-persona-trait.bad    { background: rgba(214,50,74,0.15); color: var(--risk-stop); }
+    .skel .bar { height: 14px; border-radius: 7px; background: linear-gradient(90deg, var(--tile) 0%, var(--hair) 50%, var(--tile) 100%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+    .skel .bar.w1 { width: 72%; } .skel .bar.w2 { width: 48%; } .skel .bar.w3 { width: 86%; margin-top: 18px; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
 
-    /* Logos */
-    .logos-section { padding: 56px 0; background: var(--bg-2); border-bottom: 1px solid var(--border-1); }
-    .logos-strip { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-    .logos-strip .partner { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--fg-3); letter-spacing: -0.01em; opacity: 0.7; transition: opacity var(--dur-base); }
-    .logos-strip .partner:hover { opacity: 1; }
-    .logos-strip .partner.b { font-style: italic; font-weight: 500; }
-    .logos-eyebrow { text-align: center; color: var(--fg-3); font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 24px; }
+    .res { border-radius: var(--r-card); padding: 22px; opacity: 0; animation: load-in .7s var(--ease) forwards; }
+    .res.go { background: var(--go-soft); } .res.caution { background: var(--caution-soft); } .res.stop { background: var(--stop-soft); }
+    .res-top { display: flex; align-items: center; gap: 14px; }
+    .res-av { width: 44px; height: 44px; border-radius: 12px; background: var(--raised); display: grid; place-items: center; font-family: var(--mono); font-size: 13px; flex: none; }
+    .res-co { font-weight: 600; font-size: 16px; line-height: 1.25; }
+    .res-cnpj { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .res-score { margin-left: auto; font-size: 56px; line-height: .8; letter-spacing: -.03em; }
+    .tone-go { color: var(--go); } .tone-caution { color: var(--caution); } .tone-stop { color: var(--stop); }
+    .res-arch { font-size: 24px; letter-spacing: -.025em; margin-top: 18px; }
+    .res-lbl { font-size: 14px; font-weight: 500; margin-top: 2px; }
+    .traits { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+    .trait { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 5px 11px; border-radius: 999px; background: var(--raised); color: var(--ink-2); opacity: 0; animation: load-in .5s var(--ease) forwards; animation-delay: calc(var(--i) * 70ms + 180ms); }
+    .trait i { font-size: 13px; }
+    .trait.good i { color: var(--go); } .trait.neutral i { color: var(--caution); } .trait.bad i { color: var(--stop); }
+    .kv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; padding-top: 16px; border-top: 1px solid var(--hair); }
+    .kv .k { font-size: 12px; color: var(--muted); }
+    .kv .v { font-size: 15px; font-weight: 600; }
 
-    /* Differentiators */
-    .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; border: 1px solid var(--border-1); border-radius: 24px; overflow: hidden; background: #fff; }
-    .diff-col { padding: 36px; display: flex; flex-direction: column; gap: 22px; }
-    .diff-col.them { background: var(--bg-2); color: var(--fg-2); border-right: 1px solid var(--border-1); }
-    .diff-col.us   { background: linear-gradient(180deg, #fff 0%, #f4f8ff 100%); }
-    .diff-col h3 { font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: 0; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px; }
-    .diff-col.them h3 { color: var(--fg-2); }
-    .diff-col.us h3 { color: var(--rp-blue); }
-    .diff-col h3 .mark { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; font-weight: 800; background: var(--rp-slate-200); color: var(--fg-2); }
-    .diff-col.us h3 .mark { background: var(--rp-blue); color: #fff; }
-    .diff-list { display: flex; flex-direction: column; gap: 14px; margin: 0; padding: 0; list-style: none; }
-    .diff-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.5; }
-    .diff-list li .t { flex: 1; }
-    .diff-list li .t strong { font-weight: 700; }
-    .diff-list li .ico { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; margin-top: 1px; }
-    .diff-col.them li { color: var(--fg-2); }
-    .diff-col.them li .ico { background: var(--bg-3); }
-    .diff-col.them li .ico svg { width: 12px; height: 12px; stroke: var(--rp-slate-500); stroke-width: 2.5; }
-    .diff-col.us li { color: var(--fg-1); font-weight: 500; }
-    .diff-col.us li .ico { background: var(--risk-go); }
-    .diff-col.us li .ico svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; }
+    /* Marquee (only one on the page) */
+    .marquee { padding: 28px 0; overflow: hidden; border-bottom: 1px solid var(--hair); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+    .marquee .track { display: flex; gap: 48px; width: max-content; animation: slide 46s linear infinite; }
+    .marquee span { font-size: 21px; font-weight: 600; letter-spacing: -.02em; color: var(--faint); white-space: nowrap; }
+    @keyframes slide { to { transform: translateX(-50%); } }
 
-    /* Feature grid */
-    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: step; }
-    .feature { position: relative; background: #fff; border: 1px solid var(--border-1); border-radius: 24px; padding: 36px 28px; display: flex; flex-direction: column; gap: 16px; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base); }
-    .feature:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(11,15,24,.08); border-color: var(--rp-blue-200); }
-    .feature .glyph { width: 56px; height: 56px; background: var(--rp-blue-50); border-radius: 16px; display: grid; place-items: center; position: relative; }
-    .feature .glyph svg { width: 28px; height: 28px; stroke: var(--rp-blue); stroke-width: 2; }
-    .feature .step-num { position: absolute; top: 28px; right: 28px; font-family: var(--font-display); font-weight: 800; font-size: 56px; color: var(--rp-slate-100); line-height: 1; letter-spacing: -0.04em; }
-    .feature h3 { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin: 0; line-height: 1.2; letter-spacing: -0.01em; }
-    .feature p { color: var(--fg-2); font-size: 15px; line-height: 1.55; margin: 0; }
-    .feature .step-label { font-family: var(--font-body); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rp-blue); font-weight: 700; }
+    /* Scroll-lit statements */
+    .lit-head { margin-bottom: 80px; }
+    .lit-list { display: grid; gap: 56px; max-width: 900px; margin: 0 auto; }
+    .lit { color: var(--line); transition: color .7s var(--ease); }
+    .lit h3 { font-size: clamp(28px, 3.6vw, 48px); line-height: 1.1; letter-spacing: -.03em; }
+    .lit h3 b { transition: color .7s var(--ease); }
+    .lit p { margin-top: 12px; font-size: 17px; color: transparent; transition: color .7s var(--ease); }
+    .lit[data-on] { color: var(--ink); }
+    .lit[data-on] h3 b { color: var(--accent); }
+    .lit[data-on] p { color: var(--muted); }
 
-    /* Product preview */
-    .preview-shell { background: var(--rp-ink); border-radius: 28px; padding: 8px; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.30), 0 12px 32px rgba(0,0,0,0.20); position: relative; overflow: hidden; }
-    .preview-shell::before { content: ""; position: absolute; inset: -1px; background: linear-gradient(135deg, rgba(0,80,255,0.5), transparent 40%, rgba(255,110,41,0.35)); border-radius: 28px; z-index: 0; opacity: 0.5; filter: blur(20px); pointer-events: none; }
-    .preview-window { position: relative; z-index: 1; background: #fff; border-radius: 22px; overflow: hidden; }
-    .preview-toolbar { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-2); border-bottom: 1px solid var(--border-1); }
-    .preview-toolbar .dots { display: flex; gap: 6px; }
-    .preview-toolbar .dots span { width: 11px; height: 11px; border-radius: 50%; }
-    .preview-toolbar .dots span:nth-child(1) { background: #FF5F57; }
-    .preview-toolbar .dots span:nth-child(2) { background: #FEBC2E; }
-    .preview-toolbar .dots span:nth-child(3) { background: #28C840; }
-    .preview-toolbar .crumb { font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); display: flex; align-items: center; gap: 6px; }
-    .preview-toolbar .crumb .arr { color: var(--rp-slate-400); }
-    .preview-grid { display: grid; grid-template-columns: 220px 1fr; min-height: 540px; }
-    .preview-side { background: var(--bg-2); border-right: 1px solid var(--border-1); padding: 20px 14px; display: flex; flex-direction: column; gap: 4px; }
-    .preview-side .brand { display: flex; align-items: center; gap: 8px; padding: 0 10px 18px; border-bottom: 1px solid var(--border-1); margin-bottom: 10px; }
-    .preview-side .brand img { height: 18px; }
-    .preview-side .nav-i { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--fg-2); cursor: pointer; transition: background var(--dur-fast); }
-    .preview-side .nav-i:hover { background: var(--bg-3); }
-    .preview-side .nav-i.active { background: var(--rp-blue-50); color: var(--rp-blue); font-weight: 600; }
-    .preview-side .nav-i svg { width: 15px; height: 15px; stroke-width: 2; }
-    .preview-side .sec-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-4); padding: 14px 10px 6px; }
-    .preview-main { padding: 28px; overflow: hidden; }
-    .preview-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
-    .preview-h h4 { font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: 0; line-height: 1.2; letter-spacing: -0.01em; }
-    .preview-h .sub-meta { font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); margin-top: 4px; }
-    .preview-h .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--risk-go-soft); color: var(--risk-go); flex: none; }
-    .preview-h .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--risk-go); }
-    .preview-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
-    .preview-card { background: #fff; border: 1px solid var(--border-1); border-radius: 12px; padding: 16px; }
-    .preview-card .k { font-size: 11px; color: var(--fg-3); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-    .preview-card .v { font-family: var(--font-display); font-weight: 800; font-size: 28px; letter-spacing: -0.02em; margin-top: 4px; color: var(--fg-1); }
-    .preview-card .v .small { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--fg-3); margin-left: 4px; }
-    .preview-card.score .v { color: var(--risk-go); }
-    .preview-card .meta { font-size: 11px; color: var(--fg-3); margin-top: 4px; }
-    .preview-section { background: var(--bg-2); border-radius: 12px; padding: 18px; }
-    .preview-section h5 { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin: 0 0 12px; letter-spacing: -0.005em; }
-    .score-meter { position: relative; height: 12px; background: var(--bg-3); border-radius: 999px; overflow: hidden; margin: 6px 0 14px; }
-    .score-meter .fill { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--risk-go) 0%, #6FE0A4 100%); border-radius: 999px; }
-    .score-meter .pointer { position: absolute; top: -4px; width: 4px; height: 20px; background: var(--rp-ink); border-radius: 2px; }
-    .score-axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--fg-4); font-family: var(--font-mono); }
-    .factor-list { display: flex; flex-direction: column; gap: 8px; }
-    .factor-list .f { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-1); }
-    .factor-list .f .name { font-size: 13px; font-weight: 500; color: var(--fg-1); display: flex; align-items: center; gap: 8px; }
-    .factor-list .f .name .ic { width: 14px; height: 14px; }
-    .factor-list .f.good .ic { color: var(--risk-go); }
-    .factor-list .f.warn .ic { color: var(--rp-orange); }
-    .factor-list .f.bad .ic { color: var(--risk-stop); }
-    .factor-list .f .weight { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--bg-2); color: var(--fg-2); }
-    .factor-list .f.good .weight { background: var(--risk-go-soft); color: var(--risk-go); }
-    .factor-list .f.warn .weight { background: var(--risk-caution-soft); color: var(--rp-orange-700); }
-    .factor-list .f.bad .weight { background: var(--risk-stop-soft); color: var(--risk-stop); }
+    /* Gallery */
+    .gal-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
+    .gal-nav { display: flex; gap: 10px; }
+    .gal-nav button { width: 40px; height: 40px; border-radius: 999px; border: 0; background: var(--line); color: var(--ink); cursor: pointer; display: grid; place-items: center; font-size: 16px; transition: opacity .2s, transform .2s var(--ease); }
+    .gal-nav button:active:not(:disabled) { transform: scale(.94); }
+    .gal-nav button:disabled { opacity: .35; cursor: default; }
+    .gal { --pad: max(24px, calc((100vw - 1120px) / 2 + 24px)); display: grid; grid-auto-flow: column; grid-auto-columns: min(420px, 84vw); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad); padding: 8px var(--pad) 24px; scrollbar-width: none; }
+    .gal::-webkit-scrollbar { display: none; }
+    .gcard { scroll-snap-align: start; border-radius: var(--r-tile); background: var(--raised); min-height: 520px; padding: 36px 32px; display: flex; flex-direction: column; transition: transform .5s var(--ease); }
+    .gcard:hover { transform: scale(1.015); }
+    .gcard.blue { background: var(--gradient-cover); color: #fff; box-shadow: var(--shadow-brand); }
+    .gcard .step { font-size: 14px; font-weight: 600; color: var(--muted); }
+    .gcard.blue .step { color: rgba(255,255,255,.75); }
+    .gcard h3 { font-size: 30px; line-height: 1.1; letter-spacing: -.03em; margin-top: 8px; }
+    .gtext { font-size: 17px; color: var(--muted); margin-top: 12px; }
+    .gcard.blue .gtext { color: rgba(255,255,255,.85); }
+    .gvis { margin-top: auto; padding-top: 32px; }
+    .field-mock { background: var(--tile); border-radius: var(--radius-md); padding: 14px 20px; font-family: var(--mono); font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .field-mock .caret { width: 2px; height: 20px; background: var(--accent); animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips span { font-size: 13px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); color: #fff; }
+    .verdicts { display: grid; gap: 8px; }
+    .verdicts span { border-radius: var(--radius-md); padding: 12px 18px; font-weight: 600; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
+    .verdicts .go { background: var(--go-soft); color: var(--go); }
+    .verdicts .caution { background: var(--caution-soft); color: var(--caution); }
+    .verdicts .stop { background: var(--stop-soft); color: var(--stop); }
 
-    /* Persona Format */
-    .persona-card { background: linear-gradient(140deg, var(--rp-blue-50) 0%, #fff 65%); border: 1px solid var(--rp-blue-100); border-radius: 16px; padding: 22px; margin-bottom: 14px; }
-    .persona-top { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 18px; }
-    .persona-avatar { width: 58px; height: 58px; border-radius: 16px; background: linear-gradient(135deg, var(--rp-blue) 0%, var(--rp-blue-300) 100%); color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 18px; display: grid; place-items: center; flex: none; letter-spacing: -0.02em; box-shadow: 0 6px 16px rgba(0,80,255,0.25); }
-    .persona-identity { flex: 1; }
-    .persona-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rp-blue); margin-bottom: 4px; }
-    .persona-archetype { font-family: var(--font-display); font-weight: 800; font-size: 21px; letter-spacing: -0.02em; color: var(--fg-1); line-height: 1.15; margin-bottom: 6px; }
-    .persona-desc { font-size: 13px; color: var(--fg-2); line-height: 1.55; margin: 0; }
-    .persona-traits { display: flex; flex-wrap: wrap; gap: 7px; }
-    .persona-trait { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-    .persona-trait svg { width: 12px; height: 12px; stroke-width: 2.5; }
-    .persona-trait.good { background: var(--risk-go-soft); color: var(--risk-go); }
-    .persona-trait.neutral { background: var(--rp-orange-50); color: var(--rp-orange-700); }
-    .persona-metrics { display: flex; align-items: center; background: var(--bg-2); border-radius: 14px; padding: 16px 22px; }
-    .persona-metric { flex: 1; text-align: center; }
-    .pm-div { width: 1px; height: 46px; background: var(--border-1); flex: none; }
-    .pm-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-4); margin-bottom: 4px; }
-    .pm-value { font-family: var(--font-display); font-weight: 800; font-size: 24px; letter-spacing: -0.02em; color: var(--fg-1); line-height: 1.1; }
-    .pm-value span { font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--fg-3); margin-left: 3px; }
-    .pm-value.score { color: var(--risk-go); }
-    .pm-sub { font-size: 11px; color: var(--fg-4); margin-top: 3px; }
+    /* Dark product tile (one deliberate color block) */
+    .dark { background: var(--dark); color: var(--dark-ink); }
+    .dark .lead { color: var(--dark-mut); }
+    .pcard { max-width: 860px; margin: 64px auto 0; background: var(--dark-2); border-radius: var(--r-tile); padding: 40px; }
+    .pcard-top { display: flex; gap: 20px; align-items: flex-start; }
+    .pcard .av { width: 64px; height: 64px; border-radius: 16px; background: var(--gradient-cover); color: #fff; display: grid; place-items: center; font-family: var(--mono); font-size: 18px; flex: none; }
+    .pcard .who { font-size: 14px; color: var(--dark-mut); }
+    .pcard .arch { font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -.03em; line-height: 1.1; margin: 4px 0 10px; }
+    .pcard .desc { color: var(--dark-mut); font-size: 17px; max-width: 36em; }
+    .pcard .badge { margin-left: auto; font-size: 13px; font-weight: 600; color: #7EE2A0; background: rgba(126,226,160,.12); padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
+    .pcard .traits { margin: 28px 0 0; }
+    .pcard .trait { background: rgba(255,255,255,.08); color: var(--dark-ink); opacity: 1; animation: none; }
+    .pcard .trait.good i { color: #7EE2A0; } .pcard .trait.neutral i { color: #F0B04A; }
+    .pmetrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.1); }
+    .pmetrics .k { font-size: 14px; color: var(--dark-mut); }
+    .pmetrics .v { font-size: clamp(40px, 5vw, 64px); letter-spacing: -.045em; line-height: 1; margin-top: 8px; }
+    .pmetrics .v small { font-size: 17px; font-weight: 500; color: var(--dark-mut); letter-spacing: -.01em; margin-left: 4px; }
+    .pmetrics .v.go { color: #7EE2A0; }
+    .pmetrics .s { font-size: 13px; color: var(--dark-mut); margin-top: 6px; }
 
-    /* Risk Bands */
-    .bands { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-    .band { border-radius: 22px; padding: 32px; color: #fff; display: flex; flex-direction: column; gap: 12px; min-height: 280px; position: relative; overflow: hidden; transition: transform var(--dur-base) var(--ease-out); }
-    .band:hover { transform: translateY(-3px); }
-    .band .letter { font-family: var(--font-accent); font-size: 230px; line-height: 0.8; position: absolute; right: -10px; bottom: -50px; opacity: 0.20; pointer-events: none; }
-    .band .head-row { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.86; }
-    .band .head-row svg { width: 14px; height: 14px; stroke-width: 2.5; }
-    .band .name { font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.015em; }
-    .band .desc { font-size: 14px; line-height: 1.55; opacity: 0.92; max-width: 260px; flex: 1; }
-    .band .meta { font-family: var(--font-mono); font-size: 11px; opacity: 0.7; letter-spacing: 0.04em; text-transform: uppercase; }
-    .band.go { background: linear-gradient(160deg, #20B16C 0%, #168F54 100%); }
-    .band.caution { background: linear-gradient(160deg, #FF8847 0%, #E45713 100%); }
-    .band.stop { background: linear-gradient(160deg, #E04158 0%, #B7263C 100%); }
-    .band-archetype { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; margin-bottom: 2px; }
-    .band-traits { display: flex; flex-direction: column; gap: 7px; margin: 4px 0 16px; flex: 1; }
-    .band-trait { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.92; line-height: 1.35; }
-    .band-trait::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.6); flex: none; }
+    /* Bento */
+    .bento { display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px; margin-top: 64px; }
+    .bt { border-radius: var(--r-tile); padding: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 340px; }
+    .bt.big { grid-row: span 2; min-height: 700px; }
+    .bt.go { background: var(--go-soft); } .bt.caution { background: var(--caution-soft); } .bt.stop { background: var(--stop-soft); }
+    .bt .tag { font-size: 14px; font-weight: 600; display: inline-flex; gap: 6px; align-items: center; }
+    .bt.go .tag, .bt.go .share b { color: var(--go); }
+    .bt.caution .tag, .bt.caution .share b { color: var(--caution); }
+    .bt.stop .tag, .bt.stop .share b { color: var(--stop); }
+    .bt h3 { font-size: clamp(28px, 3vw, 40px); line-height: 1.08; letter-spacing: -.03em; margin-top: 10px; max-width: 12ch; position: relative; }
+    .bt ul { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 6px; position: relative; }
+    .bt li { font-size: 15px; color: var(--ink-2); }
+    .bt .share { margin-top: auto; padding-top: 28px; font-size: 15px; color: var(--muted); position: relative; }
+    .bt .share b { display: block; font-size: clamp(48px, 6vw, 80px); letter-spacing: -.03em; line-height: 1; }
+    .bt .letter { position: absolute; right: -10px; bottom: -40px; font-size: 280px; letter-spacing: -.03em; line-height: 1; opacity: .07; pointer-events: none; transition: transform 1.2s var(--ease); }
+    .bt.big .letter { font-size: 460px; bottom: -80px; }
+    .bt:hover .letter { transform: translateY(-12px); }
 
     /* Stats */
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; border-top: 1px solid var(--border-1); border-bottom: 1px solid var(--border-1); padding: 56px 0; }
-    .stat .num { font-family: var(--font-display); font-size: clamp(56px, 7.2vw, 96px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; color: var(--rp-blue); }
-    .stat .num.orange { color: var(--rp-orange); }
-    .stat .num.purple { color: var(--rp-purple); }
-    .stat .lbl { margin-top: 14px; font-size: 15px; color: var(--fg-2); line-height: 1.5; max-width: 280px; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 64px; }
+    .stat .big { font-size: clamp(64px, 8vw, 112px); letter-spacing: -.03em; line-height: 1; }
+    .stat .big .u { color: var(--accent); }
+    .stat p { margin-top: 14px; color: var(--muted); max-width: 18em; margin-inline: auto; }
 
-    /* Testimonial */
-    .testimonial { background: linear-gradient(135deg, #1c5dff 0%, #0050FF 60%, #002cb8 100%); color: #fff; border-radius: 28px; padding: 72px 60px; position: relative; overflow: hidden; }
-    .testimonial .watermark { position: absolute; right: -40px; bottom: -60px; width: 380px; opacity: 0.10; }
-    .testimonial .quote { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 3vw, 38px); line-height: 1.2; letter-spacing: -0.018em; max-width: 780px; position: relative; z-index: 1; text-wrap: balance; }
-    .testimonial .quote::before { content: "\201C"; font-size: 1.4em; color: rgba(255,255,255,0.32); margin-right: 4px; vertical-align: -0.15em; }
-    .testimonial .who { margin-top: 28px; font-size: 14px; opacity: 0.86; position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; }
-    .testimonial .who .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #FFB58A, #FF6E29); display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 16px; }
-    .testimonial .who strong { display: block; font-weight: 700; opacity: 1; }
-
-    /* Pricing */
-    .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
-    .price { background: #fff; border: 1px solid var(--border-1); border-radius: 24px; padding: 36px; display: flex; flex-direction: column; gap: 18px; position: relative; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base); }
-    .price:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-    .price.featured { background: var(--bg-dark); color: #fff; border-color: var(--bg-dark); box-shadow: 0 18px 50px rgba(0,80,255,0.18); }
-    .price.featured:hover { box-shadow: 0 22px 60px rgba(0,80,255,0.22); }
-    .price-flag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--rp-orange); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; }
-    .price .tier { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-3); font-weight: 700; }
-    .price.featured .tier { color: rgba(255,255,255,0.62); }
-    .price .name { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; }
-    .price .sub { font-size: 13px; color: var(--fg-3); line-height: 1.45; margin-top: -8px; }
-    .price.featured .sub { color: rgba(255,255,255,0.66); }
-    .price .amount { font-family: var(--font-display); font-size: 52px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; display: flex; align-items: flex-end; gap: 4px; }
-    .price .amount .currency { font-size: 22px; font-weight: 600; margin-bottom: 8px; color: var(--fg-3); }
-    .price.featured .amount .currency { color: rgba(255,255,255,0.6); }
-    .price .amount .per { font-family: var(--font-body); font-size: 13px; color: var(--fg-3); font-weight: 500; margin-bottom: 10px; margin-left: 6px; }
-    .price.featured .amount .per { color: rgba(255,255,255,0.6); }
-    .price.featured .amount span:not(.currency):not(.per) { color: #fff; }
-    .price ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; flex: 1; }
-    .price li { font-size: 14px; line-height: 1.4; color: var(--fg-2); display: flex; gap: 10px; align-items: flex-start; }
-    .price.featured li { color: rgba(255,255,255,0.88); }
-    .price li .ic { width: 18px; height: 18px; flex: none; margin-top: 1px; color: var(--rp-blue); }
-    .price.featured li .ic { color: var(--rp-orange); }
-    .price .cta { margin-top: 8px; }
-    .price.enterprise .amount { font-size: 32px; line-height: 1.1; }
-    .consulting-block { display: flex; flex-direction: column; gap: 4px; }
-    .consulting-tag { font-family: var(--font-display); font-size: 32px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--fg-1); }
-    .price.featured .consulting-tag { color: #fff; }
-    .consulting-sub { font-size: 13px; font-weight: 500; color: var(--fg-3); }
-    .price.featured .consulting-sub { color: rgba(255,255,255,0.55); }
+    /* Pricing: compare models */
+    .compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 72px; }
+    .model { text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .model .flag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--warn); border-radius: var(--radius-pill); padding: 4px 10px; height: auto; }
+    .model .flag:empty { visibility: hidden; }
+    .model .tier { font-size: 28px; letter-spacing: -.03em; margin-top: 6px; }
+    .model .name { font-size: 17px; color: var(--ink-2); margin-top: 6px; min-height: 2.9em; max-width: 16em; }
+    .model .price { margin: 18px 0 22px; font-size: 15px; color: var(--muted); min-height: 72px; display: grid; place-items: center; align-content: center; gap: 6px; }
+    .model .price b { display: block; font-size: 44px; letter-spacing: -.045em; color: var(--ink); line-height: 1; }
+    .model ul { list-style: none; padding: 32px 0 0; margin: 32px 0 0; border-top: 1px solid var(--hair); display: grid; gap: 22px; width: 100%; }
+    .model li { display: grid; justify-items: center; gap: 6px; font-size: 15px; color: var(--ink-2); max-width: 18em; margin: 0 auto; }
+    .model li i { font-size: 24px; color: var(--ink); }
+    .model.featured li i { color: var(--accent); }
 
     /* FAQ */
-    .faq-wrap { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: start; }
-    .faq-list { display: flex; flex-direction: column; }
-    .faq-item { border-bottom: 1px solid var(--border-1); }
-    .faq-item:first-child { border-top: 1px solid var(--border-1); }
-    .faq-q { width: 100%; background: none; border: 0; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 4px; cursor: pointer; font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--fg-1); text-align: left; line-height: 1.35; letter-spacing: -0.005em; transition: color var(--dur-base); }
-    .faq-q:hover { color: var(--rp-blue); }
-    .faq-q .plus { width: 26px; height: 26px; flex: none; border-radius: 50%; background: var(--bg-2); display: grid; place-items: center; transition: background var(--dur-base) var(--ease-out), transform var(--dur-base); }
-    .faq-q .plus svg { width: 12px; height: 12px; stroke: var(--fg-1); stroke-width: 2.5; transition: transform var(--dur-base) var(--ease-out); }
-    .faq-item.open .faq-q .plus { background: var(--rp-blue); }
-    .faq-item.open .faq-q .plus svg { stroke: #fff; transform: rotate(45deg); }
-    .faq-a { max-height: 0; overflow: hidden; transition: max-height var(--dur-slow) var(--ease-out); }
-    .faq-item.open .faq-a { max-height: 400px; }
-    .faq-a-inner { padding: 0 4px 22px; font-size: 15px; line-height: 1.6; color: var(--fg-2); max-width: 580px; }
-    .faq-a-inner a { color: var(--rp-blue); font-weight: 600; }
+    .faq { margin-top: 56px; }
+    .qa { border-bottom: 1px solid var(--line); }
+    .qa button { width: 100%; background: none; border: 0; padding: 26px 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; text-align: left; cursor: pointer; font-size: 19px; font-weight: 600; letter-spacing: -.015em; line-height: 1.35; }
+    .qa button:hover span { color: var(--accent); }
+    .qa button span { transition: color .2s var(--ease); }
+    .qa button i { font-size: 18px; color: var(--muted); transition: transform .45s var(--ease); margin-top: 3px; flex: none; }
+    .qa.open button i { transform: rotate(45deg); }
+    .qa .a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease); }
+    .qa.open .a { grid-template-rows: 1fr; }
+    .qa .a > div { overflow: hidden; }
+    .qa .a p { padding: 0 48px 28px 0; color: var(--muted); }
+    .faq-note { margin-top: 32px; color: var(--muted); text-align: center; }
+    .faq-note a { color: var(--accent); }
+    .faq-note a:hover { text-decoration: underline; }
 
-    /* CTA strip */
-    .cta-strip { background: var(--rp-orange); color: #fff; border-radius: 32px; padding: 72px 64px; display: flex; justify-content: space-between; align-items: center; gap: 32px; position: relative; overflow: hidden; }
-    .cta-strip::after { content: ""; position: absolute; right: -160px; top: 50%; transform: translateY(-50%); width: 460px; height: 460px; background-image: url("assets/icon-white.svg"); background-repeat: no-repeat; background-size: contain; opacity: 0.12; pointer-events: none; }
-    .cta-strip h2 { font-family: var(--font-display); font-size: clamp(30px, 3.8vw, 48px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.05; margin: 0; max-width: 620px; color: #fff; text-wrap: balance; position: relative; z-index: 1; }
-    .cta-strip .actions { display: flex; gap: 12px; flex-shrink: 0; position: relative; z-index: 1; }
-    .cta-strip .btn-primary { background: #fff; color: var(--rp-orange-700); box-shadow: none; }
-    .cta-strip .btn-primary:hover { background: #FFF1E9; color: var(--rp-orange-700); }
-    .cta-strip .btn-secondary.on-dark { border-color: rgba(255,255,255,0.6); }
+    /* Access */
+    .access { border-radius: var(--r-tile); background: var(--tile); padding: 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .access .lead { margin-top: 18px; }
+    .perks { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 10px; }
+    .perks li { display: flex; gap: 10px; align-items: center; color: var(--ink-2); }
+    .perks i { color: var(--accent); font-size: 20px; }
+    .form { background: var(--raised); border-radius: var(--r-card); padding: 32px; }
+    .field { display: grid; gap: 6px; margin-bottom: 14px; }
+    .field label { font-size: 14px; font-weight: 500; color: var(--ink-2); }
+    .field label .opt { color: var(--muted); font-weight: 400; margin-left: 6px; }
+    .field input { width: 100%; font: inherit; font-size: 17px; padding: 14px 16px; border-radius: var(--r-input); border: 1px solid var(--line); background: var(--raised); color: var(--ink); outline: none; transition: border-color .2s var(--ease), box-shadow .2s var(--ease); }
+    .field input::placeholder { color: var(--muted); }
+    .field input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+    .field.err input { border-color: var(--stop); }
+    .field .msg { font-size: 13px; color: var(--stop); }
+    .form .pill { width: 100%; margin-top: 8px; padding: 14px; }
+    .form .fine { font-size: 13px; color: var(--muted); text-align: center; margin-top: 14px; }
+    .done { text-align: center; padding: 48px 8px; animation: load-in .6s var(--ease); }
+    .done i { font-size: 48px; color: var(--go); }
+    .done h3 { font-size: 28px; margin: 14px 0 8px; }
+    .done p { color: var(--muted); }
 
     /* Footer */
-    .rp-footer { background: var(--rp-ink); color: rgba(255,255,255,0.7); padding: 80px 0 32px; }
-    .rp-footer .grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; }
-    .rp-footer h4 { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; margin: 0 0 18px; font-weight: 700; }
-    .rp-footer a { color: rgba(255,255,255,0.66); text-decoration: none; font-size: 14px; display: block; padding: 5px 0; transition: color var(--dur-fast); }
-    .rp-footer a:hover { color: #fff; }
-    .rp-footer .blurb { font-size: 14px; line-height: 1.6; max-width: 280px; margin: 18px 0 24px; color: rgba(255,255,255,0.66); }
-    .rp-footer .logo { height: 26px; }
-    .rp-footer .social { display: flex; gap: 10px; margin-top: 6px; }
-    .rp-footer .social a { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,0.16); border-radius: 50%; padding: 0; transition: all var(--dur-base); }
-    .rp-footer .social a:hover { background: var(--rp-blue); border-color: var(--rp-blue); }
-    .rp-footer .social svg { width: 15px; height: 15px; }
-    .rp-footer .bottom { margin-top: 64px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.10); display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.50); flex-wrap: wrap; gap: 14px; }
+    .foot { background: var(--tile); font-size: 12px; color: var(--muted); padding: 40px 0 28px; }
+    .foot .note { padding-bottom: 18px; border-bottom: 1px solid var(--line); line-height: 1.6; }
+    .foot .cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding: 24px 0; }
+    .foot h4 { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 10px; letter-spacing: 0; }
+    .foot .cols a { display: block; padding: 4px 0; }
+    .foot a:hover { color: var(--ink); text-decoration: underline; }
+    .foot .legal { padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .foot .legal nav { display: flex; gap: 18px; }
 
-    /* Lead Capture */
-    .lc-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
-    .lc-left h2 { color: #fff; }
-    .lc-perks { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-direction: column; gap: 12px; }
-    .lc-perks li { display: flex; align-items: center; gap: 10px; font-size: 15px; color: rgba(255,255,255,0.82); font-weight: 500; }
-    .lc-perks li i { color: var(--risk-go); width: 18px; height: 18px; flex: none; }
-    .lc-form-card { background: #fff; border-radius: 24px; padding: 40px; box-shadow: 0 24px 64px rgba(0,0,0,0.28); }
-    .lc-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .lc-field label { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--fg-1); display: flex; align-items: center; gap: 6px; }
-    .lc-opt { font-weight: 400; color: var(--fg-4); font-size: 12px; }
-    .lc-field input { padding: 12px 14px; border: 1.5px solid var(--border-1); border-radius: 10px; font-family: var(--font-body); font-size: 15px; color: var(--fg-1); outline: none; transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base); background: var(--bg-1); width: 100%; box-sizing: border-box; }
-    .lc-field input:focus { border-color: var(--rp-blue); box-shadow: 0 0 0 3px rgba(0,80,255,0.12); }
-    .lc-field input::placeholder { color: var(--fg-4); }
-    .lc-submit { width: 100%; justify-content: center; margin-top: 8px; }
-    .lc-success { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 24px 0; gap: 12px; }
-    .lc-success-icon i { width: 52px; height: 52px; stroke-width: 1.5; color: var(--risk-go); }
-    .lc-success-title { font-family: var(--font-display); font-weight: 700; font-size: 24px; color: var(--fg-1); }
-    .lc-success-sub { font-size: 15px; color: var(--fg-2); max-width: 280px; line-height: 1.55; }
-
-    /* Utilities */
-    .text-center { text-align: center; }
-    .row-between { display: flex; justify-content: space-between; align-items: center; }
-    .mb-12 { margin-bottom: 12px; }
-    .mb-24 { margin-bottom: 24px; }
-
-    /* Mobile menu */
-    .menu-toggle { display: none; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.06); border-radius: 10px; cursor: pointer; align-items: center; justify-content: center; padding: 0; transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base); }
-    .menu-toggle svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; }
-    .rp-header.scrolled .menu-toggle { background: var(--bg-2); border-color: var(--border-1); }
-    .rp-header.scrolled .menu-toggle svg { stroke: var(--fg-1); }
-    .mobile-menu { position: fixed; inset: 0; background: var(--rp-ink); z-index: 60; display: none; flex-direction: column; padding: 24px; animation: slide-in 0.24s var(--ease-out); }
-    .mobile-menu.open { display: flex; }
-    @keyframes slide-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
-    .mobile-menu .top { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-    .mobile-menu .top img { height: 24px; }
-    .mobile-menu .close { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.06); border-radius: 10px; cursor: pointer; padding: 0; display: grid; place-items: center; }
-    .mobile-menu .close svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; }
-    .mobile-menu .links { display: flex; flex-direction: column; gap: 4px; margin-top: 24px; flex: 1; }
-    .mobile-menu .links a { color: #fff; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.015em; padding: 14px 4px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
-    .mobile-menu .links a:hover { color: #FFB58A; }
-    .mobile-menu .links a svg { width: 18px; height: 18px; opacity: 0.5; }
-    .mobile-menu .ctas { display: flex; flex-direction: column; gap: 10px; padding-top: 24px; }
-    .mobile-menu .ctas .btn { justify-content: center; padding: 16px 22px; font-size: 15px; }
-
-    /* Responsive */
-    @media (max-width: 1100px) {
-      .container { padding: 0 28px; }
-      section.rp-section { padding: 96px 0; }
-      section.rp-section .head { margin-bottom: 48px; }
-      .rp-hero { padding: 144px 0 96px; }
-      .rp-hero .container { grid-template-columns: 1fr; gap: 48px; max-width: 720px; }
-      .rp-hero .content { max-width: 100%; }
-      .rp-hero h1 { font-size: clamp(40px, 7vw, 64px); }
-      .rp-hero .watermark { width: 640px; height: 640px; right: -200px; opacity: 0.08; }
-      .diff-grid { grid-template-columns: 1fr; }
-      .diff-col.them { border-right: 0; border-bottom: 1px solid var(--border-1); }
-      .pricing { grid-template-columns: 1fr; max-width: 540px; margin: 0 auto; }
-      .price-flag { left: 24px; transform: none; }
-      .faq-wrap { grid-template-columns: 1fr; gap: 36px; }
-      .rp-footer .grid { grid-template-columns: 1fr 1fr 1fr; gap: 36px; }
-      .rp-footer .grid > div:first-child { grid-column: 1 / -1; }
-      .rp-footer .blurb { max-width: 420px; }
-      .preview-grid { grid-template-columns: 1fr; min-height: auto; }
-      .preview-side { display: none; }
-      .preview-main { padding: 24px; }
+    /* Responsive ---------------------------------------------------- */
+    @media (max-width: 1023px) {
+      .hero-pin { padding: 64px 0 80px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; max-width: 640px; padding: 0 20px; }
+      .hero-text, .hero-demo { grid-column: 1; grid-row: auto; }
+      .hero-text { text-align: center; }
+      .hero .lead { margin-inline: auto; }
+      .hero .actions { justify-content: center; }
     }
-    @media (max-width: 820px) {
-      .rp-header nav { display: none; }
-      .rp-header .actions .login { display: none; }
-      .menu-toggle { display: inline-flex; }
-      .rp-header .actions .btn-primary { padding: 10px 16px; font-size: 13px; }
-      .rp-header .actions .btn-primary .arrow { display: none; }
-      section.rp-section { padding: 80px 0; }
-      section.rp-section h2 { font-size: clamp(28px, 5.6vw, 40px); }
-      section.rp-section .sub { font-size: 16px; }
-      section.rp-section .head { margin-bottom: 40px; }
-      .feature-grid { grid-template-columns: 1fr; gap: 16px; }
-      .feature { padding: 28px 24px; }
-      .feature .step-num { font-size: 44px; top: 22px; right: 22px; }
-      .bands { grid-template-columns: 1fr; gap: 12px; }
-      .band { min-height: 200px; padding: 28px; }
-      .band .letter { font-size: 180px; bottom: -36px; }
-      .stats { grid-template-columns: 1fr; gap: 28px; padding: 44px 0; text-align: left; }
-      .stat .lbl { max-width: 100%; }
-      .testimonial { padding: 48px 32px; border-radius: 22px; }
-      .testimonial .watermark { width: 280px; right: -50px; bottom: -40px; }
-      .cta-strip { flex-direction: column; align-items: flex-start; padding: 44px 32px; border-radius: 24px; gap: 22px; }
-      .cta-strip .actions { width: 100%; flex-direction: column; }
-      .cta-strip .actions .btn { width: 100%; justify-content: center; }
-      .cta-strip::after { width: 320px; height: 320px; right: -140px; opacity: 0.08; }
-      .rp-footer { padding: 56px 0 28px; }
-      .rp-footer .grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-      .rp-footer .bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .logos-strip { gap: 18px 24px; justify-content: center; }
-      .logos-strip .partner { font-size: 18px; }
-      .demo-body { padding: 18px; }
-      .demo-input-row { flex-direction: column; padding: 8px; }
-      .demo-input-row input { width: 100%; }
-      .demo-input-row button { width: 100%; height: 44px; justify-content: center; }
-      .demo-examples { font-size: 11px; }
-      .preview-cards { grid-template-columns: 1fr; gap: 10px; }
-      .preview-card .v { font-size: 24px; }
-      .diff-col { padding: 28px 24px; }
-      .diff-list li { font-size: 14px; }
-      .price { padding: 32px 28px; }
-      .price .amount { font-size: 44px; }
+    @media (max-width: 1068px) {
+      .access { grid-template-columns: 1fr; padding: 56px 40px; }
     }
-    @media (max-width: 520px) {
-      .container { padding: 0 20px; }
-      section.rp-section { padding: 64px 0; }
-      section.rp-section .head { margin-bottom: 32px; }
-      section.rp-section h2 { font-size: clamp(26px, 7.4vw, 34px); margin: 10px 0 14px; }
-      section.rp-section .sub { font-size: 15px; }
-      .rp-hero { padding: 124px 0 72px; }
-      .rp-hero h1 { font-size: clamp(38px, 11vw, 54px); letter-spacing: -0.025em; }
-      .rp-hero .lead { font-size: 16px; margin-bottom: 28px; }
-      .rp-hero .reassure { gap: 16px; font-size: 12px; }
-      .rp-hero .badge-row { font-size: 11px; }
-      .rp-header .inner { height: 64px; }
-      .rp-header .logo { height: 36px; }
-      .rp-header .actions .btn-primary { padding: 9px 14px; font-size: 12px; }
-      .demo-card { border-radius: 18px; }
-      .demo-window { border-radius: 14px; font-size: 13px; }
-      .demo-titlebar { padding: 10px 12px; }
-      .demo-titlebar .url { font-size: 11px; padding: 4px 10px; }
-      .demo-body { padding: 14px; }
-      .demo-result { padding: 18px; }
-      .demo-result-score { font-size: 36px; }
-      .demo-result-co { font-size: 15px; }
-      .demo-result-grid { grid-template-columns: 1fr 1fr; gap: 8px 14px; }
-      .demo-examples { gap: 5px; }
-      .demo-examples .chip { font-size: 10px; padding: 4px 9px; }
-      .feature { padding: 24px 22px; border-radius: 20px; }
-      .feature h3 { font-size: 19px; }
-      .feature .step-num { font-size: 38px; top: 20px; right: 20px; }
-      .band { min-height: 180px; padding: 24px; border-radius: 18px; }
-      .band .name { font-size: 24px; }
-      .band .letter { font-size: 140px; bottom: -22px; right: -8px; }
-      .stat .num { font-size: clamp(48px, 16vw, 72px); }
-      .stat .lbl { font-size: 14px; }
-      .testimonial { padding: 36px 24px; border-radius: 18px; }
-      .testimonial .quote { font-size: clamp(20px, 5.6vw, 26px); }
-      .testimonial .who .avatar { width: 38px; height: 38px; font-size: 14px; }
-      .price { padding: 28px 24px; border-radius: 20px; }
-      .price .amount { font-size: 40px; }
-      .price.enterprise .amount { font-size: 26px; }
-      .price .name { font-size: 22px; }
-      .faq-q { font-size: 16px; padding: 18px 4px; gap: 16px; }
-      .faq-a-inner { font-size: 14px; }
-      .cta-strip { padding: 36px 24px; border-radius: 20px; }
-      .cta-strip h2 { font-size: clamp(24px, 6.4vw, 30px); }
-      .rp-footer .grid { grid-template-columns: 1fr; gap: 28px; }
-      .rp-footer h4 { margin-bottom: 12px; }
-      .rp-footer .blurb { margin: 14px 0 20px; }
-      .diff-grid { border-radius: 20px; }
-      .diff-col { padding: 24px 22px; }
-      .diff-col h3 { font-size: 18px; }
-      .diff-list li { font-size: 14px; gap: 10px; }
-      .preview-shell { border-radius: 22px; padding: 6px; }
-      .preview-window { border-radius: 18px; }
-      .preview-toolbar { padding: 10px 14px; gap: 8px; }
-      .preview-toolbar .crumb { font-size: 11px; }
-      .preview-main { padding: 20px 16px; }
-      .preview-h h4 { font-size: 18px; }
-      .preview-h { flex-direction: column; gap: 10px; }
-      .preview-section h5 { font-size: 13px; }
-      .factor-list .f { padding: 8px 12px; }
-      .factor-list .f .name { font-size: 12px; }
-      .logos-section { padding: 36px 0; }
-      .logos-strip { gap: 14px 20px; }
-      .logos-strip .partner { font-size: 16px; }
-      .logos-eyebrow { font-size: 11px; margin-bottom: 18px; }
+    @media (max-width: 833px) {
+      body { font-size: 16px; }
+      .gnav nav, .gnav .right .pill { display: none; }
+      .icon-btn { display: grid; }
+      .sec { padding: 88px 0; }
+      .demo { padding: 22px 18px 26px; }
+      .demo-stage { min-height: 380px; }
+      .lit-list { gap: 40px; }
+      .gal-head { align-items: flex-start; flex-direction: column; }
+      .gcard { min-height: 400px; padding: 30px 26px; }
+      .pcard { padding: 28px 22px; }
+      .pcard-top { flex-wrap: wrap; }
+      .pcard .badge { margin-left: 0; }
+      .pmetrics { grid-template-columns: 1fr; gap: 28px; }
+      .bento { grid-template-columns: 1fr; }
+      .bt.big { grid-row: auto; min-height: 420px; }
+      .bt.big .letter { font-size: 300px; bottom: -50px; }
+      .bt { padding: 32px 28px; }
+      .stats, .compare { grid-template-columns: 1fr; gap: 56px; }
+      .model .name { min-height: 0; }
+      .access { padding: 40px 22px; }
+      .form { padding: 22px; }
+      .foot .cols { grid-template-columns: 1fr 1fr; }
     }
-    @media (hover: none) {
-      .feature:hover, .price:hover, .band:hover { transform: none; box-shadow: none; }
-      .feature:hover { border-color: var(--border-1); }
+    @media (max-width: 480px) {
+      :root { --nav-h: 64px; }
+      .gnav .logo img { height: 40px; }
+      .wrap, .wrap-narrow { padding: 0 16px; }
+      .demo-head .ok { display: none; }
+      .demo-row { flex-direction: column; }
+      .demo-row button { height: 44px; justify-content: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+      html { scroll-behavior: auto; }
+      [data-reveal], .load, .res, .trait { opacity: 1 !important; transform: none !important; }
+      .marquee .track { animation: none; }
     }
   </style>
 </head>
 <body>
+  <a href="#main" class="skip">Pular para o conteúdo</a>
   <div id="root"></div>
 
   <script type="text/babel">
@@ -714,81 +474,77 @@
     const SAMPLES = {
       "12.345.678/0001-90": {
         name: "Mercatto Distribuição Ltda", setor: "Atacado · Alimentos", fundacao: "2014",
-        initials: "MD", score: "A", pct: 88, label: "Liberar prazo · 60 dias", band: "go",
-        archetype: "Parceiro Confiável",
-        prazo: "60 dias", limite: "R$ 180.000",
+        initials: "MD", score: "A", label: "Liberar prazo de 60 dias", band: "go",
+        archetype: "Parceiro Confiável", prazo: "60 dias", limite: "R$ 180.000",
         traits: [
           { kind: "good", text: "Pagador assíduo", icon: "check-circle" },
-          { kind: "good", text: "Crescimento estável", icon: "trending-up" },
-          { kind: "good", text: "Gestão consolidada", icon: "shield" },
-          { kind: "good", text: "10 anos de mercado", icon: "calendar" },
+          { kind: "good", text: "Crescimento estável", icon: "trend-up" },
+          { kind: "good", text: "Gestão consolidada", icon: "shield-check" },
+          { kind: "good", text: "10 anos de mercado", icon: "calendar-blank" },
         ]
       },
       "33.222.111/0001-44": {
         name: "Vega Indústria & Comércio", setor: "Indústria · Têxtil", fundacao: "2019",
-        initials: "VI", score: "B", pct: 62, label: "Atenção · prazo curto", band: "caution",
-        archetype: "Empresa em Crescimento",
-        prazo: "21 dias", limite: "R$ 35.000",
+        initials: "VI", score: "B", label: "Atenção, prazo curto", band: "caution",
+        archetype: "Empresa em Crescimento", prazo: "21 dias", limite: "R$ 35.000",
         traits: [
           { kind: "good", text: "Sem pendências fiscais", icon: "check-circle" },
-          { kind: "neutral", text: "1 protesto recente", icon: "alert-triangle" },
+          { kind: "neutral", text: "1 protesto recente", icon: "warning" },
           { kind: "neutral", text: "Pagamentos com atrasos", icon: "clock" },
-          { kind: "good", text: "5 anos de mercado", icon: "calendar" },
+          { kind: "good", text: "5 anos de mercado", icon: "calendar-blank" },
         ]
       },
       "55.999.444/0001-12": {
         name: "Northbay Trading ME", setor: "Importação", fundacao: "2023",
-        initials: "NT", score: "D", pct: 22, label: "Negar · risco alto", band: "stop",
-        archetype: "Perfil de Risco Elevado",
-        prazo: "—", limite: "—",
+        initials: "NT", score: "D", label: "Negar, risco alto", band: "stop",
+        archetype: "Perfil de Risco Elevado", prazo: "Não liberar", limite: "Não liberar",
         traits: [
-          { kind: "bad", text: "Empresa recém-aberta", icon: "alert-circle" },
-          { kind: "bad", text: "Sócio com restrições", icon: "user-x" },
+          { kind: "bad", text: "Empresa recém-aberta", icon: "warning-circle" },
+          { kind: "bad", text: "Sócio com restrições", icon: "user-minus" },
           { kind: "bad", text: "Cadastro inconsistente", icon: "x-circle" },
         ]
       }
     };
+    const FALLBACK = {
+      name: "Empresa consultada", setor: "Não informado", fundacao: "Não informado", initials: "EC",
+      score: "A", label: "Liberar prazo de 45 dias", band: "go",
+      archetype: "Parceiro Confiável", prazo: "45 dias", limite: "R$ 90.000",
+      traits: [
+        { kind: "good", text: "Dados cadastrais válidos", icon: "check-circle" },
+        { kind: "good", text: "Sem pendências relevantes", icon: "shield-check" },
+      ]
+    };
+    const ANALYSIS_STEPS = ["Consultando Receita Federal", "Cruzando dados cadastrais e sócios", "Lendo sinais alternativos", "Aplicando modelo RiskPlus+"];
+    const STEP_MS = 520;
 
-    const ANALYSIS_STEPS = [
-      "Consultando Receita Federal",
-      "Cruzando dados cadastrais e sócios",
-      "Lendo sinais alternativos",
-      "Aplicando modelo RiskPlus+"
+    const SOURCES = ["Receita Federal", "Juntas Comerciais", "Cartórios de protesto", "Diários oficiais", "Quadro societário", "Processos judiciais", "Sinais alternativos", "Modelo RiskPlus+"];
+
+    const STATEMENTS = [
+      { us: <><b>Liberar, Atenção ou Negar.</b> Com os motivos ao lado.</>, them: "No bureau: score sem explicação." },
+      { us: <>Analisa empresas <b>fora dos bureaus</b> usando sinais alternativos.</>, them: "No bureau: empresa nova ou pequena costuma aparecer como “sem informação”." },
+      { us: <>Prazo e limite sugeridos, <b>prontos pra aplicar.</b></>, them: "No bureau: relatório longo, difícil de virar decisão." },
+      { us: <>A gente monitora a carteira e <b>avisa quando o risco muda.</b></>, them: "No bureau: dados atualizados devagar." },
+      { us: <><b>API REST</b> e integração nativa com ERP.</>, them: "No bureau: planilha ou XML antigo, quando existe integração." },
+      { us: <>Plano mensal com <b>franquia de análises.</b></>, them: "No bureau: cobrança por consulta avulsa, difícil de prever no mês." },
     ];
 
     const FAQS = [
-      {
-        q: "Como a RiskPlus consegue analisar empresas que não aparecem em bureaus tradicionais?",
-        a: "A gente combina dados públicos da Receita Federal e cartórios com sinais alternativos — comportamento de pagamento em fornecedores, presença digital, vínculos societários — e roda tudo pelos nossos modelos proprietários. Empresas novas, MEIs e pequenas que o bureau ignora ganham um score consistente.",
-      },
-      {
-        q: "De onde vêm os dados? É legal e LGPD-compliant?",
-        a: "Usamos exclusivamente dados públicos (Receita Federal, JUCESP, cartórios, diários oficiais) e sinais alternativos de fontes contratadas e auditadas. A RiskPlus é registrada como bureau, segue a LGPD e mantém base de exclusão para titulares que solicitarem.",
-      },
-      {
-        q: "Quanto tempo demora cada análise?",
-        a: 'A mediana é de 8 segundos do clique em "Analisar" até o veredito na tela. Análises de empresas com pouco histórico ou alvos de aprofundamento podem levar até 30 segundos.',
-      },
-      {
-        q: "A RiskPlus integra com meu ERP?",
-        a: "Sim. No plano Pro temos integrações nativas com Omie, Bling e Conta Azul, além de API REST e webhooks pra qualquer sistema. No Enterprise, fazemos a integração junto com seu time.",
-      },
-      {
-        q: "O que acontece se eu passar do limite de análises do plano?",
-        a: "A gente avisa em 80% do consumo. Passou do limite, você pode comprar análises avulsas (R$ 1,90 cada no Pro) ou subir de plano sem perder histórico. Nada é bloqueado de surpresa.",
-      },
-      {
-        q: "Posso usar a decisão da RiskPlus como única fonte pra liberar crédito?",
-        a: "Sim — e é o caso da maioria dos nossos clientes. Toda decisão vem com a justificativa (fatores e pesos) pra você defender internamente. Em operações de alto valor, recomendamos combinar com sua política interna.",
-      },
-      {
-        q: "Tem fidelidade ou taxa de setup?",
-        a: "Não. Plano mensal, cancelável a qualquer momento, sem taxa de setup ou multa. Onboarding incluído.",
-      },
-      {
-        q: "Vocês monitoram a carteira depois ou só no momento da venda?",
-        a: "No plano Pro o monitoramento é contínuo: a gente reanalisa sua carteira todo dia e dispara alerta (e-mail, Slack ou webhook) quando o risco de um cliente muda — protesto novo, mudança societária, queda no score.",
-      },
+      { q: "Como a RiskPlus consegue analisar empresas que não aparecem em bureaus tradicionais?",
+        a: "A gente combina dados públicos da Receita Federal e de cartórios com sinais alternativos, como comportamento de pagamento com fornecedores, presença digital e vínculos societários. Tudo passa pelos nossos modelos. Por isso empresa nova, MEI e pequeno negócio que o bureau ignora também recebem um score." },
+      { q: "De onde vêm os dados? Está de acordo com a LGPD?",
+        a: "Usamos exclusivamente dados públicos (Receita Federal, JUCESP, cartórios, diários oficiais) e sinais alternativos de fontes contratadas e auditadas. A RiskPlus é registrada como bureau, segue a LGPD e mantém base de exclusão para titulares que solicitarem." },
+      { q: "Quanto tempo demora cada análise?",
+        a: 'A mediana é de 8 segundos entre o clique em "Analisar" e a decisão na tela. Empresa com pouco histórico, ou que pede uma análise mais funda, pode levar até 30 segundos.' },
+      { q: "A RiskPlus integra com meu ERP?",
+        a: "Sim. No plano Pro temos integrações nativas com Omie, Bling e Conta Azul, além de API REST e webhooks pra qualquer sistema. No Enterprise, fazemos a integração junto com seu time." },
+      { q: "O que acontece se eu passar do limite de análises do plano?",
+        a: "A gente avisa em 80% do consumo. Passou do limite, você pode comprar análises avulsas (R$ 1,90 cada no Pro) ou subir de plano sem perder histórico. Nada é bloqueado de surpresa." },
+      { q: "Posso usar a decisão da RiskPlus como única fonte pra liberar crédito?",
+        a: "Pode. Toda decisão vem com a justificativa (fatores e pesos) pra você defender internamente. Em operação de valor alto, recomendamos combinar com a sua política de crédito." },
+      { q: "Tem fidelidade ou taxa de setup?",
+        a: "Não. Plano mensal, cancelável a qualquer momento, sem taxa de setup ou multa. Onboarding incluído." },
+      { q: "Vocês monitoram a carteira depois ou só no momento da venda?",
+        a: "No plano Pro o monitoramento é contínuo. A gente reanalisa sua carteira todo dia e dispara alerta (e-mail, Slack ou webhook) quando o risco de um cliente muda, por exemplo com protesto novo, mudança societária ou queda no score." },
     ];
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -800,430 +556,392 @@
         .replace(/\.(\d{3})(\d)/, ".$1/$2")
         .replace(/(\d{4})(\d)/, "$1-$2");
     };
+    const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const Icon = ({ n, b }) => <i className={`${b ? "ph-bold" : "ph"} ph-${n}`} aria-hidden="true"></i>;
+    const Logo = () => (
+      <>
+        <img className="logo-light" src="assets/logo-blue.svg" alt="RiskPlus" />
+        <img className="logo-dark" src="assets/logo-white.svg" alt="RiskPlus" />
+      </>
+    );
 
-    // ── Header ────────────────────────────────────────────────────────────────
-    const Header = () => {
-      const [scrolled, setScrolled] = React.useState(false);
-      const [menuOpen, setMenuOpen] = React.useState(false);
+    // Fades [data-reveal] elements in once they enter the viewport.
+    const useReveal = () => {
+      React.useEffect(() => {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { e.target.dataset.shown = ""; io.unobserve(e.target); } });
+        }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+        document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+        return () => io.disconnect();
+      }, []);
+    };
+
+    // Counts from 0 to `to` when scrolled into view.
+    const CountUp = ({ to, duration = 1500 }) => {
+      const ref = React.useRef(null);
+      const [val, setVal] = React.useState(0);
+      React.useEffect(() => {
+        if (reducedMotion()) { setVal(to); return; }
+        let raf;
+        const io = new IntersectionObserver(([e]) => {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          const t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min(1, (t - t0) / duration);
+            setVal(Math.round(to * (1 - Math.pow(1 - p, 4))));
+            if (p < 1) raf = requestAnimationFrame(tick);
+          };
+          raf = requestAnimationFrame(tick);
+        }, { threshold: 0.4 });
+        io.observe(ref.current);
+        return () => { io.disconnect(); cancelAnimationFrame(raf); };
+      }, [to]);
+      return <span ref={ref} className="num">{val.toLocaleString("pt-BR")}</span>;
+    };
+
+    // ── Nav ───────────────────────────────────────────────────────────────────
+    const NAV = [
+      { href: "#diferenciais", label: "Diferenciais" },
+      { href: "#como-funciona", label: "Como funciona" },
+      { href: "#produto", label: "Produto" },
+      { href: "#precos", label: "Preços" },
+      { href: "#faq", label: "FAQ" },
+    ];
+
+    const Nav = () => {
+      const [open, setOpen] = React.useState(false);
+      const [active, setActive] = React.useState("");
 
       React.useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 32);
-        window.addEventListener("scroll", onScroll, { passive: true });
-        onScroll();
-        return () => window.removeEventListener("scroll", onScroll);
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) setActive("#" + e.target.id); });
+        }, { rootMargin: "-45% 0px -50% 0px" });
+        ["#hero", ...NAV.map((l) => l.href)].forEach((h) => { const el = document.querySelector(h); if (el) io.observe(el); });
+        return () => io.disconnect();
       }, []);
 
       React.useEffect(() => {
-        document.body.style.overflow = menuOpen ? "hidden" : "";
-        if (window.lucide) window.lucide.createIcons();
-        return () => { document.body.style.overflow = ""; };
-      }, [menuOpen]);
-
-      const logo = scrolled ? "assets/logo-blue.svg" : "assets/logo-white.svg";
-      const navLinks = [
-        { href: "#produto", label: "Produto" },
-        { href: "#diferenciais", label: "Diferenciais" },
-        { href: "#como-funciona", label: "Como funciona" },
-        { href: "#precos", label: "Preços" },
-        { href: "#faq", label: "FAQ" },
-      ];
+        document.body.style.overflow = open ? "hidden" : "";
+        const onKey = (e) => e.key === "Escape" && setOpen(false);
+        window.addEventListener("keydown", onKey);
+        return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKey); };
+      }, [open]);
 
       return (
         <>
-          <header className={`rp-header ${scrolled ? "scrolled" : ""}`}>
-            <div className="container inner">
-              <a href="#" aria-label="RiskPlus">
-                <img className="logo" src={logo} alt="RiskPlus" />
-              </a>
-              <nav>
-                {navLinks.map((l) => <a key={l.href} href={l.href}>{l.label}</a>)}
+          <header className="gnav">
+            <div className="wrap">
+              <a href="#" className="logo" aria-label="RiskPlus, início"><Logo /></a>
+              <nav aria-label="Principal">
+                {NAV.map((l) => <a key={l.href} href={l.href} className={active === l.href ? "active" : ""}>{l.label}</a>)}
               </nav>
-              <div className="actions">
-                <a href="#" className="btn btn-ghost login">Entrar</a>
-                <a href="#hero-demo" className="btn btn-primary">
-                  Analisar CNPJ grátis <i data-lucide="arrow-right" className="arrow"></i>
-                </a>
-                <button className="menu-toggle" aria-label="Abrir menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
-                  <i data-lucide="menu"></i>
-                </button>
+              <div className="right">
+                <a href="#acesso" className="pill pill-warn pill-sm">Solicitar acesso</a>
+                <button className="icon-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon n="list" /></button>
               </div>
             </div>
           </header>
-
-          <div className={`mobile-menu ${menuOpen ? "open" : ""}`} role="dialog" aria-modal="true">
-            <div className="top">
-              <img src="assets/logo-white.svg" alt="RiskPlus" />
-              <button className="close" aria-label="Fechar menu" onClick={() => setMenuOpen(false)}>
-                <i data-lucide="x"></i>
-              </button>
-            </div>
-            <div className="links">
-              {navLinks.map((l) => (
-                <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>
-                  {l.label}<i data-lucide="arrow-up-right"></i>
-                </a>
-              ))}
-            </div>
-            <div className="ctas">
-              <a href="#hero-demo" className="btn btn-primary" onClick={() => setMenuOpen(false)}>Analisar CNPJ grátis</a>
-              <a href="#" className="btn btn-secondary on-dark" onClick={() => setMenuOpen(false)}>Entrar</a>
-            </div>
+          <div className={`mmenu ${open ? "open" : ""}`} role="dialog" aria-modal="true" aria-label="Menu" aria-hidden={!open}>
+            <div className="top"><button className="icon-btn" aria-label="Fechar menu" onClick={() => setOpen(false)}><Icon n="x" /></button></div>
+            <nav>{NAV.map((l, i) => <a key={l.href} href={l.href} style={{ "--i": i }} onClick={() => setOpen(false)}>{l.label}</a>)}</nav>
+            <a href="#acesso" className="pill pill-fill" onClick={() => setOpen(false)}>Solicitar acesso</a>
           </div>
         </>
       );
     };
 
-    // ── Hero ──────────────────────────────────────────────────────────────────
+    // ── Hero + live demo ──────────────────────────────────────────────────────
     const Hero = () => {
-      const [cnpj, setCnpj] = React.useState("12.345.678/0001-90");
-      const [phase, setPhase] = React.useState("result");
-      const [stepIdx, setStepIdx] = React.useState(ANALYSIS_STEPS.length);
-      const [result, setResult] = React.useState(SAMPLES["12.345.678/0001-90"]);
-      const timersRef = React.useRef([]);
+      const first = Object.keys(SAMPLES)[0];
+      const [cnpj, setCnpj] = React.useState(first);
+      const [phase, setPhase] = React.useState("analyzing");
+      const [stepIdx, setStepIdx] = React.useState(0);
+      const [result, setResult] = React.useState(null);
+      const [shown, setShown] = React.useState(first);
+      const timers = React.useRef([]);
+      const clear = () => { timers.current.forEach(clearTimeout); timers.current = []; };
 
-      const clearTimers = () => { timersRef.current.forEach(clearTimeout); timersRef.current = []; };
-
-      const analisar = (raw) => {
+      const analisar = (raw, delay = 0) => {
         const key = raw ?? cnpj;
-        clearTimers();
-        setPhase("analyzing");
-        setStepIdx(0);
-        const sample = SAMPLES[key] || {
-          name: "Empresa Exemplo Ltda", setor: "—", fundacao: "—",
-          score: "A", pct: 80, label: "Liberar prazo · 45 dias", band: "go",
-          prazo: "45 dias", limite: "R$ 90.000",
-          factors: [
-            { kind: "good", text: "Dados cadastrais válidos" },
-            { kind: "good", text: "Sem pendências relevantes" },
-            { kind: "good", text: "Atividade compatível com porte" }
-          ]
-        };
-        ANALYSIS_STEPS.forEach((_, i) => {
-          timersRef.current.push(setTimeout(() => setStepIdx(i + 1), (i + 1) * 420));
-        });
-        timersRef.current.push(setTimeout(() => {
-          setResult(sample);
-          setPhase("result");
-        }, ANALYSIS_STEPS.length * 420 + 250));
+        clear();
+        setPhase("analyzing"); setStepIdx(0);
+        const sample = SAMPLES[key] || FALLBACK;
+        ANALYSIS_STEPS.forEach((_, i) => timers.current.push(setTimeout(() => setStepIdx(i + 1), delay + (i + 1) * STEP_MS)));
+        timers.current.push(setTimeout(() => { setResult(sample); setShown(key); setPhase("result"); }, delay + ANALYSIS_STEPS.length * STEP_MS + 260));
       };
+      React.useEffect(() => { analisar(first, 1200); return clear; }, []);
+      const busy = phase === "analyzing";
 
-      React.useEffect(() => () => clearTimers(), []);
-
-      const pickSample = (k) => { setCnpj(k); setTimeout(() => analisar(k), 30); };
+      // Start offsets for the pinned hero: text centered on top, demo centered
+      // below it. The scroll animation carries both back to their grid cells.
+      const heroRef = React.useRef(null), pinRef = React.useRef(null), textRef = React.useRef(null), demoRef = React.useRef(null);
+      React.useEffect(() => {
+        const measure = () => {
+          const pin = pinRef.current, t = textRef.current, d = demoRef.current;
+          const W = pin.clientWidth, top = 48, gap = 56;
+          const vars = {
+            "--tx": `${(W - t.offsetWidth) / 2 - t.offsetLeft}px`,
+            "--ty": `${top - t.offsetTop}px`,
+            "--dx": `${(W - d.offsetWidth) / 2 - d.offsetLeft}px`,
+            "--dy": `${top + t.offsetHeight + gap - d.offsetTop}px`,
+          };
+          Object.entries(vars).forEach(([k, v]) => heroRef.current.style.setProperty(k, v));
+        };
+        measure();
+        const ro = new ResizeObserver(measure);
+        ro.observe(pinRef.current);
+        ro.observe(textRef.current);
+        ro.observe(demoRef.current);
+        return () => ro.disconnect();
+      }, []);
 
       return (
-        <section className="rp-hero" id="hero-demo">
-          <img className="watermark" src="assets/icon-white.svg" alt="" aria-hidden="true" />
-          <div className="container">
-            <div className="content">
-              <div className="badge-row">
-                <span className="pulse-dot"></span>
-                <span>Análises rodando agora · &gt; 12.000 hoje</span>
-              </div>
-              <h1>
-                Tome decisões<br />
-                de vendas<br />
-                a prazo<br />
-                <span className="accent">em segundos</span>
-              </h1>
-              <p className="lead">
-                Analise o <span className="em">CNPJ</span> do seu cliente B2B e descubra na hora se vale dar o prazo
-                mesmo para quem <span className="em">não aparece</span> nos bureaus tradicionais.
-              </p>
-              <div className="reassure">
-                <span className="item"><i data-lucide="check"></i> Sem planilha.</span>
-                <span className="item"><i data-lucide="check"></i> Sem achismo.</span>
-                <span className="item"><i data-lucide="check"></i> Sem cadastro.</span>
-              </div>
+        <section className="hero tile" id="hero" ref={heroRef}>
+          <div className="hero-pin" ref={pinRef}>
+          <div className="hero-grid">
+          <div className="hero-text" ref={textRef}>
+            <h1 className="h-xl load" style={{ "--d": "100ms" }}>Tome decisões de vendas a prazo <span className="hl">em segundos.</span></h1>
+            <p className="lead load" style={{ "--d": "260ms" }}>Cole o CNPJ do seu cliente B2B e veja na hora se vale dar prazo, mesmo sem histórico no bureau.</p>
+            <div className="actions load" style={{ "--d": "400ms" }}>
+              <a href="#acesso" className="pill pill-fill">Solicitar acesso</a>
+              <a href="#como-funciona" className="more">Como funciona <Icon n="caret-right" b /></a>
             </div>
+          </div>
 
-            <div className="demo-card">
-              <div className="demo-window">
-                <div className="demo-titlebar">
-                  <div className="dots"><span></span><span></span><span></span></div>
-                  <div className="url"><i data-lucide="lock"></i>app.riskplus.com.br/analise</div>
+          <div className="hero-demo" ref={demoRef}>
+          <div className="load" style={{ "--d": "560ms" }}>
+            <div>
+              <div className="demo">
+                <div className="demo-head">
+                  <span>Análise de CNPJ</span>
+                  <span className="ok"><Icon n="lock-simple" b />Dados públicos e auditados</span>
                 </div>
-                <div className="demo-body">
-                  <div className="demo-input-row">
-                    <input
-                      value={cnpj}
-                      placeholder="00.000.000/0000-00"
-                      onChange={(e) => setCnpj(formatCnpj(e.target.value))}
-                      onKeyDown={(e) => e.key === "Enter" && analisar()}
-                      aria-label="CNPJ"
-                    />
-                    <button onClick={() => analisar()} disabled={phase === "analyzing"}>
-                      {phase === "analyzing" ? "Analisando…" : <><span>Analisar</span> <i data-lucide="arrow-right"></i></>}
-                    </button>
-                  </div>
-                  <div className="demo-examples">
-                    <span className="lbl">Exemplos:</span>
-                    {Object.keys(SAMPLES).map((k) => (
-                      <button key={k} className="chip" onClick={() => pickSample(k)}>{k}</button>
-                    ))}
-                  </div>
-                  {phase === "analyzing" && (
-                    <div className="demo-analyzing">
+                <div className="demo-row">
+                  <input value={cnpj} placeholder="00.000.000/0000-00" inputMode="numeric" aria-label="CNPJ"
+                    onChange={(e) => setCnpj(formatCnpj(e.target.value))}
+                    onKeyDown={(e) => e.key === "Enter" && !busy && analisar()} />
+                  <button onClick={() => analisar()} disabled={busy || cnpj.replace(/\D/g, "").length < 14}>
+                    {busy ? "Analisando…" : <>Analisar <Icon n="arrow-right" /></>}
+                  </button>
+                </div>
+                <div className="demo-ex" aria-label="CNPJs de exemplo">
+                  {Object.keys(SAMPLES).map((k) => (
+                    <button key={k} aria-pressed={shown === k && !busy} disabled={busy} onClick={() => { setCnpj(k); analisar(k); }}>{k}</button>
+                  ))}
+                </div>
+                <div className="demo-stage" aria-live="polite">
+                  {busy && (
+                    <div className="skel">
                       {ANALYSIS_STEPS.map((s, i) => {
-                        const state = i < stepIdx ? "done" : i === stepIdx ? "active" : "pending";
+                        const st = i < stepIdx ? "done" : i === stepIdx ? "active" : "";
                         return (
-                          <div key={i} className={`step ${state}`}>
-                            <span className="check">
-                              {state === "done" && <i data-lucide="check"></i>}
-                              {state === "active" && <i data-lucide="loader-2"></i>}
-                              {state === "pending" && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--rp-slate-400)" }} />}
-                            </span>
-                            {s}
+                          <div key={i} className={`row ${st}`}>
+                            <Icon n={st === "done" ? "check-circle" : st === "active" ? "circle-notch" : "circle"} b={st !== ""} />{s}
                           </div>
                         );
                       })}
+                      <div className="bar w3"></div>
+                      <div className="bar w1"></div>
+                      <div className="bar w2"></div>
                     </div>
                   )}
-                  {phase === "result" && result && (
-                    <div className={`demo-result ${result.band}`}>
-                      <div className="demo-persona-top">
-                        <div className={`demo-persona-av ${result.band}`}>{result.initials}</div>
-                        <div className="demo-persona-info">
-                          <div className="demo-result-co">{result.name}</div>
-                          <div className="demo-result-cnpj">CNPJ {cnpj}</div>
+                  {!busy && result && (
+                    <div className={`res ${result.band}`}>
+                      <div className="res-top">
+                        <div className="res-av">{result.initials}</div>
+                        <div>
+                          <div className="res-co">{result.name}</div>
+                          <div className="res-cnpj">CNPJ {shown}</div>
                         </div>
-                        <div className="demo-result-score">{result.score}</div>
+                        <div className={`res-score tone-${result.band}`}>{result.score}</div>
                       </div>
-                      <div className="demo-persona-identity">
-                        <span className="demo-persona-label">Persona de Crédito</span>
-                        <span className="demo-persona-archetype">{result.archetype}</span>
-                        <div className="demo-result-label"><span className="dot"></span>{result.label}</div>
+                      <div className="res-arch">{result.archetype}</div>
+                      <div className={`res-lbl tone-${result.band}`}>{result.label}</div>
+                      <div className="traits">
+                        {result.traits.map((t, i) => <span key={i} className={`trait ${t.kind}`} style={{ "--i": i }}><Icon n={t.icon} b />{t.text}</span>)}
                       </div>
-                      <div className="demo-persona-traits">
-                        {result.traits.map((t, i) => (
-                          <span key={i} className={`demo-persona-trait ${t.kind}`}>
-                            <i data-lucide={t.icon}></i>{t.text}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="demo-result-grid">
-                        <div className="pair"><span className="k">Prazo recomendado</span><span className="v">{result.prazo}</span></div>
-                        <div className="pair"><span className="k">Limite sugerido</span><span className="v">{result.limite}</span></div>
-                        <div className="pair"><span className="k">Setor</span><span className="v">{result.setor}</span></div>
-                        <div className="pair"><span className="k">Fundação</span><span className="v">{result.fundacao}</span></div>
+                      <div className="kv">
+                        <div><div className="k">Prazo recomendado</div><div className="v">{result.prazo}</div></div>
+                        <div><div className="k">Limite sugerido</div><div className="v">{result.limite}</div></div>
+                        <div><div className="k">Setor</div><div className="v">{result.setor}</div></div>
+                        <div><div className="k">Fundação</div><div className="v">{result.fundacao}</div></div>
                       </div>
                     </div>
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+          </div>
+          </div>
+          </div>
+        </section>
+      );
+    };
+
+    const Marquee = () => (
+      <div className="marquee" aria-label="Fontes cruzadas em cada análise">
+        <div className="track" aria-hidden="true">
+          {[...SOURCES, ...SOURCES].map((s, i) => <span key={i}>{s}</span>)}
+        </div>
+      </div>
+    );
+
+    // ── Differentiators: each statement lights up as it crosses the middle ────
+    const Differentiators = () => {
+      const listRef = React.useRef(null);
+      React.useEffect(() => {
+        const items = listRef.current.querySelectorAll(".lit");
+        if (reducedMotion()) { items.forEach((el) => (el.dataset.on = "")); return; }
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.dataset.on = "";
+            else if (e.boundingClientRect.top > window.innerHeight / 2) delete e.target.dataset.on;
+          });
+        }, { rootMargin: "-38% 0px -38% 0px" });
+        items.forEach((el) => io.observe(el));
+        return () => io.disconnect();
+      }, []);
+
+      return (
+        <section className="sec" id="diferenciais">
+          <div className="wrap center lit-head">
+            <h2 className="h-lg" data-reveal>O bureau só enxerga quem já tem histórico de crédito.</h2>
+            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus cruza dados públicos com sinais alternativos e modelos próprios. Assim dá pra analisar MEI e empresa recém-aberta.</p>
+          </div>
+          <div className="wrap">
+            <div className="lit-list" ref={listRef}>
+              {STATEMENTS.map((s, i) => (
+                <div className="lit" key={i}>
+                  <h3>{s.us}</h3>
+                  <p>{s.them}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
       );
     };
 
+    // ── How it works: horizontal gallery ──────────────────────────────────────
+    const HowItWorks = () => {
+      const galRef = React.useRef(null);
+      const [ends, setEnds] = React.useState({ start: true, end: false });
 
-    // ── Differentiators ───────────────────────────────────────────────────────
-    const Differentiators = () => (
-      <section className="rp-section" id="diferenciais">
-        <div className="container">
-          <div className="head">
-            <span className="eyebrow">Diferenciais</span>
-            <h2>O bureau tradicional enxerga o passado. A RiskPlus enxerga o potencial.</h2>
-            <p className="sub">Enquanto os bureaus tradicionais dependem do histórico de crédito, a RiskPlus combina dados públicos, alternativos e proprietários para analisar empresas de forma mais completa, inclusive aquelas sem histórico relevante, permitindo aprovações mais rápidas e assertivas em segundos.</p>
-          </div>
-          <div className="diff-grid">
-            <div className="diff-col them">
-              <h3><span className="mark">—</span>Bureau tradicional</h3>
-              <ul className="diff-list">
-                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Score sem explicação</span></li>
-                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Empresa nova ou pequena? Geralmente "sem informação".</span></li>
-                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Relatórios longos, sem clareza.</span></li>
-                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Atualização lenta dos dados</span></li>
-                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Integração via planilha, XML antigo ou nenhuma.</span></li>
-                <li><span className="ico"><i data-lucide="minus"></i></span><span className="t">Cobrança por consulta avulsa, custo imprevisível.</span></li>
-              </ul>
+      React.useEffect(() => {
+        const gal = galRef.current;
+        const cards = gal.querySelectorAll(".gcard");
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            const key = e.target === cards[0] ? "start" : "end";
+            setEnds((s) => ({ ...s, [key]: e.intersectionRatio > 0.95 }));
+          });
+        }, { root: gal, threshold: [0, 0.5, 0.95, 1] });
+        io.observe(cards[0]); io.observe(cards[cards.length - 1]);
+        return () => io.disconnect();
+      }, []);
+
+      const go = (dir) => {
+        const card = galRef.current.querySelector(".gcard");
+        galRef.current.scrollBy({ left: dir * (card.offsetWidth + 20), behavior: reducedMotion() ? "auto" : "smooth" });
+      };
+
+      return (
+        <section className="sec tile" id="como-funciona">
+          <div className="wrap gal-head">
+            <h2 className="h-lg" data-reveal>Do CNPJ à decisão em três passos.</h2>
+            <div className="gal-nav">
+              <button onClick={() => go(-1)} disabled={ends.start} aria-label="Passo anterior"><Icon n="caret-left" b /></button>
+              <button onClick={() => go(1)} disabled={ends.end} aria-label="Próximo passo"><Icon n="caret-right" b /></button>
             </div>
-            <div className="diff-col us">
-              <h3><img src="assets/logo-blue.svg" alt="RiskPlus" style={{ height: 26 }} /></h3>
-              <ul className="diff-list">
-                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Decisão direta: <strong>Liberar, Atenção ou Negar</strong> — com motivos.</span></li>
-                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Cobertura sobre empresas <strong>fora dos bureaus</strong> via sinais alternativos.</span></li>
-                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Prazo e limite sugeridos prontos pra aplicar.</span></li>
-                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Monitoramento contínuo: a gente avisa quando o risco muda.</span></li>
-                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">API moderna + integrações nativas com ERP.</span></li>
-                <li><span className="ico"><i data-lucide="check"></i></span><span className="t">Plano mensal previsível, com franquia de análises.</span></li>
-              </ul>
+          </div>
+          <div className="gal" ref={galRef}>
+            <article className="gcard">
+              <span className="step">Primeiro</span>
+              <h3>Cole o CNPJ.</h3>
+              <p className="gtext">Qualquer empresa brasileira, com ou sem pontos e barra no número. Não precisa subir planilha.</p>
+              <div className="gvis"><div className="field-mock"><span>12.345.678/0001-90</span><span className="caret"></span></div></div>
+            </article>
+            <article className="gcard blue">
+              <span className="step">Depois</span>
+              <h3>A RiskPlus cruza os dados.</h3>
+              <p className="gtext">Receita Federal, quadro de sócios, processos e sinais alternativos passam pelos nossos modelos em segundos.</p>
+              <div className="gvis"><div className="chips">{SOURCES.slice(0, 7).map((s) => <span key={s}>{s}</span>)}</div></div>
+            </article>
+            <article className="gcard">
+              <span className="step">Por fim</span>
+              <h3>Decida e justifique.</h3>
+              <p className="gtext">Você recebe Liberar, Atenção ou Negar, com os fatores e o peso de cada um. Seu time de crédito consegue defender a decisão internamente.</p>
+              <div className="gvis"><div className="verdicts">
+                <span className="go">Liberar <Icon n="check" b /></span>
+                <span className="caution">Atenção <Icon n="warning" b /></span>
+                <span className="stop">Negar <Icon n="x" b /></span>
+              </div></div>
+            </article>
+          </div>
+        </section>
+      );
+    };
+
+    // ── Product (dark color block) ────────────────────────────────────────────
+    const PRODUCT_TRAITS = [["good", "check-circle", "Pagador assíduo"], ["good", "trend-up", "Crescimento estável"], ["good", "shield-check", "Gestão consolidada"], ["good", "calendar-blank", "8 anos de mercado"], ["neutral", "clock", "1 evento regularizado"]];
+    const Product = () => (
+      <section className="sec dark" id="produto">
+        <div className="wrap center">
+          <h2 className="h-lg" data-reveal>Conheça quem está do outro lado da nota fiscal.</h2>
+          <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>Cada CNPJ analisado recebe uma persona de crédito. Ela mostra como a empresa paga e como vem crescendo, além do score.</p>
+        </div>
+        <div className="wrap">
+          <div className="pcard" data-reveal style={{ "--i": 2 }}>
+            <div className="pcard-top">
+              <div className="av">MD</div>
+              <div>
+                <div className="who">Mercatto Distribuição Ltda, CNPJ 12.345.678/0001-90</div>
+                <div className="arch">Parceiro Confiável</div>
+                <p className="desc">Empresa com crescimento consistente e histórico de pagamentos em dia. Gestão estável, presença consolidada no mercado e sem restrições ativas.</p>
+              </div>
+              <span className="badge">Liberar prazo</span>
+            </div>
+            <div className="traits">
+              {PRODUCT_TRAITS.map(([k, ic, t]) => <span key={t} className={`trait ${k}`}><Icon n={ic} b />{t}</span>)}
+            </div>
+            <div className="pmetrics">
+              <div><div className="k">Score RiskPlus</div><div className="v go">A<small>/F</small></div><div className="s"><CountUp to={88} /> de 100, top 12% do setor</div></div>
+              <div><div className="k">Prazo sugerido</div><div className="v"><CountUp to={60} /><small>dias</small></div><div className="s">Histórico estável</div></div>
+              <div><div className="k">Limite sugerido</div><div className="v">R$ <CountUp to={180} /><small>mil</small></div><div className="s">Cerca de 0,8× o faturamento</div></div>
             </div>
           </div>
         </div>
       </section>
     );
 
-    // ── FeatureGrid ───────────────────────────────────────────────────────────
-    const FeatureGrid = () => (
-      <section className="rp-section bg-soft" id="como-funciona">
-        <div className="container">
-          <div className="head">
-            <span className="eyebrow">Como funciona</span>
-            <h2>Três passos. Zero achismo.</h2>
-            <p className="sub">Você cola o CNPJ, a RiskPlus cruza dezenas de fontes — públicas, alternativas e proprietárias — e devolve uma decisão clara em segundos.</p>
+    // ── Risk bands: bento ─────────────────────────────────────────────────────
+    const BANDS = [
+      { cls: "go big", icon: "check-circle", tag: "Faixa A e B", letter: "A", name: "Parceiro Confiável", share: 64,
+        traits: ["Adimplente há mais de 24 meses", "Faturamento estável ou crescente", "Sócios sem restrições ativas", "Cadastro consistente na Receita Federal"] },
+      { cls: "caution", icon: "warning", tag: "Faixa C", letter: "C", name: "Empresa em Transição", share: 22,
+        traits: ["Algum atraso nos últimos 12 meses", "Faturamento com oscilações recentes"] },
+      { cls: "stop", icon: "x-circle", tag: "Faixa D e F", letter: "D", name: "Perfil Comprometido", share: 14,
+        traits: ["Protestos ativos ou não regularizados", "Sócio com restrições em outros CNPJs"] },
+    ];
+    const Bands = () => (
+      <section className="sec">
+        <div className="wrap">
+          <div className="center">
+            <h2 className="h-lg" data-reveal>Cada empresa recebe um arquétipo.</h2>
+            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>Depois da análise, o CNPJ cai em um de três perfis. Cada perfil vem com a recomendação e os fatores que pesaram.</p>
           </div>
-          <div className="feature-grid">
-            <div className="feature">
-              <span className="step-num">01</span>
-              <div className="glyph"><i data-lucide="search"></i></div>
-              <div className="step-label">Passo 01</div>
-              <h3>Cole o CNPJ</h3>
-              <p>Qualquer empresa brasileira, com ou sem máscara. Sem cadastro, sem upload de planilha, sem fricção.</p>
-            </div>
-            <div className="feature">
-              <span className="step-num">02</span>
-              <div className="glyph"><i data-lucide="layers"></i></div>
-              <div className="step-label">Passo 02</div>
-              <h3>A RiskPlus cruza os dados</h3>
-              <p>Receita Federal, sócios, processos, sinais alternativos e nossos modelos proprietários em segundos.</p>
-            </div>
-            <div className="feature">
-              <span className="step-num">03</span>
-              <div className="glyph"><i data-lucide="check-circle-2"></i></div>
-              <div className="step-label">Passo 03</div>
-              <h3>Decida com clareza</h3>
-              <p>Você recebe uma recomendação fundamentada — Liberar, Atenção ou Negar — com os fatores e pesos que apoiam a decisão do seu time de crédito.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-    // ── ProductPreview ────────────────────────────────────────────────────────
-    const ProductPreview = () => (
-      <section className="rp-section" id="produto">
-        <div className="container">
-          <div className="head">
-            <span className="eyebrow">Painel do produto</span>
-            <h2>Conheça quem está do outro lado da nota fiscal.</h2>
-            <p className="sub">A RiskPlus transforma dados em identidade. Cada CNPJ recebe uma persona de crédito — um perfil comportamental que vai muito além do score.</p>
-          </div>
-          <div className="preview-shell">
-            <div className="preview-window">
-              <div className="preview-toolbar">
-                <div className="dots"><span></span><span></span><span></span></div>
-                <div className="crumb">app.riskplus.com.br <span className="arr">›</span> análises <span className="arr">›</span> #A-2841</div>
-              </div>
-              <div className="preview-grid">
-                <aside className="preview-side">
-                  <div className="brand"><img src="assets/logo-blue.svg" alt="RiskPlus" /></div>
-                  <div className="nav-i active"><i data-lucide="layout-dashboard"></i>Análises</div>
-                  <div className="nav-i"><i data-lucide="eye"></i>Monitoramento</div>
-                  <div className="nav-i">
-                    <i data-lucide="bell"></i>Alertas
-                    <span style={{ marginLeft: 'auto', background: 'var(--rp-orange)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '1px 7px', borderRadius: 999 }}>3</span>
-                  </div>
-                  <div className="nav-i"><i data-lucide="file-text"></i>Relatórios</div>
-                  <div className="sec-label">Conta</div>
-                  <div className="nav-i"><i data-lucide="plug"></i>Integrações</div>
-                  <div className="nav-i"><i data-lucide="users"></i>Equipe</div>
-                  <div className="nav-i"><i data-lucide="settings"></i>Configurações</div>
-                </aside>
-                <div className="preview-main">
-                  <div className="preview-h">
-                    <div>
-                      <h4>Mercatto Distribuição Ltda</h4>
-                      <div className="sub-meta">CNPJ 12.345.678/0001-90 · análise há 2 min</div>
-                    </div>
-                    <div className="badge"><span className="dot"></span>Liberar prazo</div>
-                  </div>
-
-                  <div className="persona-card">
-                    <div className="persona-top">
-                      <div className="persona-avatar">MD</div>
-                      <div className="persona-identity">
-                        <div className="persona-label">Persona de Crédito</div>
-                        <div className="persona-archetype">Parceiro Confiável</div>
-                        <p className="persona-desc">Empresa com crescimento consistente e histórico de pagamentos em dia. Gestão estável, presença consolidada no mercado e sem restrições ativas.</p>
-                      </div>
-                    </div>
-                    <div className="persona-traits">
-                      <span className="persona-trait good"><i data-lucide="check-circle"></i>Pagador assíduo</span>
-                      <span className="persona-trait good"><i data-lucide="trending-up"></i>Crescimento estável</span>
-                      <span className="persona-trait good"><i data-lucide="shield"></i>Gestão consolidada</span>
-                      <span className="persona-trait good"><i data-lucide="calendar"></i>8 anos de mercado</span>
-                      <span className="persona-trait neutral"><i data-lucide="clock"></i>1 evento regularizado</span>
-                    </div>
-                  </div>
-
-                  <div className="persona-metrics">
-                    <div className="persona-metric">
-                      <div className="pm-label">Score RiskPlus</div>
-                      <div className="pm-value score">A<span>/F</span></div>
-                      <div className="pm-sub">88 / 100 · top 12% setor</div>
-                    </div>
-                    <div className="pm-div"></div>
-                    <div className="persona-metric">
-                      <div className="pm-label">Prazo sugerido</div>
-                      <div className="pm-value">60<span>dias</span></div>
-                      <div className="pm-sub">Histórico estável</div>
-                    </div>
-                    <div className="pm-div"></div>
-                    <div className="persona-metric">
-                      <div className="pm-label">Limite sugerido</div>
-                      <div className="pm-value">R$ 180<span>k</span></div>
-                      <div className="pm-sub">≈ 0,8× faturamento</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-    // ── RiskBands ─────────────────────────────────────────────────────────────
-    const RiskBands = () => (
-      <section className="rp-section bg-soft">
-        <div className="container">
-          <div className="head">
-            <span className="eyebrow">A decisão</span>
-            <h2>Cada empresa recebe um arquétipo.</h2>
-            <p className="sub">Após a análise, a RiskPlus classifica o CNPJ em um dos três perfis comportamentais e entrega uma recomendação clara com os fatores que pesaram.</p>
-          </div>
-          <div className="bands">
-            <div className="band go">
-              <div className="head-row"><i data-lucide="check"></i>Faixa A e B</div>
-              <div className="band-archetype">Arquétipo</div>
-              <div className="name">Parceiro Confiável</div>
-              <div className="band-traits">
-                <span className="band-trait">Adimplente há mais de 24 meses</span>
-                <span className="band-trait">Faturamento estável ou crescente</span>
-                <span className="band-trait">Sócios sem restrições ativas</span>
-                <span className="band-trait">Cadastro consistente na Receita Federal</span>
-              </div>
-              <div className="meta">≈ 64% das análises</div>
-              <div className="letter">A</div>
-            </div>
-            <div className="band caution">
-              <div className="head-row"><i data-lucide="alert-triangle"></i>Faixa C</div>
-              <div className="band-archetype">Arquétipo</div>
-              <div className="name">Empresa em Transição</div>
-              <div className="band-traits">
-                <span className="band-trait">Algum atraso registrado nos últimos 12 meses</span>
-                <span className="band-trait">Faturamento com oscilações recentes</span>
-                <span className="band-trait">Histórico societário com movimentações</span>
-                <span className="band-trait">Sinais alternativos mistos</span>
-              </div>
-              <div className="meta">≈ 22% das análises</div>
-              <div className="letter">B</div>
-            </div>
-            <div className="band stop">
-              <div className="head-row"><i data-lucide="x"></i>Faixa D e F</div>
-              <div className="band-archetype">Arquétipo</div>
-              <div className="name">Perfil Comprometido</div>
-              <div className="band-traits">
-                <span className="band-trait">Protestos ativos ou não regularizados</span>
-                <span className="band-trait">Sócio com restrições em outros CNPJs</span>
-                <span className="band-trait">Endereço ou cadastro inconsistente</span>
-                <span className="band-trait">Empresa recém-aberta com múltiplos sinais de risco</span>
-              </div>
-              <div className="meta">≈ 14% das análises</div>
-              <div className="letter">C</div>
-            </div>
+          <div className="bento">
+            {BANDS.map((b, i) => (
+              <article key={b.letter} className={`bt ${b.cls}`} data-reveal style={{ "--i": i }}>
+                <span className="letter" aria-hidden="true">{b.letter}</span>
+                <span className="tag"><Icon n={b.icon} b />{b.tag}</span>
+                <h3>{b.name}</h3>
+                <ul>{b.traits.map((t) => <li key={t}>{t}</li>)}</ul>
+                <div className="share"><b><CountUp to={b.share} />%</b>das análises</div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -1231,222 +949,132 @@
 
     // ── Stats ─────────────────────────────────────────────────────────────────
     const Stats = () => (
-      <section className="rp-section tight">
-        <div className="container">
+      <section className="sec tile">
+        <div className="wrap center">
+          <h2 className="h-lg" data-reveal>Em números.</h2>
           <div className="stats">
-            <div className="stat">
-              <div className="num">8s</div>
-              <div className="lbl">Tempo médio entre colar o CNPJ e receber uma decisão.</div>
-            </div>
-            <div className="stat">
-              <div className="num orange">+40%</div>
-              <div className="lbl">De cobertura sobre empresas invisíveis nos bureaus tradicionais.</div>
-            </div>
-            <div className="stat">
-              <div className="num">93%</div>
-              <div className="lbl">Das decisões classificadas como "Liberar" se tornam clientes adimplentes.</div>
-            </div>
+            <div className="stat" data-reveal><div className="big"><CountUp to={8} /><span className="u">s</span></div><p>Mediana de tempo entre colar o CNPJ e ver a decisão na tela.</p></div>
+            <div className="stat" data-reveal style={{ "--i": 1 }}><div className="big"><span className="u">+</span><CountUp to={40} /><span className="u">%</span></div><p>De cobertura em empresas que não aparecem nos bureaus tradicionais.</p></div>
+            <div className="stat" data-reveal style={{ "--i": 2 }}><div className="big"><CountUp to={93} /><span className="u">%</span></div><p>Das decisões “Liberar” viram clientes adimplentes.</p></div>
           </div>
         </div>
       </section>
     );
 
-    // ── Testimonial ───────────────────────────────────────────────────────────
-    const Testimonial = () => (
-      <section className="rp-section" id="clientes">
-        <div className="container">
-          <div className="testimonial">
-            <img className="watermark" src="assets/icon-white.svg" alt="" aria-hidden="true" />
-            <div className="quote">
-              Cortamos a inadimplência B2B em quase metade no primeiro trimestre. Hoje ninguém aqui dá prazo sem rodar o CNPJ na RiskPlus.
-            </div>
-            <div className="who">
-              <span className="avatar">LT</span>
-              <div>
-                <strong>Laura Tavares</strong>
-                Diretora financeira, Mercatto Distribuição
+    // ── Pricing: compare models ───────────────────────────────────────────────
+    const TIERS = [
+      { tier: "Free", name: "Pra conhecer a RiskPlus antes de integrar.", price: <><b>R$ 0</b>por mês</>,
+        features: [["magnifying-glass", "3 análises de CNPJ por mês"], ["traffic-signal", "Decisão Liberar, Atenção ou Negar"], ["calendar-check", "Prazo e limite sugeridos"], ["browser", "Acesso ao painel web"]],
+        cta: "Solicitar acesso", btn: "pill-line" },
+      { tier: "Pro", flag: "Recomendado", featured: true, name: "Pra times de crédito e financeiro que analisam cliente toda semana.", price: <><b>Sob consulta</b>Franquia mensal em definição</>,
+        features: [["eye", "Monitoramento contínuo da carteira"], ["bell-ringing", "Alertas quando o risco muda"], ["plugs-connected", "API REST, webhooks e ERP (Omie, Bling, Conta Azul)"], ["file-csv", "Relatórios e exportação CSV"]],
+        cta: "Solicitar acesso", btn: "pill-fill" },
+      { tier: "Enterprise", name: "Pra operações de alto volume, com SLA e integração sob medida.", price: <><b>Sob consulta</b>Volume ilimitado</>,
+        features: [["sliders", "Modelo customizado pro seu setor"], ["lock-key", "SSO, auditoria e SLA contratual"], ["user-circle", "Gerente de conta dedicado"], ["database", "Integração com ERP ou data warehouse"]],
+        cta: "Falar com vendas", btn: "pill-line" },
+    ];
+    const Pricing = () => (
+      <section className="sec" id="precos">
+        <div className="wrap">
+          <div className="center">
+            <h2 className="h-lg" data-reveal>Comece grátis e mude de plano quando precisar.</h2>
+            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>Não tem taxa de setup nem fidelidade.</p>
+          </div>
+          <div className="compare">
+            {TIERS.map((t, i) => (
+              <div key={t.tier} className={`model ${t.featured ? "featured" : ""}`} data-reveal style={{ "--i": i }}>
+                <span className="flag">{t.flag || ""}</span>
+                <h3 className="tier">{t.tier}</h3>
+                <p className="name">{t.name}</p>
+                <div className="price">{t.price}</div>
+                <a href="#acesso" className={`pill ${t.btn}`}>{t.cta}</a>
+                <ul>{t.features.map(([ic, f]) => <li key={f}><Icon n={ic} />{f}</li>)}</ul>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
     );
 
-    // ── Pricing ───────────────────────────────────────────────────────────────
-    const Pricing = () => {
-      const tiers = [
-        {
-          tier: "Free", name: "Para validar a ideia", sub: "Pra quem quer testar antes de integrar.",
-          currency: "R$", amount: "0", per: "/ mês",
-          features: ["3 análises de CNPJ por mês", "Decisão Liberar / Atenção / Negar", "Prazo e limite sugeridos", "Acesso ao painel web"],
-          cta: "Começar grátis", ctaClass: "btn btn-secondary", flag: null, featured: false, enterprise: false,
-        },
-        {
-          tier: "Pro", name: "Pra equipes que decidem todo dia", sub: "O mais escolhido por times de crédito e financeiro.",
-          consulting: true,
-          features: ["Em definição análises por mês", "Monitoramento contínuo da carteira", "Alertas em tempo real por mudança de risco", "API REST + webhooks", "Integração com ERP (Omie, Bling, Conta Azul)", "Relatórios e exportação CSV"],
-          cta: "Começar 14 dias grátis", ctaClass: "btn btn-warn", flag: "Mais popular", featured: true, enterprise: false,
-        },
-        {
-          tier: "Enterprise", name: "Pra operações de alto volume", sub: "Capacidade dedicada, SLA e integrações sob medida.",
-          consulting: true,
-          features: ["Volume ilimitado de análises", "Modelo customizado pro seu setor", "SSO, auditoria e SLA contratual", "Gerente de conta dedicado", "Integração 1-a-1 com seu ERP / data warehouse", "Onboarding com nosso time de risco"],
-          cta: "Falar com vendas", ctaClass: "btn btn-secondary", flag: null, featured: false, enterprise: true,
-        },
-      ];
-
+    // ── FAQ ───────────────────────────────────────────────────────────────────
+    const FAQ = () => {
+      const [open, setOpen] = React.useState(-1);
       return (
-        <section className="rp-section bg-soft" id="precos">
-          <div className="container">
-            <div className="head text-center">
-              <span className="eyebrow" style={{ justifyContent: "center" }}>Planos</span>
-              <h2>Comece grátis. Escale quando precisar.</h2>
-              <p className="sub" style={{ marginInline: "auto" }}>Sem taxa de setup. Sem fidelidade. Você decide quando subir de plano — ou voltar.</p>
-            </div>
-            <div className="pricing">
-              {tiers.map((t) => (
-                <div key={t.tier} className={`price ${t.featured ? "featured" : ""} ${t.enterprise ? "enterprise" : ""}`}>
-                  {t.flag && <div className="price-flag">{t.flag}</div>}
-                  <div className="tier">{t.tier}</div>
-                  <div>
-                    <div className="name">{t.name}</div>
-                    <div className="sub">{t.sub}</div>
-                  </div>
-                  <div className="amount">
-                    {t.consulting ? (
-                      <div className="consulting-block">
-                        <span className="consulting-tag">Sob consulta</span>
-                        <span className="consulting-sub">Fale com o time de vendas</span>
-                      </div>
-                    ) : (
-                      <>
-                        {t.currency && <span className="currency">{t.currency}</span>}
-                        <span>{t.amount}</span>
-                        {t.per && <span className="per">{t.per}</span>}
-                      </>
-                    )}
-                  </div>
-                  <ul>
-                    {t.features.map((f, i) => (
-                      <li key={i}><i data-lucide="check" className="ic"></i>{f}</li>
-                    ))}
-                  </ul>
-                  <a href="#" className={`${t.ctaClass} cta`}>
-                    {t.cta}<i data-lucide="arrow-right" className="arrow"></i>
-                  </a>
+        <section className="sec tile" id="faq">
+          <div className="wrap-narrow">
+            <h2 className="h-lg center" data-reveal>Perguntas frequentes.</h2>
+            <div className="faq">
+              {FAQS.map((f, i) => (
+                <div key={i} className={`qa ${open === i ? "open" : ""}`}>
+                  <button onClick={() => setOpen(open === i ? -1 : i)} aria-expanded={open === i} aria-controls={`qa-${i}`}>
+                    <span>{f.q}</span><Icon n="plus" />
+                  </button>
+                  <div className="a" id={`qa-${i}`} role="region"><div><p>{f.a}</p></div></div>
                 </div>
               ))}
             </div>
+            <p className="faq-note">Se sua dúvida não está aqui, <a href="#acesso">fale com vendas</a>. A gente responde em até um dia útil.</p>
           </div>
         </section>
       );
     };
 
-    // ── FAQ ───────────────────────────────────────────────────────────────────
-    const FaqItem = ({ q, a, isOpen, onToggle }) => (
-      <div className={`faq-item ${isOpen ? "open" : ""}`}>
-        <button className="faq-q" onClick={onToggle} aria-expanded={isOpen}>
-          <span>{q}</span>
-          <span className="plus"><i data-lucide="plus"></i></span>
-        </button>
-        <div className="faq-a">
-          <div className="faq-a-inner">{a}</div>
-        </div>
-      </div>
-    );
-
-    const FAQ = () => {
-      const [open, setOpen] = React.useState(0);
-      React.useEffect(() => {
-        setTimeout(() => window.lucide && window.lucide.createIcons(), 50);
-      }, [open]);
-
-      return (
-        <section className="rp-section" id="faq">
-          <div className="container">
-            <div className="faq-wrap">
-              <div>
-                <span className="eyebrow">FAQ</span>
-                <h2 style={{ marginTop: 14 }}>Perguntas que a gente ouve toda semana.</h2>
-                <p className="sub">
-                  Não achou o que precisava?{" "}
-                  <a href="#" style={{ color: "var(--rp-blue)", fontWeight: 600 }}>Fala com o time</a>{" "}
-                  — respondemos em até um dia útil.
-                </p>
-              </div>
-              <div className="faq-list">
-                {FAQS.map((f, i) => (
-                  <FaqItem
-                    key={i} q={f.q} a={f.a}
-                    isOpen={open === i}
-                    onToggle={() => setOpen(open === i ? -1 : i)}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // ── LeadCapture ───────────────────────────────────────────────────────────
-    const LeadCapture = () => {
+    // ── Access form ───────────────────────────────────────────────────────────
+    const Access = () => {
       const [form, setForm] = React.useState({ nome: "", empresa: "", email: "", cnpj: "" });
+      const [errors, setErrors] = React.useState({});
       const [sent, setSent] = React.useState(false);
 
-      const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
+      const handle = (e) => {
+        const { name, value } = e.target;
+        setForm({ ...form, [name]: name === "cnpj" ? formatCnpj(value) : value });
+        if (errors[name]) setErrors({ ...errors, [name]: null });
+      };
       const submit = (e) => {
         e.preventDefault();
-        setSent(true);
+        const err = {};
+        if (!form.nome.trim()) err.nome = "Informe seu nome.";
+        if (!form.empresa.trim()) err.empresa = "Informe a empresa.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) err.email = "Use um e-mail válido, ex.: nome@empresa.com.br";
+        if (form.cnpj && form.cnpj.replace(/\D/g, "").length !== 14) err.cnpj = "O CNPJ tem 14 dígitos.";
+        setErrors(err);
+        if (!Object.keys(err).length) setSent(true);
       };
-
-      React.useEffect(() => {
-        setTimeout(() => window.lucide && window.lucide.createIcons(), 50);
-      }, [sent]);
+      const field = (name, label, props = {}, opt) => (
+        <div className={`field ${errors[name] ? "err" : ""}`}>
+          <label htmlFor={`f-${name}`}>{label}{opt && <span className="opt">opcional</span>}</label>
+          <input id={`f-${name}`} name={name} value={form[name]} onChange={handle} aria-invalid={!!errors[name]} {...props} />
+          {errors[name] && <span className="msg">{errors[name]}</span>}
+        </div>
+      );
 
       return (
-        <section className="rp-section bg-dark" id="acesso">
-          <div className="container">
-            <div className="lc-wrap">
-              <div className="lc-left">
-                <span className="eyebrow on-dark">Acesso antecipado</span>
-                <h2>Seja um dos primeiros a usar a RiskPlus.</h2>
-                <p className="sub" style={{ color: "rgba(255,255,255,0.7)" }}>Deixe seu contato — nosso time entra em breve para liberar o acesso e fazer o onboarding com você.</p>
-                <ul className="lc-perks">
-                  <li><i data-lucide="check-circle"></i>1 consulta grátis para testar agora</li>
-                  <li><i data-lucide="check-circle"></i>Onboarding guiado pelo time RiskPlus</li>
-                  <li><i data-lucide="check-circle"></i>Sem contrato. Sem fidelidade.</li>
+        <section className="sec" id="acesso">
+          <div className="wrap">
+            <div className="access" data-reveal>
+              <div>
+                <h2 className="h-lg">Pare de dar prazo no escuro.</h2>
+                <p className="lead">Seja um dos primeiros a usar a RiskPlus. O time libera seu acesso e faz o onboarding junto com você.</p>
+                <ul className="perks">
+                  <li><Icon n="check-circle" />1 consulta grátis pra testar</li>
+                  <li><Icon n="check-circle" />Onboarding com o time, sem contrato de fidelidade</li>
                 </ul>
               </div>
-              <div className="lc-form-card">
+              <div className="form">
                 {sent ? (
-                  <div className="lc-success">
-                    <div className="lc-success-icon"><i data-lucide="check-circle"></i></div>
-                    <div className="lc-success-title">Recebemos!</div>
-                    <div className="lc-success-sub">Entraremos em contato em breve para liberar seu acesso à plataforma.</div>
+                  <div className="done">
+                    <Icon n="check-circle" />
+                    <h3>Recebemos seu pedido.</h3>
+                    <p>A gente entra em contato pra liberar seu acesso.</p>
                   </div>
                 ) : (
-                  <form onSubmit={submit}>
-                    <div className="lc-field">
-                      <label>Nome completo</label>
-                      <input name="nome" value={form.nome} onChange={handle} placeholder="João Silva" required />
-                    </div>
-                    <div className="lc-field">
-                      <label>Empresa</label>
-                      <input name="empresa" value={form.empresa} onChange={handle} placeholder="Distribuidora Exemplo Ltda" required />
-                    </div>
-                    <div className="lc-field">
-                      <label>E-mail corporativo</label>
-                      <input type="email" name="email" value={form.email} onChange={handle} placeholder="joao@empresa.com.br" required />
-                    </div>
-                    <div className="lc-field">
-                      <label>CNPJ da empresa <span className="lc-opt">opcional</span></label>
-                      <input name="cnpj" value={form.cnpj} onChange={handle} placeholder="00.000.000/0001-00" />
-                    </div>
-                    <button type="submit" className="btn btn-warn btn-lg lc-submit">
-                      Solicitar acesso <i data-lucide="arrow-right" className="arrow"></i>
-                    </button>
+                  <form onSubmit={submit} noValidate>
+                    {field("nome", "Nome completo", { placeholder: "Marina Couto", autoComplete: "name" })}
+                    {field("empresa", "Empresa", { placeholder: "Distribuidora Alvorada Ltda", autoComplete: "organization" })}
+                    {field("email", "E-mail corporativo", { type: "email", placeholder: "marina@alvorada.com.br", autoComplete: "email" })}
+                    {field("cnpj", "CNPJ da empresa", { placeholder: "00.000.000/0001-00", inputMode: "numeric" }, true)}
+                    <button type="submit" className="pill pill-fill">Solicitar acesso</button>
+                    <p className="fine">Respondemos em até um dia útil.</p>
                   </form>
                 )}
               </div>
@@ -1456,95 +1084,42 @@
       );
     };
 
-    // ── CTA ───────────────────────────────────────────────────────────────────
-    const CTA = () => (
-      <section className="rp-section tight">
-        <div className="container">
-          <div className="cta-strip">
-            <h2>Pare de dar prazo no escuro.<br />Comece pela primeira análise.</h2>
-            <div className="actions">
-              <a href="#hero-demo" className="btn btn-primary btn-lg">
-                Analisar CNPJ grátis <i data-lucide="arrow-right" className="arrow"></i>
-              </a>
-              <a href="#" className="btn btn-secondary on-dark btn-lg">Falar com vendas</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
     // ── Footer ────────────────────────────────────────────────────────────────
     const Footer = () => (
-      <footer className="rp-footer">
-        <div className="container">
-          <div className="grid">
-            <div>
-              <img className="logo" src="assets/logo-white.svg" alt="RiskPlus" />
-              <p className="blurb">Decisão de crédito B2B em segundos. Sem planilha. Sem achismo.</p>
-              <div className="social">
-                <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
-                <a href="#" aria-label="Twitter / X"><i data-lucide="twitter"></i></a>
-                <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
-              </div>
-            </div>
-            <div>
-              <h4>Produto</h4>
-              <a href="#produto">Análise de CNPJ</a>
-              <a href="#">Monitoramento</a>
-              <a href="#">API &amp; webhooks</a>
-              <a href="#">Integrações ERP</a>
-              <a href="#precos">Preços</a>
-            </div>
-            <div>
-              <h4>Empresa</h4>
-              <a href="#">Sobre</a>
-              <a href="#">Carreiras</a>
-              <a href="#">Contato</a>
-              <a href="#">Imprensa</a>
-            </div>
-            <div>
-              <h4>Recursos</h4>
-              <a href="#">Documentação da API</a>
-              <a href="#">Blog</a>
-              <a href="#">Central de ajuda</a>
-              <a href="#">Segurança &amp; LGPD</a>
-              <a href="#">Status</a>
-            </div>
+      <footer className="foot">
+        <div className="wrap">
+          <p className="note">A RiskPlus usa dados públicos e sinais alternativos de fontes contratadas e auditadas, de acordo com a LGPD. As decisões são recomendações. Em operação de valor alto, combine com a política de crédito da sua empresa.</p>
+          <div className="cols">
+            <div><h4>Produto</h4><a href="#produto">Análise de CNPJ</a><a href="#produto">Monitoramento</a><a href="#">API e webhooks</a><a href="#precos">Preços</a></div>
+            <div><h4>Empresa</h4><a href="#">Sobre</a><a href="#">Carreiras</a><a href="#acesso">Contato</a></div>
+            <div><h4>Recursos</h4><a href="#">Documentação da API</a><a href="#faq">Central de ajuda</a><a href="#">Segurança e LGPD</a></div>
+            <div><h4>Redes</h4><a href="#">LinkedIn</a><a href="#">X</a><a href="#">GitHub</a></div>
           </div>
-          <div className="bottom">
-            <span>© 2026 RiskPlus Tecnologia Ltda. Todos os direitos reservados.</span>
-            <span>CNPJ 35.951.627/0001-02 · São Paulo, Brasil</span>
+          <div className="legal">
+            <span>© 2026 RiskPlus Tecnologia Ltda. CNPJ 35.951.627/0001-02, São Paulo.</span>
+            <nav aria-label="Legal"><a href="#">Privacidade</a><a href="#">Termos de uso</a></nav>
           </div>
         </div>
       </footer>
     );
 
-    // ── App ───────────────────────────────────────────────────────────────────
     const App = () => {
-      React.useEffect(() => {
-        const renderIcons = () => window.lucide && window.lucide.createIcons();
-        renderIcons();
-        const tids = [
-          setTimeout(renderIcons, 250),
-          setTimeout(renderIcons, 800),
-          setTimeout(renderIcons, 1800),
-        ];
-        return () => tids.forEach(clearTimeout);
-      }, []);
-
+      useReveal();
       return (
         <>
-          <Header />
-          <Hero />
-          <Differentiators />
-          <FeatureGrid />
-          <ProductPreview />
-          <RiskBands />
-          <Stats />
-          <Pricing />
-          <FAQ />
-          <LeadCapture />
-          <CTA />
+          <Nav />
+          <main id="main">
+            <Hero />
+            <Marquee />
+            <Differentiators />
+            <HowItWorks />
+            <Product />
+            <Bands />
+            <Stats />
+            <Pricing />
+            <FAQ />
+            <Access />
+          </main>
           <Footer />
         </>
       );
