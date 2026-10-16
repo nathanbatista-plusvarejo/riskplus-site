@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>RiskPlus · Decisão de crédito B2B em segundos</title>
-  <meta name="description" content="Analise o CNPJ do seu cliente B2B e descubra em segundos se vale dar prazo, inclusive pra empresa que não aparece nos bureaus tradicionais." />
+  <meta name="description" content="Saiba em segundos se vale vender a prazo. Cole o CNPJ do seu cliente B2B e a RiskPlus responde, mesmo quando a empresa não tem histórico no bureau." />
   <meta property="og:title" content="RiskPlus · Decisão de crédito B2B em segundos" />
-  <meta property="og:description" content="Analise o CNPJ do seu cliente B2B e descubra em segundos se vale dar prazo." />
+  <meta property="og:description" content="Saiba em segundos se vale vender a prazo. Cole o CNPJ do seu cliente B2B." />
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" href="assets/icon-blue.svg" />
 
@@ -249,8 +249,11 @@
     .res-av { width: 44px; height: 44px; border-radius: 12px; background: var(--raised); display: grid; place-items: center; font-family: var(--mono); font-size: 13px; flex: none; }
     .res-co { font-weight: 600; font-size: 16px; line-height: 1.25; }
     .res-cnpj { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .res-score { margin-left: auto; font-size: 56px; line-height: .8; letter-spacing: -.03em; }
+    .res-score { display: none; font-size: 56px; line-height: .8; letter-spacing: -.03em; }
     .tone-go { color: var(--go); } .tone-caution { color: var(--caution); } .tone-stop { color: var(--stop); }
+    .res-head-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 18px 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); }
+    .res-k { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+    .res-decision { font-family: var(--font-display); font-size: 40px; line-height: 1; letter-spacing: -.02em; }
     .res-arch { font-size: 24px; letter-spacing: -.025em; margin-top: 18px; }
     .res-lbl { font-size: 14px; font-weight: 500; margin-top: 2px; }
     .traits { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
@@ -319,6 +322,11 @@
     .pcard .traits { margin: 28px 0 0; }
     .pcard .trait { background: rgba(255,255,255,.08); color: var(--dark-ink); opacity: 1; animation: none; }
     .pcard .trait.good i { color: #7EE2A0; } .pcard .trait.neutral i { color: #F0B04A; }
+    .pcard .arch.go { color: #7EE2A0; }
+    .pcard .badge { color: var(--dark-mut); background: rgba(255,255,255,.08); font-weight: 500; }
+    .pfactors { display: grid; grid-template-columns: 1.6fr 1fr; gap: 28px; margin-top: 32px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.1); }
+    .pfactors .k { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--dark-mut); }
+    .pfactors .traits { margin: 12px 0 0; }
     .pmetrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.1); }
     .pmetrics .k { font-size: 14px; color: var(--dark-mut); }
     .pmetrics .v { font-size: clamp(40px, 5vw, 64px); letter-spacing: -.045em; line-height: 1; margin-top: 8px; }
@@ -336,33 +344,16 @@
     .bt.caution .tag, .bt.caution .share b { color: var(--caution); }
     .bt.stop .tag, .bt.stop .share b { color: var(--stop); }
     .bt h3 { font-size: clamp(28px, 3vw, 40px); line-height: 1.08; letter-spacing: -.03em; margin-top: 10px; max-width: 12ch; position: relative; }
-    .bt ul { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 6px; position: relative; }
+    .bt .bt-desc { font-size: 17px; color: var(--ink-2); margin-top: 12px; max-width: 26em; position: relative; }
+    .bt .bt-k { margin-top: auto; padding-top: 28px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); position: relative; }
+    .bt.go .tag { color: var(--go); } .bt.caution .tag { color: var(--caution); } .bt.stop .tag { color: var(--stop); }
+    .bt ul { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; position: relative; }
     .bt li { font-size: 15px; color: var(--ink-2); }
     .bt .share { margin-top: auto; padding-top: 28px; font-size: 15px; color: var(--muted); position: relative; }
     .bt .share b { display: block; font-size: clamp(48px, 6vw, 80px); letter-spacing: -.03em; line-height: 1; }
     .bt .letter { position: absolute; right: -10px; bottom: -40px; font-size: 280px; letter-spacing: -.03em; line-height: 1; opacity: .07; pointer-events: none; transition: transform 1.2s var(--ease); }
     .bt.big .letter { font-size: 460px; bottom: -80px; }
     .bt:hover .letter { transform: translateY(-12px); }
-
-    /* Stats */
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 64px; }
-    .stat .big { font-size: clamp(64px, 8vw, 112px); letter-spacing: -.03em; line-height: 1; }
-    .stat .big .u { color: var(--accent); }
-    .stat p { margin-top: 14px; color: var(--muted); max-width: 18em; margin-inline: auto; }
-
-    /* Pricing: compare models */
-    .compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 72px; }
-    .model { text-align: center; display: flex; flex-direction: column; align-items: center; }
-    .model .flag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--warn); border-radius: var(--radius-pill); padding: 4px 10px; height: auto; }
-    .model .flag:empty { visibility: hidden; }
-    .model .tier { font-size: 28px; letter-spacing: -.03em; margin-top: 6px; }
-    .model .name { font-size: 17px; color: var(--ink-2); margin-top: 6px; min-height: 2.9em; max-width: 16em; }
-    .model .price { margin: 18px 0 22px; font-size: 15px; color: var(--muted); min-height: 72px; display: grid; place-items: center; align-content: center; gap: 6px; }
-    .model .price b { display: block; font-size: 44px; letter-spacing: -.045em; color: var(--ink); line-height: 1; }
-    .model ul { list-style: none; padding: 32px 0 0; margin: 32px 0 0; border-top: 1px solid var(--hair); display: grid; gap: 22px; width: 100%; }
-    .model li { display: grid; justify-items: center; gap: 6px; font-size: 15px; color: var(--ink-2); max-width: 18em; margin: 0 auto; }
-    .model li i { font-size: 24px; color: var(--ink); }
-    .model.featured li i { color: var(--accent); }
 
     /* FAQ */
     .faq { margin-top: 56px; }
@@ -474,77 +465,61 @@
     const SAMPLES = {
       "12.345.678/0001-90": {
         name: "Mercatto Distribuição Ltda", setor: "Atacado · Alimentos", fundacao: "2014",
-        initials: "MD", score: "A", label: "Liberar prazo de 60 dias", band: "go",
-        archetype: "Parceiro Confiável", prazo: "60 dias", limite: "R$ 180.000",
+        initials: "MD", decision: "Liberar", band: "go",
         traits: [
-          { kind: "good", text: "Pagador assíduo", icon: "check-circle" },
-          { kind: "good", text: "Crescimento estável", icon: "trend-up" },
-          { kind: "good", text: "Gestão consolidada", icon: "shield-check" },
-          { kind: "good", text: "10 anos de mercado", icon: "calendar-blank" },
+          { kind: "good", text: "Pagamentos em dia", icon: "check-circle" },
+          { kind: "good", text: "Faturamento estável", icon: "trend-up" },
+          { kind: "good", text: "Sócios sem restrições", icon: "shield-check" },
+          { kind: "good", text: "10 anos de Receita ativa", icon: "calendar-blank" },
         ]
       },
       "33.222.111/0001-44": {
         name: "Vega Indústria & Comércio", setor: "Indústria · Têxtil", fundacao: "2019",
-        initials: "VI", score: "B", label: "Atenção, prazo curto", band: "caution",
-        archetype: "Empresa em Crescimento", prazo: "21 dias", limite: "R$ 35.000",
+        initials: "VI", decision: "Atenção", band: "caution",
         traits: [
-          { kind: "good", text: "Sem pendências fiscais", icon: "check-circle" },
-          { kind: "neutral", text: "1 protesto recente", icon: "warning" },
-          { kind: "neutral", text: "Pagamentos com atrasos", icon: "clock" },
-          { kind: "good", text: "5 anos de mercado", icon: "calendar-blank" },
+          { kind: "good", text: "Cadastro regular na Receita", icon: "check-circle" },
+          { kind: "neutral", text: "Atrasos recentes em pagamentos", icon: "clock" },
+          { kind: "neutral", text: "Faturamento oscilando", icon: "trend-down" },
+          { kind: "good", text: "5 anos de Receita ativa", icon: "calendar-blank" },
         ]
       },
       "55.999.444/0001-12": {
         name: "Northbay Trading ME", setor: "Importação", fundacao: "2023",
-        initials: "NT", score: "D", label: "Negar, risco alto", band: "stop",
-        archetype: "Perfil de Risco Elevado", prazo: "Não liberar", limite: "Não liberar",
+        initials: "NT", decision: "Negar", band: "stop",
         traits: [
           { kind: "bad", text: "Empresa recém-aberta", icon: "warning-circle" },
-          { kind: "bad", text: "Sócio com restrições", icon: "user-minus" },
-          { kind: "bad", text: "Cadastro inconsistente", icon: "x-circle" },
+          { kind: "bad", text: "Sócio com restrições em outros CNPJs", icon: "user-minus" },
+          { kind: "bad", text: "Cadastro inconsistente na Receita", icon: "x-circle" },
         ]
       }
     };
     const FALLBACK = {
       name: "Empresa consultada", setor: "Não informado", fundacao: "Não informado", initials: "EC",
-      score: "A", label: "Liberar prazo de 45 dias", band: "go",
-      archetype: "Parceiro Confiável", prazo: "45 dias", limite: "R$ 90.000",
+      decision: "Liberar", band: "go",
       traits: [
-        { kind: "good", text: "Dados cadastrais válidos", icon: "check-circle" },
-        { kind: "good", text: "Sem pendências relevantes", icon: "shield-check" },
+        { kind: "good", text: "Cadastro regular na Receita", icon: "check-circle" },
+        { kind: "good", text: "Sócios sem restrições", icon: "shield-check" },
       ]
     };
-    const ANALYSIS_STEPS = ["Consultando Receita Federal", "Cruzando dados cadastrais e sócios", "Lendo sinais alternativos", "Aplicando modelo RiskPlus+"];
+    const ANALYSIS_STEPS = ["Consultando a Receita Federal", "Cruzando o quadro societário", "Lendo faturamento, pagamentos e sinais alternativos", "Aplicando o modelo RiskPlus"];
     const STEP_MS = 520;
 
-    const SOURCES = ["Receita Federal", "Juntas Comerciais", "Cartórios de protesto", "Diários oficiais", "Quadro societário", "Processos judiciais", "Sinais alternativos", "Modelo RiskPlus+"];
+    const SOURCES = ["Receita Federal", "Quadro societário", "Comportamento de faturamento", "Comportamento de pagamentos", "Sinais alternativos", "Modelo RiskPlus"];
 
     const STATEMENTS = [
       { us: <><b>Liberar, Atenção ou Negar.</b> Com os motivos ao lado.</>, them: "No bureau: score sem explicação." },
-      { us: <>Analisa empresas <b>fora dos bureaus</b> usando sinais alternativos.</>, them: "No bureau: empresa nova ou pequena costuma aparecer como “sem informação”." },
-      { us: <>Prazo e limite sugeridos, <b>prontos pra aplicar.</b></>, them: "No bureau: relatório longo, difícil de virar decisão." },
-      { us: <>A gente monitora a carteira e <b>avisa quando o risco muda.</b></>, them: "No bureau: dados atualizados devagar." },
-      { us: <><b>API REST</b> e integração nativa com ERP.</>, them: "No bureau: planilha ou XML antigo, quando existe integração." },
-      { us: <>Plano mensal com <b>franquia de análises.</b></>, them: "No bureau: cobrança por consulta avulsa, difícil de prever no mês." },
+      { us: <>Analisa empresas <b>fora do bureau</b> usando sinais alternativos.</>, them: "No bureau: empresa nova ou pequena costuma aparecer como “sem informação”." },
+      { us: <>Cola o CNPJ e <b>tem a resposta em segundos.</b></>, them: "No bureau: relatório longo pra interpretar." },
+      { us: <><b>No painel ou via API</b>, do jeito que funcionar melhor pra você.</>, them: "No bureau: planilha ou integração antiga." },
     ];
 
     const FAQS = [
-      { q: "Como a RiskPlus consegue analisar empresas que não aparecem em bureaus tradicionais?",
-        a: "A gente combina dados públicos da Receita Federal e de cartórios com sinais alternativos, como comportamento de pagamento com fornecedores, presença digital e vínculos societários. Tudo passa pelos nossos modelos. Por isso empresa nova, MEI e pequeno negócio que o bureau ignora também recebem um score." },
+      { q: "Como a RiskPlus analisa empresas que não aparecem no bureau?",
+        a: "A gente cruza os dados da Receita Federal e do quadro societário com o comportamento de faturamento e pagamentos e com sinais alternativos de fontes contratadas. Tudo passa pelo nosso modelo. Por isso MEI, empresa nova e pequeno negócio também recebem uma resposta." },
       { q: "De onde vêm os dados? Está de acordo com a LGPD?",
-        a: "Usamos exclusivamente dados públicos (Receita Federal, JUCESP, cartórios, diários oficiais) e sinais alternativos de fontes contratadas e auditadas. A RiskPlus é registrada como bureau, segue a LGPD e mantém base de exclusão para titulares que solicitarem." },
-      { q: "Quanto tempo demora cada análise?",
-        a: 'A mediana é de 8 segundos entre o clique em "Analisar" e a decisão na tela. Empresa com pouco histórico, ou que pede uma análise mais funda, pode levar até 30 segundos.' },
-      { q: "A RiskPlus integra com meu ERP?",
-        a: "Sim. No plano Pro temos integrações nativas com Omie, Bling e Conta Azul, além de API REST e webhooks pra qualquer sistema. No Enterprise, fazemos a integração junto com seu time." },
-      { q: "O que acontece se eu passar do limite de análises do plano?",
-        a: "A gente avisa em 80% do consumo. Passou do limite, você pode comprar análises avulsas (R$ 1,90 cada no Pro) ou subir de plano sem perder histórico. Nada é bloqueado de surpresa." },
-      { q: "Posso usar a decisão da RiskPlus como única fonte pra liberar crédito?",
-        a: "Pode. Toda decisão vem com a justificativa (fatores e pesos) pra você defender internamente. Em operação de valor alto, recomendamos combinar com a sua política de crédito." },
-      { q: "Tem fidelidade ou taxa de setup?",
-        a: "Não. Plano mensal, cancelável a qualquer momento, sem taxa de setup ou multa. Onboarding incluído." },
-      { q: "Vocês monitoram a carteira depois ou só no momento da venda?",
-        a: "No plano Pro o monitoramento é contínuo. A gente reanalisa sua carteira todo dia e dispara alerta (e-mail, Slack ou webhook) quando o risco de um cliente muda, por exemplo com protesto novo, mudança societária ou queda no score." },
+        a: "Usamos dados públicos, como Receita Federal e quadro societário, e dados de fontes contratadas. A RiskPlus é registrada como bureau, segue a LGPD e mantém base de exclusão para quem pedir." },
+      { q: "Dá pra analisar vários CNPJs de uma vez ou integrar com meu sistema?",
+        a: "Dá. No dia a dia, você cola o CNPJ no painel. Se tiver uma lista, manda pra gente que devolvemos a análise de todos em CSV. Também dá pra integrar via API." },
     ];
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -576,36 +551,11 @@
       }, []);
     };
 
-    // Counts from 0 to `to` when scrolled into view.
-    const CountUp = ({ to, duration = 1500 }) => {
-      const ref = React.useRef(null);
-      const [val, setVal] = React.useState(0);
-      React.useEffect(() => {
-        if (reducedMotion()) { setVal(to); return; }
-        let raf;
-        const io = new IntersectionObserver(([e]) => {
-          if (!e.isIntersecting) return;
-          io.disconnect();
-          const t0 = performance.now();
-          const tick = (t) => {
-            const p = Math.min(1, (t - t0) / duration);
-            setVal(Math.round(to * (1 - Math.pow(1 - p, 4))));
-            if (p < 1) raf = requestAnimationFrame(tick);
-          };
-          raf = requestAnimationFrame(tick);
-        }, { threshold: 0.4 });
-        io.observe(ref.current);
-        return () => { io.disconnect(); cancelAnimationFrame(raf); };
-      }, [to]);
-      return <span ref={ref} className="num">{val.toLocaleString("pt-BR")}</span>;
-    };
-
     // ── Nav ───────────────────────────────────────────────────────────────────
     const NAV = [
       { href: "#diferenciais", label: "Diferenciais" },
       { href: "#como-funciona", label: "Como funciona" },
       { href: "#produto", label: "Produto" },
-      { href: "#precos", label: "Preços" },
       { href: "#faq", label: "FAQ" },
     ];
 
@@ -637,7 +587,7 @@
                 {NAV.map((l) => <a key={l.href} href={l.href} className={active === l.href ? "active" : ""}>{l.label}</a>)}
               </nav>
               <div className="right">
-                <a href="#acesso" className="pill pill-warn pill-sm">Solicitar acesso</a>
+                <a href="#acesso" className="pill pill-warn pill-sm">Falar com o time</a>
                 <button className="icon-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon n="list" /></button>
               </div>
             </div>
@@ -645,7 +595,7 @@
           <div className={`mmenu ${open ? "open" : ""}`} role="dialog" aria-modal="true" aria-label="Menu" aria-hidden={!open}>
             <div className="top"><button className="icon-btn" aria-label="Fechar menu" onClick={() => setOpen(false)}><Icon n="x" /></button></div>
             <nav>{NAV.map((l, i) => <a key={l.href} href={l.href} style={{ "--i": i }} onClick={() => setOpen(false)}>{l.label}</a>)}</nav>
-            <a href="#acesso" className="pill pill-fill" onClick={() => setOpen(false)}>Solicitar acesso</a>
+            <a href="#acesso" className="pill pill-fill" onClick={() => setOpen(false)}>Falar com o time</a>
           </div>
         </>
       );
@@ -701,10 +651,10 @@
           <div className="hero-pin" ref={pinRef}>
           <div className="hero-grid">
           <div className="hero-text" ref={textRef}>
-            <h1 className="h-xl load" style={{ "--d": "100ms" }}>Tome decisões de vendas a prazo <span className="hl">em segundos.</span></h1>
-            <p className="lead load" style={{ "--d": "260ms" }}>Cole o CNPJ do seu cliente B2B e veja na hora se vale dar prazo, mesmo sem histórico no bureau.</p>
+            <h1 className="h-xl load" style={{ "--d": "100ms" }}>Saiba <span className="hl">em segundos</span> se vale vender a prazo.</h1>
+            <p className="lead load" style={{ "--d": "260ms" }}>Cole o CNPJ do seu cliente B2B. A RiskPlus responde mesmo quando a empresa não tem histórico no bureau.</p>
             <div className="actions load" style={{ "--d": "400ms" }}>
-              <a href="#acesso" className="pill pill-fill">Solicitar acesso</a>
+              <a href="#acesso" className="pill pill-fill">Falar com o time</a>
               <a href="#como-funciona" className="more">Como funciona <Icon n="caret-right" b /></a>
             </div>
           </div>
@@ -715,7 +665,7 @@
               <div className="demo">
                 <div className="demo-head">
                   <span>Análise de CNPJ</span>
-                  <span className="ok"><Icon n="lock-simple" b />Dados públicos e auditados</span>
+                  <span className="ok"><Icon n="lock-simple" b />De acordo com a LGPD</span>
                 </div>
                 <div className="demo-row">
                   <input value={cnpj} placeholder="00.000.000/0000-00" inputMode="numeric" aria-label="CNPJ"
@@ -754,16 +704,16 @@
                           <div className="res-co">{result.name}</div>
                           <div className="res-cnpj">CNPJ {shown}</div>
                         </div>
-                        <div className={`res-score tone-${result.band}`}>{result.score}</div>
                       </div>
-                      <div className="res-arch">{result.archetype}</div>
-                      <div className={`res-lbl tone-${result.band}`}>{result.label}</div>
+                      <div className="res-head-row">
+                        <span className="res-k">Recomendação</span>
+                        <span className={`res-decision tone-${result.band}`}>{result.decision}</span>
+                      </div>
+                      <span className="res-k">Motivos</span>
                       <div className="traits">
                         {result.traits.map((t, i) => <span key={i} className={`trait ${t.kind}`} style={{ "--i": i }}><Icon n={t.icon} b />{t.text}</span>)}
                       </div>
                       <div className="kv">
-                        <div><div className="k">Prazo recomendado</div><div className="v">{result.prazo}</div></div>
-                        <div><div className="k">Limite sugerido</div><div className="v">{result.limite}</div></div>
                         <div><div className="k">Setor</div><div className="v">{result.setor}</div></div>
                         <div><div className="k">Fundação</div><div className="v">{result.fundacao}</div></div>
                       </div>
@@ -808,7 +758,7 @@
         <section className="sec" id="diferenciais">
           <div className="wrap center lit-head">
             <h2 className="h-lg" data-reveal>O bureau só enxerga quem já tem histórico de crédito.</h2>
-            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus cruza dados públicos com sinais alternativos e modelos próprios. Assim dá pra analisar MEI e empresa recém-aberta.</p>
+            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus cruza dados da Receita Federal e do quadro societário com o comportamento de faturamento e pagamentos e com sinais alternativos. Assim dá pra analisar MEI e empresa recém-aberta.</p>
           </div>
           <div className="wrap">
             <div className="lit-list" ref={listRef}>
@@ -860,19 +810,19 @@
             <article className="gcard">
               <span className="step">Primeiro</span>
               <h3>Cole o CNPJ.</h3>
-              <p className="gtext">Qualquer empresa brasileira, com ou sem pontos e barra no número. Não precisa subir planilha.</p>
+              <p className="gtext">Qualquer empresa brasileira, com ou sem pontos e barra no número.</p>
               <div className="gvis"><div className="field-mock"><span>12.345.678/0001-90</span><span className="caret"></span></div></div>
             </article>
             <article className="gcard blue">
               <span className="step">Depois</span>
               <h3>A RiskPlus cruza os dados.</h3>
-              <p className="gtext">Receita Federal, quadro de sócios, processos e sinais alternativos passam pelos nossos modelos em segundos.</p>
-              <div className="gvis"><div className="chips">{SOURCES.slice(0, 7).map((s) => <span key={s}>{s}</span>)}</div></div>
+              <p className="gtext">Receita Federal, quadro societário, comportamento de faturamento e pagamentos e sinais alternativos passam pelo nosso modelo em segundos.</p>
+              <div className="gvis"><div className="chips">{SOURCES.slice(0, 5).map((s) => <span key={s}>{s}</span>)}</div></div>
             </article>
             <article className="gcard">
               <span className="step">Por fim</span>
-              <h3>Decida e justifique.</h3>
-              <p className="gtext">Você recebe Liberar, Atenção ou Negar, com os fatores e o peso de cada um. Seu time de crédito consegue defender a decisão internamente.</p>
+              <h3>Decida com os motivos na mão.</h3>
+              <p className="gtext">Você recebe Liberar, Atenção ou Negar e os fatores que pesaram. Fica fácil explicar pro cliente ou pro sócio por que o prazo saiu ou não.</p>
               <div className="gvis"><div className="verdicts">
                 <span className="go">Liberar <Icon n="check" b /></span>
                 <span className="caution">Atenção <Icon n="warning" b /></span>
@@ -885,12 +835,13 @@
     };
 
     // ── Product (dark color block) ────────────────────────────────────────────
-    const PRODUCT_TRAITS = [["good", "check-circle", "Pagador assíduo"], ["good", "trend-up", "Crescimento estável"], ["good", "shield-check", "Gestão consolidada"], ["good", "calendar-blank", "8 anos de mercado"], ["neutral", "clock", "1 evento regularizado"]];
+    const PRODUCT_FOR = [["check-circle", "Pagamentos em dia"], ["trend-up", "Faturamento estável"], ["shield-check", "Sócios sem restrições"], ["calendar-blank", "10 anos de Receita ativa"]];
+    const PRODUCT_WATCH = [["clock", "1 atraso regularizado"]];
     const Product = () => (
       <section className="sec dark" id="produto">
         <div className="wrap center">
-          <h2 className="h-lg" data-reveal>Conheça quem está do outro lado da nota fiscal.</h2>
-          <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>Cada CNPJ analisado recebe uma persona de crédito. Ela mostra como a empresa paga e como vem crescendo, além do score.</p>
+          <h2 className="h-lg" data-reveal>Uma resposta que você entende de primeira.</h2>
+          <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus diz se vale vender a prazo e mostra o que pesou a favor e o que pesou contra.</p>
         </div>
         <div className="wrap">
           <div className="pcard" data-reveal style={{ "--i": 2 }}>
@@ -898,98 +849,52 @@
               <div className="av">MD</div>
               <div>
                 <div className="who">Mercatto Distribuição Ltda, CNPJ 12.345.678/0001-90</div>
-                <div className="arch">Parceiro Confiável</div>
-                <p className="desc">Empresa com crescimento consistente e histórico de pagamentos em dia. Gestão estável, presença consolidada no mercado e sem restrições ativas.</p>
+                <div className="arch go">Liberar</div>
+                <p className="desc">Empresa com pagamentos em dia e faturamento estável. Sócios sem restrições e cadastro regular na Receita Federal.</p>
               </div>
-              <span className="badge">Liberar prazo</span>
+              <span className="badge">Exemplo de análise</span>
             </div>
-            <div className="traits">
-              {PRODUCT_TRAITS.map(([k, ic, t]) => <span key={t} className={`trait ${k}`}><Icon n={ic} b />{t}</span>)}
-            </div>
-            <div className="pmetrics">
-              <div><div className="k">Score RiskPlus</div><div className="v go">A<small>/F</small></div><div className="s"><CountUp to={88} /> de 100, top 12% do setor</div></div>
-              <div><div className="k">Prazo sugerido</div><div className="v"><CountUp to={60} /><small>dias</small></div><div className="s">Histórico estável</div></div>
-              <div><div className="k">Limite sugerido</div><div className="v">R$ <CountUp to={180} /><small>mil</small></div><div className="s">Cerca de 0,8× o faturamento</div></div>
+            <div className="pfactors">
+              <div>
+                <div className="k">A favor</div>
+                <div className="traits">{PRODUCT_FOR.map(([ic, t]) => <span key={t} className="trait good"><Icon n={ic} b />{t}</span>)}</div>
+              </div>
+              <div>
+                <div className="k">Ponto de atenção</div>
+                <div className="traits">{PRODUCT_WATCH.map(([ic, t]) => <span key={t} className="trait neutral"><Icon n={ic} b />{t}</span>)}</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
     );
 
-    // ── Risk bands: bento ─────────────────────────────────────────────────────
-    const BANDS = [
-      { cls: "go big", icon: "check-circle", tag: "Faixa A e B", letter: "A", name: "Parceiro Confiável", share: 64,
-        traits: ["Adimplente há mais de 24 meses", "Faturamento estável ou crescente", "Sócios sem restrições ativas", "Cadastro consistente na Receita Federal"] },
-      { cls: "caution", icon: "warning", tag: "Faixa C", letter: "C", name: "Empresa em Transição", share: 22,
-        traits: ["Algum atraso nos últimos 12 meses", "Faturamento com oscilações recentes"] },
-      { cls: "stop", icon: "x-circle", tag: "Faixa D e F", letter: "D", name: "Perfil Comprometido", share: 14,
-        traits: ["Protestos ativos ou não regularizados", "Sócio com restrições em outros CNPJs"] },
+    // ── The three decisions: bento ───────────────────────────────────────────
+    const DECISIONS = [
+      { cls: "go big", icon: "check-circle", name: "Liberar", desc: "Pode vender a prazo. Os sinais mostram uma empresa que paga em dia.",
+        traits: ["Pagamentos em dia", "Faturamento estável ou crescente", "Sócios sem restrições", "Cadastro regular na Receita Federal"] },
+      { cls: "caution", icon: "warning", name: "Atenção", desc: "Os sinais estão misturados. Vale olhar os motivos antes de decidir.",
+        traits: ["Atrasos recentes em pagamentos", "Faturamento com oscilações"] },
+      { cls: "stop", icon: "x-circle", name: "Negar", desc: "Os sinais de risco pesam mais. O mais seguro é vender à vista.",
+        traits: ["Sócio com restrições em outros CNPJs", "Cadastro inconsistente na Receita Federal"] },
     ];
-    const Bands = () => (
+    const Decisions = () => (
       <section className="sec">
         <div className="wrap">
           <div className="center">
-            <h2 className="h-lg" data-reveal>Cada empresa recebe um arquétipo.</h2>
-            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>Depois da análise, o CNPJ cai em um de três perfis. Cada perfil vem com a recomendação e os fatores que pesaram.</p>
+            <h2 className="h-lg" data-reveal>Três respostas possíveis.</h2>
+            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>Cada CNPJ sai com uma recomendação clara e os fatores que levaram até ela.</p>
           </div>
           <div className="bento">
-            {BANDS.map((b, i) => (
-              <article key={b.letter} className={`bt ${b.cls}`} data-reveal style={{ "--i": i }}>
-                <span className="letter" aria-hidden="true">{b.letter}</span>
-                <span className="tag"><Icon n={b.icon} b />{b.tag}</span>
-                <h3>{b.name}</h3>
-                <ul>{b.traits.map((t) => <li key={t}>{t}</li>)}</ul>
-                <div className="share"><b><CountUp to={b.share} />%</b>das análises</div>
+            {DECISIONS.map((d, i) => (
+              <article key={d.name} className={`bt ${d.cls}`} data-reveal style={{ "--i": i }}>
+                <span className="letter" aria-hidden="true"><Icon n={d.icon} b /></span>
+                <span className="tag"><Icon n={d.icon} b />Recomendação</span>
+                <h3>{d.name}</h3>
+                <p className="bt-desc">{d.desc}</p>
+                <div className="bt-k">Sinais que costumam levar aqui</div>
+                <ul>{d.traits.map((t) => <li key={t}>{t}</li>)}</ul>
               </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-
-    // ── Stats ─────────────────────────────────────────────────────────────────
-    const Stats = () => (
-      <section className="sec tile">
-        <div className="wrap center">
-          <h2 className="h-lg" data-reveal>Em números.</h2>
-          <div className="stats">
-            <div className="stat" data-reveal><div className="big"><CountUp to={8} /><span className="u">s</span></div><p>Mediana de tempo entre colar o CNPJ e ver a decisão na tela.</p></div>
-            <div className="stat" data-reveal style={{ "--i": 1 }}><div className="big"><span className="u">+</span><CountUp to={40} /><span className="u">%</span></div><p>De cobertura em empresas que não aparecem nos bureaus tradicionais.</p></div>
-            <div className="stat" data-reveal style={{ "--i": 2 }}><div className="big"><CountUp to={93} /><span className="u">%</span></div><p>Das decisões “Liberar” viram clientes adimplentes.</p></div>
-          </div>
-        </div>
-      </section>
-    );
-
-    // ── Pricing: compare models ───────────────────────────────────────────────
-    const TIERS = [
-      { tier: "Free", name: "Pra conhecer a RiskPlus antes de integrar.", price: <><b>R$ 0</b>por mês</>,
-        features: [["magnifying-glass", "3 análises de CNPJ por mês"], ["traffic-signal", "Decisão Liberar, Atenção ou Negar"], ["calendar-check", "Prazo e limite sugeridos"], ["browser", "Acesso ao painel web"]],
-        cta: "Solicitar acesso", btn: "pill-line" },
-      { tier: "Pro", flag: "Recomendado", featured: true, name: "Pra times de crédito e financeiro que analisam cliente toda semana.", price: <><b>Sob consulta</b>Franquia mensal em definição</>,
-        features: [["eye", "Monitoramento contínuo da carteira"], ["bell-ringing", "Alertas quando o risco muda"], ["plugs-connected", "API REST, webhooks e ERP (Omie, Bling, Conta Azul)"], ["file-csv", "Relatórios e exportação CSV"]],
-        cta: "Solicitar acesso", btn: "pill-fill" },
-      { tier: "Enterprise", name: "Pra operações de alto volume, com SLA e integração sob medida.", price: <><b>Sob consulta</b>Volume ilimitado</>,
-        features: [["sliders", "Modelo customizado pro seu setor"], ["lock-key", "SSO, auditoria e SLA contratual"], ["user-circle", "Gerente de conta dedicado"], ["database", "Integração com ERP ou data warehouse"]],
-        cta: "Falar com vendas", btn: "pill-line" },
-    ];
-    const Pricing = () => (
-      <section className="sec" id="precos">
-        <div className="wrap">
-          <div className="center">
-            <h2 className="h-lg" data-reveal>Comece grátis e mude de plano quando precisar.</h2>
-            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>Não tem taxa de setup nem fidelidade.</p>
-          </div>
-          <div className="compare">
-            {TIERS.map((t, i) => (
-              <div key={t.tier} className={`model ${t.featured ? "featured" : ""}`} data-reveal style={{ "--i": i }}>
-                <span className="flag">{t.flag || ""}</span>
-                <h3 className="tier">{t.tier}</h3>
-                <p className="name">{t.name}</p>
-                <div className="price">{t.price}</div>
-                <a href="#acesso" className={`pill ${t.btn}`}>{t.cta}</a>
-                <ul>{t.features.map(([ic, f]) => <li key={f}><Icon n={ic} />{f}</li>)}</ul>
-              </div>
             ))}
           </div>
         </div>
@@ -1013,7 +918,7 @@
                 </div>
               ))}
             </div>
-            <p className="faq-note">Se sua dúvida não está aqui, <a href="#acesso">fale com vendas</a>. A gente responde em até um dia útil.</p>
+            <p className="faq-note">Se sua dúvida não está aqui, <a href="#acesso">fale com o time</a>. A gente responde em até um dia útil.</p>
           </div>
         </section>
       );
@@ -1053,19 +958,20 @@
           <div className="wrap">
             <div className="access" data-reveal>
               <div>
-                <h2 className="h-lg">Pare de dar prazo no escuro.</h2>
-                <p className="lead">Seja um dos primeiros a usar a RiskPlus. O time libera seu acesso e faz o onboarding junto com você.</p>
+                <h2 className="h-lg">Faça sua primeira consulta com a gente.</h2>
+                <p className="lead">Deixe seu contato. O time faz uma consulta grátis com você e mostra como a RiskPlus funciona na sua operação.</p>
                 <ul className="perks">
-                  <li><Icon n="check-circle" />1 consulta grátis pra testar</li>
-                  <li><Icon n="check-circle" />Onboarding com o time, sem contrato de fidelidade</li>
+                  <li><Icon n="check-circle" />1 consulta grátis</li>
+                  <li><Icon n="check-circle" />Sem fidelidade e sem taxa de setup</li>
+                  <li><Icon n="check-circle" />Onboarding incluído</li>
                 </ul>
               </div>
               <div className="form">
                 {sent ? (
                   <div className="done">
                     <Icon n="check-circle" />
-                    <h3>Recebemos seu pedido.</h3>
-                    <p>A gente entra em contato pra liberar seu acesso.</p>
+                    <h3>Recebemos seu contato.</h3>
+                    <p>A gente fala com você pra marcar sua consulta grátis.</p>
                   </div>
                 ) : (
                   <form onSubmit={submit} noValidate>
@@ -1073,7 +979,7 @@
                     {field("empresa", "Empresa", { placeholder: "Distribuidora Alvorada Ltda", autoComplete: "organization" })}
                     {field("email", "E-mail corporativo", { type: "email", placeholder: "marina@alvorada.com.br", autoComplete: "email" })}
                     {field("cnpj", "CNPJ da empresa", { placeholder: "00.000.000/0001-00", inputMode: "numeric" }, true)}
-                    <button type="submit" className="pill pill-fill">Solicitar acesso</button>
+                    <button type="submit" className="pill pill-fill">Falar com o time</button>
                     <p className="fine">Respondemos em até um dia útil.</p>
                   </form>
                 )}
@@ -1088,11 +994,11 @@
     const Footer = () => (
       <footer className="foot">
         <div className="wrap">
-          <p className="note">A RiskPlus usa dados públicos e sinais alternativos de fontes contratadas e auditadas, de acordo com a LGPD. As decisões são recomendações. Em operação de valor alto, combine com a política de crédito da sua empresa.</p>
+          <p className="note">A RiskPlus usa dados públicos e dados de fontes contratadas, de acordo com a LGPD. As decisões são recomendações. Em operação de valor alto, combine com a política de crédito da sua empresa.</p>
           <div className="cols">
-            <div><h4>Produto</h4><a href="#produto">Análise de CNPJ</a><a href="#produto">Monitoramento</a><a href="#">API e webhooks</a><a href="#precos">Preços</a></div>
-            <div><h4>Empresa</h4><a href="#">Sobre</a><a href="#">Carreiras</a><a href="#acesso">Contato</a></div>
-            <div><h4>Recursos</h4><a href="#">Documentação da API</a><a href="#faq">Central de ajuda</a><a href="#">Segurança e LGPD</a></div>
+            <div><h4>Produto</h4><a href="#produto">Análise de CNPJ</a><a href="#faq">Análise em lote</a><a href="#faq">API</a></div>
+            <div><h4>Empresa</h4><a href="#">Sobre</a><a href="#acesso">Contato</a></div>
+            <div><h4>Recursos</h4><a href="#faq">Central de ajuda</a><a href="#">Segurança e LGPD</a></div>
             <div><h4>Redes</h4><a href="#">LinkedIn</a><a href="#">X</a><a href="#">GitHub</a></div>
           </div>
           <div className="legal">
@@ -1114,9 +1020,7 @@
             <Differentiators />
             <HowItWorks />
             <Product />
-            <Bands />
-            <Stats />
-            <Pricing />
+            <Decisions />
             <FAQ />
             <Access />
           </main>
