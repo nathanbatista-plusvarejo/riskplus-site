@@ -285,14 +285,9 @@
     .lit[data-on] p { color: var(--muted); }
 
     /* Gallery */
-    .gal-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
-    .gal-nav { display: flex; gap: 10px; }
-    .gal-nav button { width: 40px; height: 40px; border-radius: 999px; border: 0; background: var(--line); color: var(--ink); cursor: pointer; display: grid; place-items: center; font-size: 16px; transition: opacity .2s, transform .2s var(--ease); }
-    .gal-nav button:active:not(:disabled) { transform: scale(.94); }
-    .gal-nav button:disabled { opacity: .35; cursor: default; }
-    .gal { --pad: max(24px, calc((100vw - 1120px) / 2 + 24px)); display: grid; grid-auto-flow: column; grid-auto-columns: min(420px, 84vw); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad); padding: 8px var(--pad) 24px; scrollbar-width: none; }
-    .gal::-webkit-scrollbar { display: none; }
-    .gcard { scroll-snap-align: start; border-radius: var(--r-tile); background: var(--raised); min-height: 520px; padding: 36px 32px; display: flex; flex-direction: column; transition: transform .5s var(--ease); }
+    .gal-head { margin-bottom: 40px; }
+    .gal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    .gcard { border-radius: var(--r-tile); background: var(--raised); min-height: 480px; padding: 36px 32px; display: flex; flex-direction: column; transition: transform .5s var(--ease); }
     .gcard:hover { transform: scale(1.015); }
     .gcard.blue { background: var(--gradient-cover); color: #fff; box-shadow: var(--shadow-brand); }
     .gcard .step { font-size: 14px; font-weight: 600; color: var(--muted); }
@@ -414,6 +409,9 @@
       .hero-text { text-align: center; }
       .hero .lead { margin-inline: auto; }
       .hero .actions { justify-content: center; }
+      .gal { grid-template-columns: 1fr; }
+      .gal, .gal-head { max-width: 640px; }
+      .gcard { min-height: 0; }
     }
     @media (max-width: 1068px) {
       .access { grid-template-columns: 1fr; padding: 56px 40px; }
@@ -433,8 +431,7 @@
       .lit-list td + td { padding: 12px 0 0; }
       .lit-list td.them::before { content: attr(data-label); display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: inherit; }
       .lit[data-on] td.them::before { color: var(--muted); }
-      .gal-head { align-items: flex-start; flex-direction: column; }
-      .gcard { min-height: 400px; padding: 30px 26px; }
+      .gcard { min-height: 0; padding: 30px 26px; }
       .pcard { padding: 28px 22px; }
       .pcard-top { flex-wrap: wrap; }
       .pcard .badge { margin-left: 0; }
@@ -786,39 +783,14 @@
       );
     };
 
-    // ── How it works: horizontal gallery ──────────────────────────────────────
+    // ── How it works: three steps, side by side or stacked ───────────────────
     const HowItWorks = () => {
-      const galRef = React.useRef(null);
-      const [ends, setEnds] = React.useState({ start: true, end: false });
-
-      React.useEffect(() => {
-        const gal = galRef.current;
-        const cards = gal.querySelectorAll(".gcard");
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            const key = e.target === cards[0] ? "start" : "end";
-            setEnds((s) => ({ ...s, [key]: e.intersectionRatio > 0.95 }));
-          });
-        }, { root: gal, threshold: [0, 0.5, 0.95, 1] });
-        io.observe(cards[0]); io.observe(cards[cards.length - 1]);
-        return () => io.disconnect();
-      }, []);
-
-      const go = (dir) => {
-        const card = galRef.current.querySelector(".gcard");
-        galRef.current.scrollBy({ left: dir * (card.offsetWidth + 20), behavior: reducedMotion() ? "auto" : "smooth" });
-      };
-
       return (
         <section className="sec tile" id="como-funciona">
           <div className="wrap gal-head">
             <h2 className="h-lg" data-reveal>Do CNPJ à decisão em três passos.</h2>
-            <div className="gal-nav">
-              <button onClick={() => go(-1)} disabled={ends.start} aria-label="Passo anterior"><Icon n="caret-left" b /></button>
-              <button onClick={() => go(1)} disabled={ends.end} aria-label="Próximo passo"><Icon n="caret-right" b /></button>
-            </div>
           </div>
-          <div className="gal" ref={galRef}>
+          <div className="wrap gal">
             <article className="gcard">
               <span className="step">Primeiro</span>
               <h3>Cole o CNPJ.</h3>
