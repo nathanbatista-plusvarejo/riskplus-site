@@ -208,6 +208,18 @@
         @keyframes hero-text-in { from { transform: translate(var(--tx, 0px), var(--ty, 0px)); } to { transform: none; } }
         @keyframes hero-demo-in { from { transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(.96); } to { transform: none; } }
       }
+      /* Stacked hero: the demo rises and settles into place as it scrolls in */
+      @media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+        .hero-demo { animation: hero-demo-rise linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+        @keyframes hero-demo-rise { from { transform: translateY(48px) scale(.92); } to { transform: none; } }
+      }
+      /* Touch screens have no hover: play the hover effects as elements scroll into view */
+      @media (hover: none) and (prefers-reduced-motion: no-preference) {
+        .gcard { animation: card-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+        @keyframes card-in { from { transform: scale(.94); } to { transform: none; } }
+        .bt .letter { animation: letter-rise linear both; animation-timeline: view(); animation-range: entry 20% cover 60%; }
+        @keyframes letter-rise { from { transform: translateY(24px); } to { transform: translateY(-12px); } }
+      }
     }
 
     /* Demo (the real product component) */
@@ -352,6 +364,7 @@
     .bt .letter { position: absolute; right: -10px; bottom: -40px; font-size: 280px; letter-spacing: -.03em; line-height: 1; opacity: .07; pointer-events: none; transition: transform 1.2s var(--ease); }
     .bt.big .letter { font-size: 460px; bottom: -80px; }
     .bt:hover .letter { transform: translateY(-12px); }
+    @media (hover: none) { .gcard:hover { transform: none; } }
 
     /* FAQ */
     .faq { margin-top: 56px; }
@@ -418,7 +431,7 @@
     }
     @media (max-width: 833px) {
       body { font-size: 16px; }
-      .gnav nav, .gnav .right .pill { display: none; }
+      .gnav nav { display: none; }
       .icon-btn { display: grid; }
       .sec { padding: 88px 0; }
       .demo { padding: 22px 18px 26px; }
@@ -427,8 +440,12 @@
       .lit-list, .lit-list tbody, .lit-list tr, .lit-list td { display: block; }
       .lit-list tr { padding: 28px 0; border-bottom: 1px solid var(--line); }
       .lit-list tr:first-child { border-top: 1px solid var(--line); }
-      .lit-list td { padding: 0; border: 0; }
-      .lit-list td + td { padding: 12px 0 0; }
+      .lit-list td { padding: 0; border: 0; text-align: center; }
+      .lit-list td + td { padding: 14px 0 0; }
+      .lit-list h3, .lit-list p { max-width: 22em; margin-inline: auto; text-wrap: balance; }
+      .lit-list h3 { max-width: 16em; }
+      .gal-head { text-align: center; }
+      .gal-head h2 { text-wrap: balance; }
       .lit-list td.them::before { content: attr(data-label); display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: inherit; }
       .lit[data-on] td.them::before { color: var(--muted); }
       .gcard { min-height: 0; padding: 30px 26px; }
@@ -448,9 +465,10 @@
     }
     @media (max-width: 480px) {
       :root { --nav-h: 64px; }
-      .gnav .logo img { height: 40px; }
       .wrap, .wrap-narrow { padding: 0 16px; }
-      .demo-head .ok { display: none; }
+      .gnav .logo img { height: 34px; }
+      .gnav .right .pill-sm { padding: 8px 12px; font-size: 13px; }
+      .demo-head { flex-direction: column; align-items: flex-start; gap: 6px; }
       .demo-row { flex-direction: column; }
       .demo-row button { height: 44px; justify-content: center; }
     }
