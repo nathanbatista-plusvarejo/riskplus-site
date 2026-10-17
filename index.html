@@ -116,10 +116,7 @@
         --caution: var(--rp-orange-300); --caution-soft: #2E1A0F;
         --stop: #F07587; --stop-soft: #2E1218;
       }
-      .logo-light { display: none !important; }
-      .logo-dark { display: block !important; }
     }
-    .logo-dark { display: none !important; }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
@@ -272,11 +269,16 @@
 
     /* Scroll-lit statements */
     .lit-head { margin-bottom: 80px; }
-    .lit-list { display: grid; gap: 56px; max-width: 900px; margin: 0 auto; }
+    .lit-list { width: 100%; max-width: 1000px; margin: 0 auto; border-collapse: collapse; }
+    .lit-list col.us { width: 58%; }
+    .lit-list th { text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); padding: 0 0 16px; border-bottom: 1px solid var(--line); }
+    .lit-list th.us { color: var(--accent); }
+    .lit-list td { padding: 32px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .lit-list th + th, .lit-list td + td { padding-left: 48px; }
     .lit { color: var(--line); transition: color .7s var(--ease); }
-    .lit h3 { font-size: clamp(28px, 3.6vw, 48px); line-height: 1.1; letter-spacing: -.03em; }
+    .lit h3 { font-size: clamp(22px, 2.4vw, 32px); line-height: 1.15; letter-spacing: -.025em; }
     .lit h3 b { transition: color .7s var(--ease); }
-    .lit p { margin-top: 12px; font-size: 17px; color: transparent; transition: color .7s var(--ease); }
+    .lit p { font-size: 17px; color: var(--line); transition: color .7s var(--ease); }
     .lit[data-on] { color: var(--ink); }
     .lit[data-on] h3 b { color: var(--accent); }
     .lit[data-on] p { color: var(--muted); }
@@ -422,7 +424,14 @@
       .sec { padding: 88px 0; }
       .demo { padding: 22px 18px 26px; }
       .demo-stage { min-height: 380px; }
-      .lit-list { gap: 40px; }
+      .lit-list thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+      .lit-list, .lit-list tbody, .lit-list tr, .lit-list td { display: block; }
+      .lit-list tr { padding: 28px 0; border-bottom: 1px solid var(--line); }
+      .lit-list tr:first-child { border-top: 1px solid var(--line); }
+      .lit-list td { padding: 0; border: 0; }
+      .lit-list td + td { padding: 12px 0 0; }
+      .lit-list td.them::before { content: attr(data-label); display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: inherit; }
+      .lit[data-on] td.them::before { color: var(--muted); }
       .gal-head { align-items: flex-start; flex-direction: column; }
       .gcard { min-height: 400px; padding: 30px 26px; }
       .pcard { padding: 28px 22px; }
@@ -507,10 +516,10 @@
     const SOURCES = ["Receita Federal", "Quadro societário", "Comportamento de faturamento", "Comportamento de pagamentos", "Sinais alternativos", "Modelo RiskPlus"];
 
     const STATEMENTS = [
-      { us: <><b>Liberar, Atenção ou Negar.</b> Com os motivos ao lado.</>, them: "No bureau: score sem explicação." },
-      { us: <>Analisa empresas <b>fora do bureau</b> usando sinais alternativos.</>, them: "No bureau: empresa nova ou pequena costuma aparecer como “sem informação”." },
-      { us: <>Cola o CNPJ e <b>tem a resposta em segundos.</b></>, them: "No bureau: relatório longo pra interpretar." },
-      { us: <><b>No painel ou via API</b>, do jeito que funcionar melhor pra você.</>, them: "No bureau: planilha ou integração antiga." },
+      { us: <><b>Liberar, Atenção ou Negar.</b> Com os motivos ao lado.</>, them: "Score sem explicação." },
+      { us: <>Analisa empresas <b>fora do bureau</b> usando sinais alternativos.</>, them: "Empresa nova ou pequena costuma aparecer como “sem informação”." },
+      { us: <>Cola o CNPJ e <b>tem a resposta em segundos.</b></>, them: "Relatório longo pra interpretar." },
+      { us: <><b>No painel ou via API</b>, do jeito que funcionar melhor pra você.</>, them: "Planilha ou integração antiga." },
     ];
 
     const FAQS = [
@@ -533,12 +542,7 @@
     };
     const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const Icon = ({ n, b }) => <i className={`${b ? "ph-bold" : "ph"} ph-${n}`} aria-hidden="true"></i>;
-    const Logo = () => (
-      <>
-        <img className="logo-light" src="assets/logo-blue.svg" alt="RiskPlus" />
-        <img className="logo-dark" src="assets/logo-white.svg" alt="RiskPlus" />
-      </>
-    );
+    const Logo = () => <img src="assets/logo-blue.svg" alt="RiskPlus" />;
 
     // Fades [data-reveal] elements in once they enter the viewport.
     const useReveal = () => {
@@ -761,14 +765,20 @@
             <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus cruza dados da Receita Federal e do quadro societário com o comportamento de faturamento e pagamentos e com sinais alternativos. Assim dá pra analisar MEI e empresa recém-aberta.</p>
           </div>
           <div className="wrap">
-            <div className="lit-list" ref={listRef}>
-              {STATEMENTS.map((s, i) => (
-                <div className="lit" key={i}>
-                  <h3>{s.us}</h3>
-                  <p>{s.them}</p>
-                </div>
-              ))}
-            </div>
+            <table className="lit-list" ref={listRef}>
+              <colgroup><col className="us" /><col /></colgroup>
+              <thead>
+                <tr><th scope="col" className="us">Com a RiskPlus</th><th scope="col">No bureau</th></tr>
+              </thead>
+              <tbody>
+                {STATEMENTS.map((s, i) => (
+                  <tr className="lit" key={i}>
+                    <td><h3>{s.us}</h3></td>
+                    <td className="them" data-label="No bureau"><p>{s.them}</p></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
       );
