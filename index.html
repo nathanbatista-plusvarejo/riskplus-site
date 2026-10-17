@@ -8,6 +8,17 @@
   <meta property="og:title" content="RiskPlus · Decisão de crédito B2B em segundos" />
   <meta property="og:description" content="Saiba em segundos se vale vender a prazo. Cole o CNPJ do seu cliente B2B." />
   <meta name="color-scheme" content="light dark" />
+
+  <!-- Applies the saved theme before first paint (light is the default). -->
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem("rp-theme") === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="icon" href="assets/icon-blue.svg" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -94,28 +105,29 @@
       --r-tile: var(--radius-xl); --r-card: var(--radius-lg); --r-input: var(--radius-md);
       --z-nav: 40; --z-menu: 50;
       --nav-h: 76px;
+      color-scheme: light;
     }
-    /* Dark scheme built from the DS neutrals (the guide defines light only) */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --page:  var(--rp-ink);
-        --tile:  #111623;
-        --raised: var(--rp-graphite);
-        --ink:   var(--rp-slate-50);
-        --ink-2: var(--rp-slate-200);
-        --muted: var(--rp-slate-400);
-        --faint: var(--rp-slate-600);
-        --line:  var(--rp-slate-700);
-        --hair:  rgba(255,255,255,.1);
-        --accent:      var(--rp-blue-400);
-        --accent-hov:  var(--rp-blue-300);
-        --accent-soft: var(--rp-blue-900);
-        --dark:   #05070C;
-        --dark-2: var(--rp-graphite);
-        --go: #4FCB8B; --go-soft: #0F2A1E;
-        --caution: var(--rp-orange-300); --caution-soft: #2E1A0F;
-        --stop: #F07587; --stop-soft: #2E1218;
-      }
+    /* Dark scheme built from the DS neutrals (the guide defines light only).
+       Light is the default; dark is opt-in via the nav toggle (data-theme). */
+    :root[data-theme="dark"] {
+      --page:  var(--rp-ink);
+      --tile:  #111623;
+      --raised: var(--rp-graphite);
+      --ink:   var(--rp-slate-50);
+      --ink-2: var(--rp-slate-200);
+      --muted: var(--rp-slate-400);
+      --faint: var(--rp-slate-600);
+      --line:  var(--rp-slate-700);
+      --hair:  rgba(255,255,255,.1);
+      --accent:      var(--rp-blue-400);
+      --accent-hov:  var(--rp-blue-300);
+      --accent-soft: var(--rp-blue-900);
+      --dark:   #05070C;
+      --dark-2: var(--rp-graphite);
+      --go: #4FCB8B; --go-soft: #0F2A1E;
+      --caution: var(--rp-orange-300); --caution-soft: #2E1A0F;
+      --stop: #F07587; --stop-soft: #2E1218;
+      color-scheme: dark;
     }
 
     * { box-sizing: border-box; }
@@ -166,6 +178,9 @@
     .gnav nav a:hover, .gnav nav a.active { opacity: 1; color: var(--ink); }
     .gnav .right { display: flex; align-items: center; gap: 10px; }
     .icon-btn { width: 36px; height: 36px; display: none; place-items: center; border: 0; background: none; cursor: pointer; font-size: 20px; color: var(--ink); }
+    .theme-btn { width: 36px; height: 36px; display: grid; place-items: center; border-radius: var(--radius-pill); border: 1px solid var(--line); background: transparent; color: var(--ink-2); cursor: pointer; font-size: 18px; transition: color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease); }
+    .theme-btn:hover { color: var(--ink); border-color: var(--ink); }
+    .theme-btn:active { transform: scale(.94); }
 
     .mmenu { position: fixed; inset: 0; z-index: var(--z-menu); background: var(--page); padding: 0 32px 32px; display: flex; flex-direction: column; visibility: hidden; opacity: 0; transition: opacity .3s var(--ease), visibility 0s .3s; }
     .mmenu.open { visibility: visible; opacity: 1; transition: opacity .3s var(--ease); }
@@ -572,6 +587,30 @@
       }, []);
     };
 
+    // ── Theme (light is the default; the choice persists in localStorage) ────
+    const THEME_KEY = "rp-theme";
+    const useTheme = () => {
+      const [theme, setTheme] = React.useState(() =>
+        document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
+      React.useEffect(() => {
+        const root = document.documentElement;
+        if (theme === "dark") root.setAttribute("data-theme", "dark"); else root.removeAttribute("data-theme");
+        try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+      }, [theme]);
+      const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+      return [theme, toggle];
+    };
+    const ThemeToggle = () => {
+      const [theme, toggle] = useTheme();
+      const dark = theme === "dark";
+      return (
+        <button type="button" className="theme-btn" onClick={toggle} aria-pressed={dark}
+          aria-label={dark ? "Ativar modo claro" : "Ativar modo escuro"} title={dark ? "Modo claro" : "Modo escuro"}>
+          <Icon n={dark ? "sun" : "moon"} />
+        </button>
+      );
+    };
+
     // ── Nav ───────────────────────────────────────────────────────────────────
     const NAV = [
       { href: "#diferenciais", label: "Diferenciais" },
@@ -609,6 +648,7 @@
               </nav>
               <div className="right">
                 <a href="#acesso" className="pill pill-warn pill-sm">Falar com o time</a>
+                <ThemeToggle />
                 <button className="icon-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon n="list" /></button>
               </div>
             </div>
